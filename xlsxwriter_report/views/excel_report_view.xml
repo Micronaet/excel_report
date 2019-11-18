@@ -128,7 +128,9 @@
             <field name="arch" type="xml">
                 <tree string="Excel report page" editable="bottom">
                     <field name="sequence" />
-                    <field name="name" />                    
+                    <field name="name" />  
+                    <field name="index" />          
+                    <field name="paper_size" />        
                 </tree>
             </field>
         </record>
@@ -141,6 +143,8 @@
                         <group colspan="4" col="4">
                             <field name="sequence" />
                             <field name="name" />                    
+                            <field name="index" />          
+                            <field name="paper_size" />        
                         </group>    
                     </sheet>
                 </form>

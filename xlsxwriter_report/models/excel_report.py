@@ -45,12 +45,13 @@ class ExcelReportFormatPage(models.Model):
     """    
     _name = 'excel.report.format.page'
     _description = 'Excel report'
+    _order = 'sequence,name'
 
     # -------------------------------------------------------------------------
     #                                   COLUMNS:
     # -------------------------------------------------------------------------
     #default = fields.Char('Default')
-    index = fields.Integer('Index', required=True),
+    index = fields.Integer('Index', required=True)
     name = fields.Char('Name', size=64, required=True)
     sequence = fields.Integer('Sequence')
     paper_size = fields.Char('Paper size', size=40)
