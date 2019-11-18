@@ -4,8 +4,8 @@ __pycache__/
 *$py.class
 
 Micronaet filter:
-~*
-*.~*
+*.*~
+*~
 
 # C extensions
 *.so
