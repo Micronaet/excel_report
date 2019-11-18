@@ -16,8 +16,8 @@
                     <field name="bold" />
                     <field name="italic" />
                     
-                    <field name="foregroung_id" />
-                    <field name="backgroung_id" />
+                    <field name="foreground_id" />
+                    <field name="background_id" />
                 </tree>
             </field>
         </record>
@@ -40,8 +40,8 @@
                             <field name="italic" />
                             
                             <separator string="Colors:" colspan="4"/>
-                            <field name="foregroung_id" />
-                            <field name="backgroung_id" />                            
+                            <field name="foreground_id" />
+                            <field name="background_id" />                            
                         </group>    
                     </sheet>
                 </form>

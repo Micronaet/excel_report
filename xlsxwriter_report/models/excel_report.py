@@ -98,7 +98,7 @@ class ExcelReportFormatColor(models.Model):
     #                                   COLUMNS:
     # -------------------------------------------------------------------------
     name = fields.Char('Color name', size=64, required=True)
-    rgb = fields.char('RGB syntax', size=10, required=True)
+    rgb = fields.Char('RGB syntax', size=10, required=True)
 
 class ExcelReportFormatStyle(models.Model):
     """ Model name: ExcelReportFormat
@@ -121,6 +121,11 @@ class ExcelReportFormatStyle(models.Model):
     height = fields.Integer('Font height', required=True, default=10)
     bold = fields.Boolean('Bold')
     italic = fields.Boolean('Italic')
+    
+    # TODO: 
+    # border (4 value)
+    # align
+    # valign
 
 class ExcelReportFormat(models.Model):
     """ Model name: Inherit for relation: ExcelReportFormat
@@ -130,8 +135,8 @@ class ExcelReportFormat(models.Model):
     # -------------------------------------------------------------------------
     #                                   COLUMNS:
     # -------------------------------------------------------------------------
-    style_ids: fields.One2many(
-        'excel.report.format.style', 'format_id', 'Style'),
+    style_ids = fields.One2many(
+        'excel.report.format.style', 'format_id', 'Style')
     
 class ExcelReport(models.Model):
     """ Model name: Excel Report

@@ -34,8 +34,10 @@
     'init_xml': [],
     'demo': [],
     'data': [
-        'data/config_data.xml',
+        #'data/config_data.xml',
         'security/ir.model.access.csv',
+        
+        'views/excel_report_view.xml',
         ],
     'active': False,
     'installable': True,
