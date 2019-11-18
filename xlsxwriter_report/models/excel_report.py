@@ -25,6 +25,7 @@ import xlsxwriter
 import shutil
 import openerp
 import logging
+
 from openerp import models, fields, api
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
@@ -120,6 +121,17 @@ class ExcelReportFormatStyle(models.Model):
     height = fields.Integer('Font height', required=True, default=10)
     bold = fields.Boolean('Bold')
     italic = fields.Boolean('Italic')
+
+class ExcelReportFormat(models.Model):
+    """ Model name: Inherit for relation: ExcelReportFormat
+    """    
+    _inherit = 'excel.report.format'
+    
+    # -------------------------------------------------------------------------
+    #                                   COLUMNS:
+    # -------------------------------------------------------------------------
+    style_ids: fields.One2many(
+        'excel.report.format.style', 'format_id', 'Style'),
     
 class ExcelReport(models.Model):
     """ Model name: Excel Report

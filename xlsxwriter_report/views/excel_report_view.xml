@@ -1,0 +1,263 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!--excel.report.format.style-->
+        <record model="ir.ui.view" id="view_excel_report_format_style_tree">
+            <field name="name">excel.report.format.style.tree</field>
+            <field name="model">excel.report.format.style</field>
+            <field name="arch" type="xml">
+                <tree string="Excel report style" editable="bottom">
+                    <field name="format_id" />
+                    <field name="code" />
+                    <field name="name" />                    
+                    
+                    <field name="font_id" />
+                    <field name="height" />
+                    <field name="bold" />
+                    <field name="italic" />
+                    
+                    <field name="foregroung_id" />
+                    <field name="backgroung_id" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_excel_report_format_style_form">
+            <field name="name">excel.report.format.style.form</field>
+            <field name="model">excel.report.format.style</field>
+            <field name="arch" type="xml">
+                <form string="Excel report style">
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="format_id" />
+                            <newline/>
+                            <field name="code" />
+                            <field name="name" />                    
+                            
+                            <separator string="Font:" colspan="4"/>
+                            <field name="font_id" />
+                            <field name="height" />
+                            <field name="bold" />
+                            <field name="italic" />
+                            
+                            <separator string="Colors:" colspan="4"/>
+                            <field name="foregroung_id" />
+                            <field name="backgroung_id" />                            
+                        </group>    
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_excel_report_format_style">
+            <field name="name">Excel Format Style</field>
+            <field name="res_model">excel.report.format.style</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_excel_report_format_style_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <!--excel.report.format-->
+        <record model="ir.ui.view" id="view_excel_report_format_tree">
+            <field name="name">excel.report.format.tree</field>
+            <field name="model">excel.report.format</field>
+            <field name="arch" type="xml">
+                <tree string="Excel report format" editable="bottom">
+                    <field name="code" />
+                    <field name="name" />                    
+                    <field name="page_id" />
+                    <field name="margin_top" />
+                    <field name="margin_bottom" />
+                    <field name="margin_left" />
+                    <field name="margin_right" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_excel_report_format_form">
+            <field name="name">excel.report.format.form</field>
+            <field name="model">excel.report.format</field>
+            <field name="arch" type="xml">
+                <form string="Excel report">
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="code" />
+                            <field name="name" />                    
+                            <field name="page_id" />
+                            <newline/>
+                            
+                            <notebook colspan="4">
+                                <page string="Style">
+                                    <group colspan="4" col="4">
+                                        <separator string="Style:" colspan="4"/>
+                                        <field name="style_ids" colspan="4">
+                                            
+                                        </field>
+                                    </group>    
+                                </page>
+                                <page string="Margin">
+                                    <group colspan="4" col="4">
+                                        <separator string="Margin:" colspan="4"/>
+                                        <field name="margin_top" />
+                                        <field name="margin_bottom" />
+                                        
+                                        <field name="margin_left" />
+                                        <field name="margin_right" />
+                                    </group>    
+                                </page>
+                            </notebook>
+                            
+                        </group>    
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_excel_report_format">
+            <field name="name">Excel Format</field>
+            <field name="res_model">excel.report.format</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_excel_report_format_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <!--excel.report.format.page-->
+        <record model="ir.ui.view" id="view_excel_report_format_page_tree">
+            <field name="name">excel.report.format.page.tree</field>
+            <field name="model">excel.report.format.page</field>
+            <field name="arch" type="xml">
+                <tree string="Excel report page" editable="bottom">
+                    <field name="sequence" />
+                    <field name="name" />                    
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_excel_report_format_page_form">
+            <field name="name">excel.report.format.page.form</field>
+            <field name="model">excel.report.format.page</field>
+            <field name="arch" type="xml">
+                <form string="Excel report page">
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="sequence" />
+                            <field name="name" />                    
+                        </group>    
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_excel_report_format_page">
+            <field name="name">Excel Page</field>
+            <field name="res_model">excel.report.format.page</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_excel_report_format_page_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <!--excel.report.format.font-->
+        <record model="ir.ui.view" id="view_excel_report_format_font_tree">
+            <field name="name">excel.report.format.font.tree</field>
+            <field name="model">excel.report.format.font</field>
+            <field name="arch" type="xml">
+                <tree string="Excel report font" editable="bottom">
+                    <field name="name" />                    
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_excel_report_format_font_form">
+            <field name="name">excel.report.format.font.form</field>
+            <field name="model">excel.report.format.font</field>
+            <field name="arch" type="xml">
+                <form string="Excel report font">
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="name" />                    
+                        </group>    
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_excel_report_format_font">
+            <field name="name">Excel font</field>
+            <field name="res_model">excel.report.format.font</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_excel_report_format_font_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <!--excel.report.format.color-->
+        <record model="ir.ui.view" id="view_excel_report_format_color_tree">
+            <field name="name">excel.report.format.color.tree</field>
+            <field name="model">excel.report.format.color</field>
+            <field name="arch" type="xml">
+                <tree string="Excel report color" editable="bottom">
+                    <field name="name" />                    
+                    <field name="rgb" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_excel_report_format_color_form">
+            <field name="name">excel.report.format.color.form</field>
+            <field name="model">excel.report.format.color</field>
+            <field name="arch" type="xml">
+                <form string="Excel report color">
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="name" />                    
+                            <field name="rgb" />
+                        </group>    
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_excel_report_format_color">
+            <field name="name">Excel color</field>
+            <field name="res_model">excel.report.format.color</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_excel_report_format_color_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
+
+        <menuitem 
+            parent="base.reporting_menuitem"
+            name="Excel report"             
+            id="reporting_excel_root"
+            sequence="90"
+            />
+            <menuitem 
+                parent="reporting_excel_root" 
+                id="menu_reporting_excel_format" 
+                action="action_excel_report_format"
+                sequence="10"
+                />
+            <menuitem 
+                parent="reporting_excel_root" 
+                id="menu_reporting_excel_page" 
+                action="action_excel_report_format_page"
+                sequence="20"
+                />
+            <menuitem 
+                parent="reporting_excel_root" 
+                id="menu_reporting_excel_font" 
+                action="action_excel_report_format_font"
+                sequence="30"
+                />
+            <menuitem 
+                parent="reporting_excel_root" 
+                id="menu_reporting_excel_color" 
+                action="action_excel_report_format_color"
+                sequence="40"
+                />
+            
+            
+        
+
+    </data>
+</openerp>
+
