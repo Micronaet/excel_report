@@ -38,6 +38,9 @@
         'security/ir.model.access.csv',
         
         'views/excel_report_view.xml',
+
+        # Data: 
+        'data/color_data.xml',
         ],
     'active': False,
     'installable': True,

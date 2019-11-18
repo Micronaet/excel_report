@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<openerp>
+    <data> 
+        <record model="excel.report.format.color" id="data_color_red">
+            <field name="name">Red</field>
+            <field name="rgb">#FFC6AF</field>
+        </record>
+        <record model="excel.report.format.color" id="data_color_white">
+            <field name="name">White</field>
+            <field name="rgb">#FFFFFF</field>
+        </record>
+        <record model="excel.report.format.color" id="data_color_green">
+            <field name="name">Green</field>
+            <field name="rgb">#B1F9C1</field>
+        </record>
+        <record model="excel.report.format.color" id="data_color_blue">
+            <field name="name">Blue</field>
+            <field name="rgb">#C4DAFF</field>
+        </record>
+        <record model="excel.report.format.color" id="data_color_yellow">
+            <field name="name">Yellow</field>
+            <field name="rgb">#FFFEC1</field>
+        </record>
+        <record model="excel.report.format.color" id="data_color_orange">
+            <field name="name">Orange</field>
+            <field name="rgb">#FCDEDB</field>
+        </record>
+        <record model="excel.report.format.color" id="data_color_grey">
+            <field name="name">Grey</field>
+            <field name="rgb">#EEEEEE</field>
+        </record>
+        <record model="excel.report.format.color" id="data_color_black">
+            <field name="name">Grey</field>
+            <field name="rgb">#000000</field>
+        </record>
+    </data>
+</openerp>
+

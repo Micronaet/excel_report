@@ -100,6 +100,8 @@ class ExcelReportFormatColor(models.Model):
     name = fields.Char('Color name', size=64, required=True)
     rgb = fields.Char('RGB syntax', size=10, required=True)
 
+# TODO class With numer format
+
 class ExcelReportFormatStyle(models.Model):
     """ Model name: ExcelReportFormat
     """    
@@ -126,6 +128,8 @@ class ExcelReportFormatStyle(models.Model):
     # border (4 value)
     # align
     # valign
+    # wrap
+    # format
 
 class ExcelReportFormat(models.Model):
     """ Model name: Inherit for relation: ExcelReportFormat
