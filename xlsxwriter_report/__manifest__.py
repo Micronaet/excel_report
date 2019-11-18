@@ -41,6 +41,8 @@
 
         # Data: 
         'data/color_data.xml',
+        'data/font_data.xml',
+        'data/page_data.xml',
         ],
     'active': False,
     'installable': True,

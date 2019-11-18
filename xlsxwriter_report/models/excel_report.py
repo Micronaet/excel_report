@@ -50,8 +50,10 @@ class ExcelReportFormatPage(models.Model):
     #                                   COLUMNS:
     # -------------------------------------------------------------------------
     #default = fields.Char('Default')
+    index = fields.Integer('Index', required=True),
     name = fields.Char('Name', size=64, required=True)
     sequence = fields.Integer('Sequence')
+    paper_size = fields.Char('Paper size', size=40)
     # dimension
     # note
 
@@ -116,7 +118,8 @@ class ExcelReportFormatStyle(models.Model):
     format_id = fields.Many2one('excel.report.format', 'Format')
 
     font_id = fields.Many2one(
-        'excel.report.format.font', 'Font', required=True)
+        'excel.report.format.font', 'Font', required=True, 
+        help='Remember to use standard fonts, need to be installed on PC!')
     foreground_id = fields.Many2one('excel.report.format.color', 'Color')
     background_id = fields.Many2one('excel.report.format.color', 'Backgroung')
 

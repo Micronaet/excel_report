@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<openerp>
+    <data> 
+        <record model="excel.report.format.font" id="data_font_times">
+            <field name="name">Times New Roman</field>
+        </record>
+        <record model="excel.report.format.font" id="data_font_calibri">
+            <field name="name">Calibri</field>
+        </record>
+        <record model="excel.report.format.font" id="data_font_courier_new">
+            <field name="name">Courier New</field>
+        </record>
+        <record model="excel.report.format.font" id="data_font_arial">
+            <field name="name">Arial</field>
+        </record>
+    </data>
+</openerp>
+
