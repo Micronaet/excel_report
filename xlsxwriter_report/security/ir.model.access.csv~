@@ -1,8 +1,0 @@
-"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
-access_excel_report_user,excel.report,model_excel_report,base.group_user,1,1,1,1
-access_excel_report_format_user,excel.report.format,model_excel_report_format,base.group_user,1,1,1,1
-access_excel_report_format_page_user,excel.report.format.page,model_excel_report_format_page,base.group_user,1,1,1,1
-access_excel_report_format_font_user,excel.report.format.font,model_excel_report_format_font,base.group_user,1,1,1,1
-access_excel_report_format_color_user,excel.report.format.color,model_excel_report_format_color,base.group_user,1,1,1,1
-access_excel_report_format_style_user,excel.report.format.style,model_excel_report_format_style,base.group_user,1,1,1,1
-
