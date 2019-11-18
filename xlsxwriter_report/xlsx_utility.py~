@@ -21,21 +21,113 @@ import os
 import sys
 import logging
 import base64
-
 import xlsxwriter
 import shutil
-
-from odoo import models, fields, api
-from odoo.tools.translate import _
+import openerp
+import logging
+from openerp import models, fields, api
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+from openerp.tools.translate import _
+from openerp.tools import (
+    DEFAULT_SERVER_DATE_FORMAT, 
+    DEFAULT_SERVER_DATETIME_FORMAT, 
+    DATETIME_FORMATS_MAP, 
+    float_compare,
+    )
 
 
 _logger = logging.getLogger(__name__)
 
-class ExcelWriter(models.Model):
-    """ Model name: ExcelWriter
+class ExcelReportFormatPage(models.Model):
+    """ Model name: ExcelReportFormatPage
     """    
-    _name = 'excel.writer'
-    _description = 'Excel writer'
+    _name = 'excel.report.format.page'
+    _description = 'Excel report'
+
+    # -------------------------------------------------------------------------
+    #                                   COLUMNS:
+    # -------------------------------------------------------------------------
+    #default = fields.Char('Default')
+    name = fields.Char('Name', size=64, required=True)
+    sequence = fields.Integer('Sequence')
+    # dimension
+    # note
+
+class ExcelReportFormat(models.Model):
+    """ Model name: ExcelReportFormat
+    """    
+    _name = 'excel.report.format'
+    _description = 'Excel report'
+    
+    # -------------------------------------------------------------------------
+    #                                   COLUMNS:
+    # -------------------------------------------------------------------------
+    #default = fields.Char('Default')
+    name = fields.Char('Name', size=64, required=True)
+    code = fields.Char('Code', size=15, required=True)
+    page_id = fields.Many2one(
+        'excel.report.format.page', 'Page', required=True)
+    
+    margin_top = fields.Integer('Margin Top')
+    margin_bottom = fields.Integer('Margin Bottom')
+    margin_left = fields.Integer('Margin Left')
+    margin_right = fields.Integer('Margin Right')
+
+    # TODO header, footer
+
+class ExcelReportFormatFont(models.Model):
+    """ Model name: ExcelReportFormatFont
+    """    
+    _name = 'excel.report.format.font'
+    _description = 'Excel format font'
+        
+    # -------------------------------------------------------------------------
+    #                                   COLUMNS:
+    # -------------------------------------------------------------------------
+    name = fields.Char('Font name', size=64, required=True)
+
+class ExcelReportFormatColor(models.Model):
+    """ Model name: ExcelReportFormatColor
+    """    
+    _name = 'excel.report.format.color'
+    _description = 'Excel format color'
+        
+    # -------------------------------------------------------------------------
+    #                                   COLUMNS:
+    # -------------------------------------------------------------------------
+    name = fields.Char('Color name', size=64, required=True)
+    rgb = fields.char('RGB syntax', size=10, required=True)
+
+class ExcelReportFormatStyle(models.Model):
+    """ Model name: ExcelReportFormat
+    """    
+    _name = 'excel.report.format.style'
+    _description = 'Excel format style'
+    
+    # -------------------------------------------------------------------------
+    #                                   COLUMNS:
+    # -------------------------------------------------------------------------
+    name = fields.Char('Name', size=64, required=True)
+    code = fields.Char('Code', size=15, required=True)
+    format_id = fields.Many2one('excel.report.format', 'Format')
+
+    font_id = fields.Many2one(
+        'excel.report.format.font', 'Font', required=True)
+    foreground_id = fields.Many2one('excel.report.format.color', 'Color')
+    background_id = fields.Many2one('excel.report.format.color', 'Backgroung')
+
+    height = fields.Integer('Font height', required=True, default=10)
+    bold = fields.Boolean('Bold')
+    italic = fields.Boolean('Italic')
+    
+
+class ExcelReport(models.Model):
+    """ Model name: Excel Report
+    """    
+    _name = 'excel.report'
+    _description = 'Excel report'
+    _order = 'name',
 
     # -------------------------------------------------------------------------
     # Computed fields:
@@ -53,6 +145,9 @@ class ExcelWriter(models.Model):
     # -------------------------------------------------------------------------
     #                                   COLUMNS:
     # -------------------------------------------------------------------------
+    name = fields.Char('Name', size=64, required=True)
+    code = fields.Char('Code', size=15, required=True)
+    
     b64_file = fields.Binary('B64 file', compute='_get_template')
     fullname = fields.Text('Fullname of file')
     
