@@ -121,7 +121,6 @@ class ExcelReportFormatStyle(models.Model):
     bold = fields.Boolean('Bold')
     italic = fields.Boolean('Italic')
     
-
 class ExcelReport(models.Model):
     """ Model name: Excel Report
     """    
