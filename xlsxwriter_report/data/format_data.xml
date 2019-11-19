@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<openerp>
+    <data> 
+        <record model="excel.report.format" id="data_format_default">
+            <field name="name">Standard A4 format (default)</field>
+            <field name="code">DETAULT</field>
+            <field name="page_id" ref="xlsxwriter_report.data_page_9"/>
+            <field name="margin_top" eval="5"/>
+            <field name="margin_bottom" eval="5"/>
+            <field name="margin_left" eval="5"/>
+            <field name="margin_right" eval="5"/>
+        </record>       
+    </data>
+</openerp>
+

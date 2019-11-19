@@ -7,7 +7,7 @@
             <field name="model">excel.report.format.style</field>
             <field name="arch" type="xml">
                 <tree string="Excel report style" editable="bottom">
-                    <field name="format_id" />
+                    <field name="format_id" invisible="1" />
                     <field name="code" />
                     <field name="name" />                    
                     
@@ -28,7 +28,7 @@
                 <form string="Excel report style">
                     <sheet>
                         <group colspan="4" col="4">
-                            <field name="format_id" />
+                            <field name="format_id"/>
                             <newline/>
                             <field name="code" />
                             <field name="name" />                    
@@ -62,7 +62,7 @@
             <field name="name">excel.report.format.tree</field>
             <field name="model">excel.report.format</field>
             <field name="arch" type="xml">
-                <tree string="Excel report format" editable="bottom">
+                <tree string="Excel report format">
                     <field name="code" />
                     <field name="name" />                    
                     <field name="page_id" />
@@ -89,7 +89,7 @@
                                 <page string="Style">
                                     <group colspan="4" col="4">
                                         <separator string="Style:" colspan="4"/>
-                                        <field name="style_ids" colspan="4">
+                                        <field name="style_ids" colspan="4" nolabel="1">
                                             
                                         </field>
                                     </group>    

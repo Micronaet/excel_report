@@ -67,7 +67,7 @@ class ExcelReportFormat(models.Model):
     # -------------------------------------------------------------------------
     #                                   COLUMNS:
     # -------------------------------------------------------------------------
-    #default = fields.Char('Default')
+    #default = fields.Boolean('Default')
     name = fields.Char('Name', size=64, required=True)
     code = fields.Char('Code', size=15, required=True)
     page_id = fields.Many2one(
