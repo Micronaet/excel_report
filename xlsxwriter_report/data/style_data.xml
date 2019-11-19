@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<openerp>
+    <data> 
+        <record model="excel.report.format.style" id="data_format_style_title">
+            <field name="name">Title</field>
+            <field name="code">title</field>
+            
+            <field name="format_id" ref="xlsxwriter_report.data_format_default"/>
+            <field name="font_id" ref="xlsxwriter_report.data_font_calibri"/>
+            <field name="foreground_id" ref="xlsxwriter_report.data_color_black"/>
+            <field name="background_id" ref="xlsxwriter_report.data_color_white"/>
+            <field name="height" eval="10" />
+            <field name="bold" eval="True" />
+            <field name="italic" eval="False" />
+        </record>       
+
+        <record model="excel.report.format.style" id="data_format_style_header">
+            <field name="name">Header</field>
+            <field name="code">header</field>
+            
+            <field name="format_id" ref="xlsxwriter_report.data_format_default"/>
+            <field name="font_id" ref="xlsxwriter_report.data_font_calibri"/>
+            <field name="foreground_id" ref="xlsxwriter_report.data_color_black"/>
+            <field name="background_id" ref="xlsxwriter_report.data_color_grey"/>
+            <field name="height" eval="10" />
+            <field name="bold" eval="True" />
+            <field name="italic" eval="False" />
+            
+            <field name="border_top" eval="1" />
+            <field name="border_bottom" eval="1" />
+            <field name="border_left" eval="1" />
+            <field name="border_right" eval="1" />
+
+            <field name="border_color_top_id" ref="xlsxwriter_report.data_color_black" />
+            <field name="border_color_bottom_id" ref="xlsxwriter_report.data_color_black" />
+            <field name="border_color_left_id" ref="xlsxwriter_report.data_color_black" />
+            <field name="border_color_right_id" ref="xlsxwriter_report.data_color_black" />
+
+        </record>       
+
+        <record model="excel.report.format.style" id="data_format_style_text">
+            <field name="name">Text cell</field>
+            <field name="code">text</field>
+            
+            <field name="format_id" ref="xlsxwriter_report.data_format_default"/>
+            <field name="font_id" ref="xlsxwriter_report.data_font_calibri"/>
+            <field name="foreground_id" ref="xlsxwriter_report.data_color_black"/>
+            <field name="background_id" ref="xlsxwriter_report.data_color_white"/>
+            <field name="height" eval="10" />
+            <field name="bold" eval="False" />
+            <field name="italic" eval="False" />
+            
+            <field name="border_top" eval="1" />
+            <field name="border_bottom" eval="1" />
+            <field name="border_left" eval="1" />
+            <field name="border_right" eval="1" />
+
+            <field name="border_color_top_id" ref="xlsxwriter_report.data_color_black" />
+            <field name="border_color_bottom_id" ref="xlsxwriter_report.data_color_black" />
+            <field name="border_color_left_id" ref="xlsxwriter_report.data_color_black" />
+            <field name="border_color_right_id" ref="xlsxwriter_report.data_color_black" />
+        </record>       
+    </data>
+</openerp>
+

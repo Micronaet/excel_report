@@ -13,6 +13,9 @@
         <record model="excel.report.format.font" id="data_font_arial">
             <field name="name">Arial</field>
         </record>
+        <record model="excel.report.format.font" id="data_font_verdana">
+            <field name="name">Verdana</field>
+        </record>
     </data>
 </openerp>
 

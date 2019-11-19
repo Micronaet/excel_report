@@ -128,8 +128,23 @@ class ExcelReportFormatStyle(models.Model):
     bold = fields.Boolean('Bold')
     italic = fields.Boolean('Italic')
     
+    # Border:
+    border_top = fields.Integer('Border top')
+    border_bottom = fields.Integer('Border bottom')
+    border_left = fields.Integer('Border left')
+    border_right = fields.Integer('Border right')
+
+    # Border color
+    border_color_top_id = fields.Many2one(
+        'excel.report.format.color', 'Border top color')
+    border_color_bottom_id = fields.Many2one(
+        'excel.report.format.color', 'Border bottom color')
+    border_color_left_id = fields.Many2one(
+        'excel.report.format.color', 'Border left color')
+    border_color_right_id = fields.Many2one(
+        'excel.report.format.color', 'Border right color')
+    
     # TODO: 
-    # border (4 value)
     # align
     # valign
     # wrap

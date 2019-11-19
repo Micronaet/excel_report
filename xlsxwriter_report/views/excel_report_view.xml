@@ -6,10 +6,10 @@
             <field name="name">excel.report.format.style.tree</field>
             <field name="model">excel.report.format.style</field>
             <field name="arch" type="xml">
-                <tree string="Excel report style" editable="bottom">
+                <tree string="Excel report style">
                     <field name="format_id" invisible="1" />
-                    <field name="code" />
                     <field name="name" />                    
+                    <field name="code" />
                     
                     <field name="font_id" />
                     <field name="height" />
@@ -33,15 +33,36 @@
                             <field name="code" />
                             <field name="name" />                    
                             
-                            <separator string="Font:" colspan="4"/>
-                            <field name="font_id" />
-                            <field name="height" />
-                            <field name="bold" />
-                            <field name="italic" />
-                            
                             <separator string="Colors:" colspan="4"/>
                             <field name="foreground_id" />
                             <field name="background_id" />                            
+
+                            <notebook colspan="4">
+                                <page string="Font:">
+                                    <group colspan="4" col="4">
+                                        <separator string="Font:" colspan="4"/>
+                                        <field name="font_id" />
+                                        <field name="height" />
+                                        <field name="bold" />
+                                        <field name="italic" />
+                                    </group>    
+                                </page>
+                                <page string="Border:">
+                                    <group colspan="4" col="4">
+                                        <separator string="Border:" colspan="4"/>
+                                        <field name="border_top" />
+                                        <field name="border_bottom" />
+                                        <field name="border_left" />
+                                        <field name="border_right" />
+
+                                        <separator string="Color:" colspan="4"/>
+                                        <field name="border_color_top_id" />
+                                        <field name="border_color_bottom_id" />
+                                        <field name="border_color_left_id" />
+                                        <field name="border_color_right_id" />
+                                    </group>    
+                                </page>
+                            </notebook>                            
                         </group>    
                     </sheet>
                 </form>

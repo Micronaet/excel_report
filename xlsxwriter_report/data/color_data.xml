@@ -30,7 +30,7 @@
             <field name="rgb">#EEEEEE</field>
         </record>
         <record model="excel.report.format.color" id="data_color_black">
-            <field name="name">Grey</field>
+            <field name="name">Black</field>
             <field name="rgb">#000000</field>
         </record>
     </data>

@@ -45,6 +45,7 @@
         'data/page_data.xml',
 
         'data/format_data.xml',
+        'data/style_data.xml',
         ],
     'active': False,
     'installable': True,
