@@ -3,7 +3,7 @@
     <data> 
         <record model="excel.report.format" id="data_format_default">
             <field name="name">Standard A4 format (default)</field>
-            <field name="code">DETAULT</field>
+            <field name="code">DEFAULT</field>
             <field name="page_id" ref="xlsxwriter_report.data_page_9"/>
             <field name="margin_top" eval="5"/>
             <field name="margin_bottom" eval="5"/>
