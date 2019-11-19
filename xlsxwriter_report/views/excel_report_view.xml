@@ -279,10 +279,11 @@
                 action="action_excel_report_format_color"
                 sequence="40"
                 />
-            
-            
-        
-
+            <menuitem 
+                parent="reporting_excel_root" 
+                id="menu_reporting_excel_sample" 
+                name="Sample"
+                sequence="99"
+                />
     </data>
 </openerp>
-

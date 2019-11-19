@@ -118,6 +118,8 @@ class ExcelReportFormatStyle(models.Model):
     code = fields.Char('Code', size=15, required=True)
     format_id = fields.Many2one('excel.report.format', 'Format')
 
+    # -------------------------------------------------------------------------
+    # Font:
     font_id = fields.Many2one(
         'excel.report.format.font', 'Font', required=True, 
         help='Remember to use standard fonts, need to be installed on PC!')
@@ -125,15 +127,20 @@ class ExcelReportFormatStyle(models.Model):
     background_id = fields.Many2one('excel.report.format.color', 'Backgroung')
 
     height = fields.Integer('Font height', required=True, default=10)
+    
+    # -------------------------------------------------------------------------
+    # Type:
     bold = fields.Boolean('Bold')
     italic = fields.Boolean('Italic')
     
+    # -------------------------------------------------------------------------
     # Border:
     border_top = fields.Integer('Border top')
     border_bottom = fields.Integer('Border bottom')
     border_left = fields.Integer('Border left')
     border_right = fields.Integer('Border right')
 
+    # -------------------------------------------------------------------------
     # Border color
     border_color_top_id = fields.Many2one(
         'excel.report.format.color', 'Border top color')
@@ -184,8 +191,8 @@ class ExcelReport(models.Model):
     # -------------------------------------------------------------------------
     #                                   COLUMNS:
     # -------------------------------------------------------------------------
-    name = fields.Char('Name', size=64, required=True)
-    code = fields.Char('Code', size=15, required=True)
+    #name = fields.Char('Name', size=64, required=True)
+    #code = fields.Char('Code', size=15, required=True)
     
     b64_file = fields.Binary('B64 file', compute='_get_template')
     fullname = fields.Text('Fullname of file')

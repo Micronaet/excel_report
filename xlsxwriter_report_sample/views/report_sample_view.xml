@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        
+        <record id="view_res_partner_excel_report_wizard" model="ir.ui.view">
+            <field name="name">Partner country report</field>
+            <field name="model">res.partner.excel.report.wizard</field>
+            <field name="arch" type="xml">
+              <form string="Excel report:">
+                  <header>
+                      <button string="Cancel" class="btn-default" special="cancel" />
+                      <button name="excel_partner_report" string="Excel report" type="object" class="btn-primary" />
+                  </header>
+                  <sheet>                  
+                      <group colspan="4" col="4">
+                          <field name="country_id" />
+                      </group>    
+                  </sheet>
+              </form>
+            </field>
+        </record>
+        <record id="action_res_partner_excel_report_wizard" model="ir.actions.act_window">
+            <field name="name">Partner Report Wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner.excel.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_res_partner_excel_report_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem 
+            parent="xlsxwriter_report.menu_reporting_excel_sample"
+            sequence="10"
+            id="menu_res_partner_excel_report_wizard" 
+            action="action_res_partner_excel_report_wizard"
+            />
+    </data>
+</openerp>
