@@ -384,7 +384,7 @@ class ExcelReport(models.Model):
             }
 
     @api.model
-    def merge_cell(self, WS_name, rectangle, default_format=False, data=''):
+    def merge_cell(self, ws_name, rectangle, default_format=False, data=''):
         ''' Merge cell procedure:
             WS: Worksheet where work
             rectangle: list for 2 corners xy data: [0, 0, 10, 5]
@@ -393,11 +393,11 @@ class ExcelReport(models.Model):
         rectangle.append(data)        
         if default_format:
             rectangle.append(default_format)            
-        self._WS[WS_name].merge_range(*rectangle)
+        self._WS[ws_name].merge_range(*rectangle)
         return 
              
     @api.model
-    def write_xls_line(self, WS_name, row, line, default_format=False, col=0):
+    def write_xls_line(self, ws_name, row, line, default_format=False, col=0):
         ''' Write line in excel file:
             WS: Worksheet where find
             row: position where write
@@ -411,49 +411,49 @@ class ExcelReport(models.Model):
                 record = ''
             if type(record) not in (list, tuple):
                 if default_format:                    
-                    self._WS[WS_name].write(row, col, record, default_format)
+                    self._WS[ws_name].write(row, col, record, default_format)
                 else:    
-                    self._WS[WS_name].write(row, col, record)                
+                    self._WS[ws_name].write(row, col, record)                
             elif len(record) == 2: # Normal text, format
-                self._WS[WS_name].write(row, col, *record)
+                self._WS[ws_name].write(row, col, *record)
             else: # Rich format TODO
                 
-                self._WS[WS_name].write_rich_string(row, col, *record)
+                self._WS[ws_name].write_rich_string(row, col, *record)
             col += 1
         return True
 
     @api.model
-    def write_xls_data(self, WS_name, row, col, data, default_format=False):
+    def write_xls_data(self, ws_name, row, col, data, default_format=False):
         ''' Write data in row col position with default_format
             
             @return: nothing
         '''
         if default_format:
-            self._WS[WS_name].write(row, col, data, default_format)
+            self._WS[ws_name].write(row, col, data, default_format)
         else:    
-            self._WS[WS_name].write(row, col, data, default_format)
+            self._WS[ws_name].write(row, col, data, default_format)
         return True
         
     @api.model
-    def column_width(self, WS_name, columns_w, col=0):
+    def column_width(self, ws_name, columns_w, col=0):
         ''' WS: Worksheet passed
             columns_w: list of dimension for the columns
         '''
         for w in columns_w:
-            self._WS[WS_name].set_column(col, col, w)
+            self._WS[ws_name].set_column(col, col, w)
             col += 1
         return True
 
     @api.model
-    def row_height(self, WS_name, row_list, height=10):
+    def row_height(self, ws_name, row_list, height=10):
         ''' WS: Worksheet passed
             columns_w: list of dimension for the columns
         '''
         if type(row_list) in (list, tuple):            
             for row in row_list:
-                self._WS[WS_name].set_row(row, height)
+                self._WS[ws_name].set_row(row, height)
         else:        
-            self._WS[WS_name].set_row(row_list, height)                
+            self._WS[ws_name].set_row(row_list, height)                
         return True
         
     @api.model
