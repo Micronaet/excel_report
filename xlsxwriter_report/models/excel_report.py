@@ -168,12 +168,12 @@ class ExcelReportFormat(models.Model):
     style_ids = fields.One2many(
         'excel.report.format.style', 'format_id', 'Style')
     
-class ExcelReport(models.Model):
+class ExcelReport(models.TransientModel):
     """ Model name: Excel Report
     """    
     _name = 'excel.report'
     _description = 'Excel report'
-    _order = 'name',
+    _order = 'name'
 
     # -------------------------------------------------------------------------
     # Computed fields:
@@ -377,7 +377,7 @@ class ExcelReport(models.Model):
         return {
             'type' : 'ir.actions.act_url',
             'name': name,
-            'url': '/web/content/excel.writer/%s/b64_file/%s?download=true' % (
+            'url': '/web/content/excel.report/%s/b64_file/%s?download=true' % (
                 temp_id,
                 name_of_file,
                 ),
