@@ -250,6 +250,8 @@ class ExcelReport(models.TransientModel):
         _logger.info('Start create file %s' % filename)
         self._WB = xlsxwriter.Workbook(filename)
         self._WS = {}
+        self._style = {}
+
         self._filename = filename
         _logger.warning('Created WB and file: %s' % filename)
         
@@ -261,6 +263,7 @@ class ExcelReport(models.TransientModel):
         ''' Close workbook
         '''
         self._WS = {}
+        self._style = {}
         self._wb_format = False
         
         try:
@@ -276,7 +279,63 @@ class ExcelReport(models.TransientModel):
         return self._close_workbook()
 
     @api.model
-    def create_worksheet(self, name=False, extension='xlsx'):
+    def _load_format_code(self, name, format_code):
+        ''' Setup format parameters and syles
+        '''
+        format_pool = self.env['excel.report.format']
+        formats = format_pool.search([('code', '=', format_code)])
+        ws = self._WS[name]
+        if formats:
+            current_format = formats[0]
+            _logger.info('Format selected: %s' % format_code)
+            
+            # Setup page:
+            page_id = current_format.page_id
+            if page_id:
+                # Set page:
+                ws.set_paper(page_id.index)
+
+                # Set orientation: # TODO
+                # set_landscape set_portrait                
+                ws.set_landscape()
+            
+                # Setup Margin
+                ws.set_margins(
+                    left=current_format.margin_left, 
+                    right=current_format.margin_right, 
+                    top=current_format.margin_top, 
+                    bottom=current_format.margin_bottom,
+                    )
+                    
+                # -------------------------------------------------------------
+                # Load Styles:
+                # -------------------------------------------------------------
+                if name not in self._style:
+                    # Every page has his own style list 
+                    # (can use different format)
+                    self._style[name] = {}
+
+                for style in current_format.style_ids:
+                    # Create new style and add
+                    self._style[name][style.code] = self._WB.add_format({
+                        'bold': style.bold, 
+                        'font_name': style.font_id.name,
+                        'font_size': style.height,
+                        'font_color': style.foreground_id.rgb,
+                        'bg_color': style.background_id.rgb,
+                        #'align': 'center',
+                        #'valign': 'vcenter',
+                        #'border': F['border'],
+                        # border color
+                        # italic
+                        #'text_wrap': True,
+                        }),
+            
+        else:    
+            _logger.info('Format not found: %s, use nothing: %s' % format_code)
+        
+    @api.model
+    def create_worksheet(self, name=False, format_code='', extension='xlsx'):
         ''' Create database for WS in this module
         '''
         try:
@@ -287,6 +346,11 @@ class ExcelReport(models.TransientModel):
             self._create_workbook(extension=extension)
             
         self._WS[name] = self._WB.add_worksheet(name)
+        
+        # Setup Format:
+        if format_code:
+            self._load_format_code(name, format_code)
+            
         
     @api.model
     def send_mail_to_group(self,
