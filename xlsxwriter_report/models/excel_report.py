@@ -395,59 +395,61 @@ class ExcelReport(models.TransientModel):
             self._WS[ws_name].set_row(row_list, height)                
         return True
 
+    @api.model
+    def merge_cell(self, ws_name, rectangle, style=False, data=''):
+        ''' Merge cell procedure:
+            WS: Worksheet where work
+            rectangle: list for 2 corners xy data: [0, 0, 10, 5]
+            style: setup format for cells
+        '''
+        rectangle.append(data)        
+        if style:
+            rectangle.append(style)            
+        self._WS[ws_name].merge_range(*rectangle)
+        return 
+
     # -------------------------------------------------------------------------
     # Miscellaneous operations (called directly):
     # -------------------------------------------------------------------------
     @api.model
-    def write_xls_line(self, ws_name, row, line, default_format=False, col=0):
+    def write_xls_line(self, ws_name, row, line, style_code=False, col=0):
         ''' Write line in excel file:
             WS: Worksheet where find
             row: position where write
             line: Row passed is a list of element or tuple (element, format)
-            default_format: if present replace when format is not present
+            style: if present replace when format is not present
             
             @return: nothing
         '''
+        style = self._WS(ws_name).get(style_code)
         for record in line:
             if type(record) == bool:
                 record = ''
             if type(record) not in (list, tuple):
-                if default_format:                    
-                    self._WS[ws_name].write(row, col, record, default_format)
+                if style: # needed?               
+                    self._WS[ws_name].write(row, col, record, style)
                 else:    
                     self._WS[ws_name].write(row, col, record)                
             elif len(record) == 2: # Normal text, format
                 self._WS[ws_name].write(row, col, *record)
-            else: # Rich format TODO
-                
+            else: # Rich format TODO                
                 self._WS[ws_name].write_rich_string(row, col, *record)
             col += 1
         return True
 
+    # TODO USED?
+    """
     @api.model
-    def merge_cell(self, ws_name, rectangle, default_format=False, data=''):
-        ''' Merge cell procedure:
-            WS: Worksheet where work
-            rectangle: list for 2 corners xy data: [0, 0, 10, 5]
-            default_format: setup format for cells
-        '''
-        rectangle.append(data)        
-        if default_format:
-            rectangle.append(default_format)            
-        self._WS[ws_name].merge_range(*rectangle)
-        return 
-
-    @api.model
-    def write_xls_data(self, ws_name, row, col, data, default_format=False):
-        ''' Write data in row col position with default_format
+    def write_xls_data(self, ws_name, row, col, data, style=False):
+        ''' Write data in row col position with style (used?)
             
             @return: nothing
         '''
-        if default_format:
-            self._WS[ws_name].write(row, col, data, default_format)
+        if style:
+            self._WS[ws_name].write(row, col, data, style)
         else:    
-            self._WS[ws_name].write(row, col, data, default_format)
-        return True
+            self._WS[ws_name].write(row, col, data, style)
+        return True"""
         
     # -------------------------------------------------------------------------
     # Return operation:
