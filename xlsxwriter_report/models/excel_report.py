@@ -324,11 +324,13 @@ class ExcelReport(models.TransientModel):
                 ws.set_paper(page_id.index)
 
                 # -------------------------------------------------------------
-                # Set orientation: # TODO
+                # Set orientation: 
                 # -------------------------------------------------------------
-                # set_landscape set_portrait                
-                ws.set_landscape()
-            
+                # set_landscape set_portrait
+                if True:     # TODO paramter to add!
+                    ws.set_landscape() 
+                else:    
+                    ws.set_portrait()
             
                 # -------------------------------------------------------------
                 # Setup Margin
@@ -344,8 +346,7 @@ class ExcelReport(models.TransientModel):
                 # Load Styles:
                 # -------------------------------------------------------------
                 if name not in self._style:
-                    # Every page has his own style list 
-                    # (can use different format)
+                    # Every page use own style (can use different format)
                     self._style[name] = {}
 
                 for style in current_format.style_ids:
@@ -369,6 +370,88 @@ class ExcelReport(models.TransientModel):
             _logger.info('Format not found: %s, use nothing: %s' % format_code)
         
         
+    # -------------------------------------------------------------------------
+    # Sheet setup:
+    # -------------------------------------------------------------------------
+    @api.model
+    def column_width(self, ws_name, columns_w, col=0):
+        ''' WS: Worksheet passed
+            columns_w: list of dimension for the columns
+        '''
+        for w in columns_w:
+            self._WS[ws_name].set_column(col, col, w)
+            col += 1
+        return True
+
+    @api.model
+    def row_height(self, ws_name, row_list, height=10):
+        ''' WS: Worksheet passed
+            columns_w: list of dimension for the columns
+        '''
+        if type(row_list) in (list, tuple):            
+            for row in row_list:
+                self._WS[ws_name].set_row(row, height)
+        else:        
+            self._WS[ws_name].set_row(row_list, height)                
+        return True
+
+    # -------------------------------------------------------------------------
+    # Miscellaneous operations (called directly):
+    # -------------------------------------------------------------------------
+    @api.model
+    def write_xls_line(self, ws_name, row, line, default_format=False, col=0):
+        ''' Write line in excel file:
+            WS: Worksheet where find
+            row: position where write
+            line: Row passed is a list of element or tuple (element, format)
+            default_format: if present replace when format is not present
+            
+            @return: nothing
+        '''
+        for record in line:
+            if type(record) == bool:
+                record = ''
+            if type(record) not in (list, tuple):
+                if default_format:                    
+                    self._WS[ws_name].write(row, col, record, default_format)
+                else:    
+                    self._WS[ws_name].write(row, col, record)                
+            elif len(record) == 2: # Normal text, format
+                self._WS[ws_name].write(row, col, *record)
+            else: # Rich format TODO
+                
+                self._WS[ws_name].write_rich_string(row, col, *record)
+            col += 1
+        return True
+
+    @api.model
+    def merge_cell(self, ws_name, rectangle, default_format=False, data=''):
+        ''' Merge cell procedure:
+            WS: Worksheet where work
+            rectangle: list for 2 corners xy data: [0, 0, 10, 5]
+            default_format: setup format for cells
+        '''
+        rectangle.append(data)        
+        if default_format:
+            rectangle.append(default_format)            
+        self._WS[ws_name].merge_range(*rectangle)
+        return 
+
+    @api.model
+    def write_xls_data(self, ws_name, row, col, data, default_format=False):
+        ''' Write data in row col position with default_format
+            
+            @return: nothing
+        '''
+        if default_format:
+            self._WS[ws_name].write(row, col, data, default_format)
+        else:    
+            self._WS[ws_name].write(row, col, data, default_format)
+        return True
+        
+    # -------------------------------------------------------------------------
+    # Return operation:
+    # -------------------------------------------------------------------------
     @api.model
     def send_mail_to_group(self,
             group_name,
@@ -464,78 +547,6 @@ class ExcelReport(models.TransientModel):
                 ),
             }
 
-    @api.model
-    def merge_cell(self, ws_name, rectangle, default_format=False, data=''):
-        ''' Merge cell procedure:
-            WS: Worksheet where work
-            rectangle: list for 2 corners xy data: [0, 0, 10, 5]
-            default_format: setup format for cells
-        '''
-        rectangle.append(data)        
-        if default_format:
-            rectangle.append(default_format)            
-        self._WS[ws_name].merge_range(*rectangle)
-        return 
-             
-    @api.model
-    def write_xls_line(self, ws_name, row, line, default_format=False, col=0):
-        ''' Write line in excel file:
-            WS: Worksheet where find
-            row: position where write
-            line: Row passed is a list of element or tuple (element, format)
-            default_format: if present replace when format is not present
-            
-            @return: nothing
-        '''
-        for record in line:
-            if type(record) == bool:
-                record = ''
-            if type(record) not in (list, tuple):
-                if default_format:                    
-                    self._WS[ws_name].write(row, col, record, default_format)
-                else:    
-                    self._WS[ws_name].write(row, col, record)                
-            elif len(record) == 2: # Normal text, format
-                self._WS[ws_name].write(row, col, *record)
-            else: # Rich format TODO
-                
-                self._WS[ws_name].write_rich_string(row, col, *record)
-            col += 1
-        return True
-
-    @api.model
-    def write_xls_data(self, ws_name, row, col, data, default_format=False):
-        ''' Write data in row col position with default_format
-            
-            @return: nothing
-        '''
-        if default_format:
-            self._WS[ws_name].write(row, col, data, default_format)
-        else:    
-            self._WS[ws_name].write(row, col, data, default_format)
-        return True
-        
-    @api.model
-    def column_width(self, ws_name, columns_w, col=0):
-        ''' WS: Worksheet passed
-            columns_w: list of dimension for the columns
-        '''
-        for w in columns_w:
-            self._WS[ws_name].set_column(col, col, w)
-            col += 1
-        return True
-
-    @api.model
-    def row_height(self, ws_name, row_list, height=10):
-        ''' WS: Worksheet passed
-            columns_w: list of dimension for the columns
-        '''
-        if type(row_list) in (list, tuple):            
-            for row in row_list:
-                self._WS[ws_name].set_row(row, height)
-        else:        
-            self._WS[ws_name].set_row(row_list, height)                
-        return True
         
     '''@api.model
     def set_format(    
