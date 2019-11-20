@@ -13,7 +13,48 @@
             <field name="paper_size">8 1/2 x 11 in</field>
             <field name="sequence" eval="1"/>
         </record>
-
+        <record model="excel.report.format.page" id="data_page_2">
+            <field name="index" eval="2" />
+            <field name="name">Letter Small</field>
+            <field name="paper_size">8 1/2 x 11 in</field>
+            <field name="sequence" eval="2"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_3">
+            <field name="index" eval="3" />
+            <field name="name">Tabloid</field>
+            <field name="paper_size">11 x 17 in</field>
+            <field name="sequence" eval="3"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_4">
+            <field name="index" eval="4" />
+            <field name="name">Ledger</field>
+            <field name="paper_size">17 x 11 in</field>
+            <field name="sequence" eval="4"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_5">
+            <field name="index" eval="5" />
+            <field name="name">Legal</field>
+            <field name="paper_size">8 1/2 x 14 in</field>
+            <field name="sequence" eval="5"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_6">
+            <field name="index" eval="6" />
+            <field name="name">Statement</field>
+            <field name="paper_size">5 1/2 x 8 1/2 in</field>
+            <field name="sequence" eval="6"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_7">
+            <field name="index" eval="7" />
+            <field name="name">Executive</field>
+            <field name="paper_size">7 1/4 x 10 1/2 in</field>
+            <field name="sequence" eval="7"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_8">
+            <field name="index" eval="8" />
+            <field name="name">A3</field>
+            <field name="paper_size">297 x 420 mm</field>
+            <field name="sequence" eval="8"/>
+        </record>
         <record model="excel.report.format.page" id="data_page_9">
             <field name="index" eval="9" />
             <field name="name">A4</field>
@@ -21,15 +62,7 @@
             <field name="sequence" eval="9"/>
         </record>
 
-<!--        
-2 	Letter Small 	8 1/2 x 11 in
-3 	Tabloid 	11 x 17 in
-4 	Ledger 	17 x 11 in
-5 	Legal 	8 1/2 x 14 in
-6 	Statement 	5 1/2 x 8 1/2 in
-7 	Executive 	7 1/4 x 10 1/2 in
-8 	A3 	297 x 420 mm
-9 	A4 	210 x 297 mm
+<!--
 10 	A4 Small 	210 x 297 mm
 11 	A5 	148 x 210 mm
 12 	B4 	250 x 354 mm
