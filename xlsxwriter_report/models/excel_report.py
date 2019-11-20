@@ -238,25 +238,28 @@ class ExcelReport(models.TransientModel):
         minute = int((value - hour) * 60)
         return '%d:%02d' % (hour, minute) 
     
-    # Excel utility:
+    # -------------------------------------------------------------------------
+    #                              Excel utility:
+    # -------------------------------------------------------------------------
+
+    # -------------------------------------------------------------------------
+    # Workbook:
+    # -------------------------------------------------------------------------
     @api.model
     def _create_workbook(self, extension='xlsx'):
         ''' Create workbook in a temp file
         '''
         now = fields.Datetime.now()
         now = now.replace(':', '_').replace('-', '_').replace(' ', '_')
-        filename = '/tmp/wb_%s.%s' % (now, extension)
-             
+        filename = '/tmp/wb_%s.%s' % (now, extension) # TODO better!
+
         _logger.info('Start create file %s' % filename)
         self._WB = xlsxwriter.Workbook(filename)
         self._WS = {}
-        self._style = {}
+        self._style = {} # Style for every WS
 
         self._filename = filename
-        _logger.warning('Created WB and file: %s' % filename)
-        
-        self.set_format() # setup default format for text used
-        self.get_format() # Load database of formats
+        _logger.warning('Created WB on file: %s' % filename)
 
     @api.model
     def _close_workbook(self, ):
@@ -278,6 +281,29 @@ class ExcelReport(models.TransientModel):
         '''
         return self._close_workbook()
 
+    # -------------------------------------------------------------------------
+    # Worksheet:
+    # -------------------------------------------------------------------------
+    @api.model
+    def create_worksheet(self, name=False, format_code='', extension='xlsx'):
+        ''' Create database for WS in this module
+        '''
+        try:
+            if not self._WB:
+                self._create_workbook(extension=extension)
+            _logger.info('Using WB: %s' % self._WB)
+        except:
+            self._create_workbook(extension=extension)
+            
+        self._WS[name] = self._WB.add_worksheet(name)
+        
+        # Setup Format:
+        if format_code:
+            self._load_format_code(name, format_code)
+            
+    # -------------------------------------------------------------------------
+    # Format:
+    # -------------------------------------------------------------------------
     @api.model
     def _load_format_code(self, name, format_code):
         ''' Setup format parameters and syles
@@ -292,14 +318,21 @@ class ExcelReport(models.TransientModel):
             # Setup page:
             page_id = current_format.page_id
             if page_id:
+                # -------------------------------------------------------------
                 # Set page:
+                # -------------------------------------------------------------
                 ws.set_paper(page_id.index)
 
+                # -------------------------------------------------------------
                 # Set orientation: # TODO
+                # -------------------------------------------------------------
                 # set_landscape set_portrait                
                 ws.set_landscape()
             
+            
+                # -------------------------------------------------------------
                 # Setup Margin
+                # -------------------------------------------------------------
                 ws.set_margins(
                     left=current_format.margin_left, 
                     right=current_format.margin_right, 
@@ -329,28 +362,12 @@ class ExcelReport(models.TransientModel):
                         # border color
                         # italic
                         #'text_wrap': True,
+                        #'num_format': F['number'],
                         }),
             
         else:    
             _logger.info('Format not found: %s, use nothing: %s' % format_code)
         
-    @api.model
-    def create_worksheet(self, name=False, format_code='', extension='xlsx'):
-        ''' Create database for WS in this module
-        '''
-        try:
-            if not self._WB:
-                self._create_workbook(extension=extension)
-            _logger.info('Using WB: %s' % self._WB)
-        except:
-            self._create_workbook(extension=extension)
-            
-        self._WS[name] = self._WB.add_worksheet(name)
-        
-        # Setup Format:
-        if format_code:
-            self._load_format_code(name, format_code)
-            
         
     @api.model
     def send_mail_to_group(self,
@@ -520,7 +537,7 @@ class ExcelReport(models.TransientModel):
             self._WS[ws_name].set_row(row_list, height)                
         return True
         
-    @api.model
+    '''@api.model
     def set_format(    
             self, 
             # Title:
@@ -534,458 +551,5 @@ class ExcelReport(models.TransientModel):
             # Layout:
             border=1,
             ):
-        ''' Setup 4 element used in normal reporting 
-            Every time replace format setup with new database           
         '''
-        self._default_format = {
-            'title': (title_font, title_size, title_fg),
-            'header': (header_font, header_size, header_fg),
-            'text': (text_font, text_size, text_fg),
-            'number': number_format,
-            'border': border,
-            }
-        _logger.warning('Set format variables: %s' % self._default_format)            
-        return
-    
-    @api.model
-    def get_format(self, key=False):  
-        ''' Database for format cells
-            key: mode of format
-            if not passed load database only
-        '''
-        #try:
-        _logger.warning('Set format WB type')
-        WB = self._WB # Create with start method
-        #except:
-            
-        F = self._default_format # readability
-        
-        # Save database in self:
-        create = False
-        try:
-            if not self._wb_format: # raise error if not present
-                create = True            
-        except:    
-            create = True
-
-        if create:    
-            self._wb_format = {
-                # -------------------------------------------------------------
-                # Used when key not present:
-                # -------------------------------------------------------------
-                'default' : WB.add_format({ # Usually text format
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'align': 'left',
-                    }),
-
-                # -------------------------------------------------------------
-                #                       TITLE:
-                # -------------------------------------------------------------
-                'title' : WB.add_format({
-                    'bold': True, 
-                    'font_name': F['title'][0],
-                    'font_size': F['title'][1],
-                    'font_color': F['title'][2],
-                    'align': 'left',
-                    }),
-                    
-                # -------------------------------------------------------------
-                #                       HEADER:
-                # -------------------------------------------------------------
-                'header': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['header'][0],
-                    'font_size': F['header'][1],
-                    'font_color': F['header'][2],
-                    'align': 'center',
-                    'valign': 'vcenter',
-                    'bg_color': '#cfcfcf', # grey
-                    'border': F['border'],
-                    #'text_wrap': True,
-                    }),
-
-                # -------------------------------------------------------------
-                #                       TEXT:
-                # -------------------------------------------------------------
-                'text': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'align': 'left',
-                    #'valign': 'vcenter',
-                    }),                    
-                'text_center': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'align': 'center',
-                    #'valign': 'vcenter',
-                    }),
-                'text_right': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'align': 'right',
-                    #'valign': 'vcenter',
-                    }),
-                    
-                'text_total': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'bg_color': '#DDDDDD',
-                    'align': 'left',
-                    'valign': 'vcenter',
-                    #'text_wrap': True,
-                    }),
-
-                # --------------
-                # Text BG color:
-                # --------------
-                # No bold:
-                'bg_normal_white': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'bg_color': '#FFFFFF',
-                    'align': 'left',
-                    #'valign': 'vcenter',
-                    }),
-                'bg_normal_red': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'bg_color': '#ffc6af',
-                    'align': 'left',
-                    #'valign': 'vcenter',
-                    }),
-                'bg_normal_green': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'bg_color': '#b1f9c1',
-                    'align': 'left',
-                    #'valign': 'vcenter',
-                    }),
-
-                'bg_normal_white_number': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'font_color': 'black',
-                    'bg_color': '#FFFFFF',
-                    'align': 'right',
-                    'num_format': F['number'],
-                    }),                
-                'bg_normal_red_number': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'bg_color': '#ffc6af',
-                    'align': 'right',
-                    'num_format': F['number'],
-                    }),
-                'bg_normal_green_number': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'bg_color': '#b1f9c1',
-                    'align': 'right',
-                    'num_format': F['number'],
-                    }),
-
-
-                # Bold
-                'bg_white': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'bg_color': '#FFFFFF',
-                    'align': 'left',
-                    #'valign': 'vcenter',
-                    }),
-                'bg_blue': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'bg_color': '#c4daff',
-                    'align': 'left',
-                    #'valign': 'vcenter',
-                    }),
-                'bg_red': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'bg_color': '#ffc6af',
-                    'align': 'left',
-                    #'valign': 'vcenter',
-                    }),
-                'bg_green': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'bg_color': '#b1f9c1',
-                    'align': 'left',
-                    #'valign': 'vcenter',
-                    }),
-                'bg_yellow': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'font_color': 'black',
-                    'bg_color': '#fffec1',
-                    'align': 'left',
-                    #'valign': 'vcenter',
-                    }),                
-                'bg_orange': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'font_color': 'black',
-                    'bg_color': '#fcdebd',
-                    'align': 'left',
-                    #'valign': 'vcenter',
-                    }),                
-                'bg_red_number': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'bg_color': '#ffc6af',
-                    'align': 'right',
-                    'num_format': F['number'],
-                    #'valign': 'vcenter',
-                    }),
-                'bg_green_number': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'bg_color': '#b1f9c1',
-                    'align': 'right',
-                    'num_format': F['number'],
-                    #'valign': 'vcenter',
-                    }),
-                'bg_yellow_number': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'font_color': 'black',
-                    'bg_color': '#fffec1',##ffff99',
-                    'align': 'right',
-                    'num_format': F['number'],
-                    #'valign': 'vcenter',
-                    }),                
-                'bg_orange_number': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'font_color': 'black',
-                    'bg_color': '#fcdebd',
-                    'align': 'right',
-                    'num_format': F['number'],
-                    #'valign': 'vcenter',
-                    }),                
-                'bg_white_number': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'font_color': 'black',
-                    'bg_color': '#FFFFFF',
-                    'align': 'right',
-                    'num_format': F['number'],
-                    #'valign': 'vcenter',
-                    }),                
-                'bg_blue_number': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'font_color': 'black',
-                    'bg_color': '#c4daff',##ffff99',
-                    'align': 'right',
-                    'num_format': F['number'],
-                    #'valign': 'vcenter',
-                    }),                
-
-                # TODO remove?
-                'bg_order': WB.add_format({
-                    'bold': True, 
-                    'bg_color': '#cc9900',
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'num_format': F['number'],
-                    'align': 'right',
-                    #'valign': 'vcenter',
-                    }),
-
-                # --------------
-                # Text FG color:
-                # --------------
-                'text_black': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': 'black',
-                    'border': F['border'],
-                    'align': 'left',
-                    'valign': 'vcenter',
-                    #'text_wrap': True
-                    }),
-                'text_blue': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': 'blue',
-                    'border': F['border'],
-                    'align': 'left',
-                    'valign': 'vcenter',
-                    #'text_wrap': True
-                    }),
-                'text_red': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': '#ff420e',
-                    'border': F['border'],
-                    'align': 'left',
-                    'valign': 'vcenter',
-                    #'text_wrap': True
-                    }),
-                'text_green': WB.add_format({
-                    'font_color': '#328238', ##99cc66
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'align': 'left',
-                    'valign': 'vcenter',
-                    #'text_wrap': True
-                    }),
-                'text_grey': WB.add_format({
-                    'font_color': '#eeeeee',
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'align': 'left',
-                    'valign': 'vcenter',
-                    #'text_wrap': True
-                    }),                
-                'text_wrap': WB.add_format({
-                    'font_color': 'black',
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'align': 'left',
-                    'valign': 'vcenter',
-                    #'text_wrap': True,
-                    }),
-
-                # -------------------------------------------------------------
-                #                       NUMBER:
-                # -------------------------------------------------------------
-                'number': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'num_format': F['number'],
-                    'align': 'right',
-                    #'valign': 'vcenter',
-                    }),
-
-                # ----------------
-                # Number FG color:
-                # ----------------
-                'number_black': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'num_format': F['number'],
-                    'font_color': 'black',
-                    'align': 'right',
-                    #'valign': 'vcenter',
-                    }),
-                'number_blue': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'num_format': F['number'],
-                    'font_color': 'blue',
-                    'align': 'right',
-                    #'valign': 'vcenter',
-                    }),
-                'number_grey': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'num_format': F['number'],
-                    'font_color': 'grey',
-                    'align': 'right',
-                    #'valign': 'vcenter',
-                    }),
-                'number_red': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'num_format': F['number'],
-                    'font_color': 'red',
-                    'align': 'right',
-                    #'valign': 'vcenter',
-                    }),
-                'number_green': WB.add_format({
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'border': F['border'],
-                    'num_format': F['number'],
-                    'font_color': 'green',
-                    'align': 'right',
-                    #'valign': 'vcenter',
-                    }),
-
-                'number_total': WB.add_format({
-                    'bold': True, 
-                    'font_name': F['text'][0],
-                    'font_size': F['text'][1],
-                    'font_color': F['text'][2],
-                    'border': F['border'],
-                    'num_format': F['number'],
-                    'bg_color': '#DDDDDD',
-                    'align': 'right',
-                    #'valign': 'vcenter',
-                    }),
-                }
-        
-        # Return format or default one's
-        if key:
-            return self._wb_format.get(
-                key, 
-                self._wb_format.get('default'),
-                )
-        else:
-            return True    
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
