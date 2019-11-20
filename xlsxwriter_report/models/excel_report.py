@@ -73,10 +73,16 @@ class ExcelReportFormat(models.Model):
     page_id = fields.Many2one(
         'excel.report.format.page', 'Page', required=True)
     
-    margin_top = fields.Integer('Margin Top')
-    margin_bottom = fields.Integer('Margin Bottom')
-    margin_left = fields.Integer('Margin Left')
-    margin_right = fields.Integer('Margin Right')
+    
+    margin_top = fields.Float('Margin Top', digits=(16, 3), default=0.25)
+    margin_bottom = fields.Float('Margin Bottom', digits=(16, 3), default=0.25)
+    margin_left = fields.Float('Margin Left', digits=(16, 3), default=0.25)
+    margin_right = fields.Float('Margin Right', digits=(16, 3), default=0.25)
+    
+    orientation = fields.Selection([
+        ('portrait', 'Portrait'),
+        ('landscape', 'Landscape'),
+        ], 'Orientation', default='portrait')
 
     # TODO header, footer
 
@@ -296,8 +302,11 @@ class ExcelReport(models.TransientModel):
             self._create_workbook(extension=extension)
             
         self._WS[name] = self._WB.add_worksheet(name)
+        self._style[name] = {}
         
-        # Setup Format:
+        # ---------------------------------------------------------------------
+        # Setup Format (every new sheet):
+        # ---------------------------------------------------------------------
         if format_code:
             self._load_format_code(name, format_code)
             
@@ -327,7 +336,7 @@ class ExcelReport(models.TransientModel):
                 # Set orientation: 
                 # -------------------------------------------------------------
                 # set_landscape set_portrait
-                if True:     # TODO paramter to add!
+                if current_format.orientation == 'landscape':
                     ws.set_landscape() 
                 else:    
                     ws.set_portrait()
@@ -352,19 +361,28 @@ class ExcelReport(models.TransientModel):
                 for style in current_format.style_ids:
                     # Create new style and add
                     self._style[name][style.code] = self._WB.add_format({
-                        'bold': style.bold, 
                         'font_name': style.font_id.name,
                         'font_size': style.height,
                         'font_color': style.foreground_id.rgb,
+                        
+
+                        'bold': style.bold, 
+                        'italic': style.italic,
+                        # bottom top left right
+                        # bottom_color top_color left_color right_color
+                        
                         'bg_color': style.background_id.rgb,
+
                         #'align': 'center',
                         #'valign': 'vcenter',
-                        #'border': F['border'],
-                        # border color
                         # italic
                         #'text_wrap': True,
                         #'num_format': F['number'],
-                        }),
+                        
+                        # locked
+                        # hidden
+                        
+                        })
             
         else:    
             _logger.info('Format not found: %s, use nothing: %s' % format_code)
@@ -421,7 +439,7 @@ class ExcelReport(models.TransientModel):
             
             @return: nothing
         '''
-        style = self._WS(ws_name).get(style_code)
+        style = self._style[ws_name].get(style_code)
         for record in line:
             if type(record) == bool:
                 record = ''

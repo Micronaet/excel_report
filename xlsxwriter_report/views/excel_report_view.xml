@@ -123,6 +123,8 @@
                                         
                                         <field name="margin_left" />
                                         <field name="margin_right" />
+                                        
+                                        <field name="orientation" />
                                     </group>    
                                 </page>
                             </notebook>

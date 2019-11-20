@@ -76,16 +76,16 @@ class ResPartnerExcelReportWizard(models.TransientModel):
         # Write detail:
         # ---------------------------------------------------------------------        
         ws_name = 'Partner' # Worksheet name:
-        report_pool.create_worksheet(ws_name)
+        report_pool.create_worksheet(ws_name, format_code='DEFAULT')
         report_pool.column_width(ws_name, column_width)
 
         # Title:
         row = 0
-        report_pool.write_xls_line(ws_name, row, title)
+        report_pool.write_xls_line(ws_name, row, title, style_code='title')
         
         # Header:
         row += 1
-        report_pool.write_xls_line(ws_name, row, header)
+        report_pool.write_xls_line(ws_name, row, header, style_code='header')
         
         for partner in sorted(partners, key=lambda x: x.name):
             # Data line:
@@ -94,7 +94,7 @@ class ResPartnerExcelReportWizard(models.TransientModel):
                 partner.name,
                 partner.city or '',
                 partner.country_id.name or '',
-                ))
+                ), style_code='text')
                 
         # ---------------------------------------------------------------------
         # Save file:
