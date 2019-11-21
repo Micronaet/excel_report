@@ -178,10 +178,27 @@ class ExcelReportFormatStyle(models.Model):
         'excel.report.format.color', 'Border left color')
     border_color_right_id = fields.Many2one(
         'excel.report.format.color', 'Border right color')
-    
+
+    # -------------------------------------------------------------------------
+    # Alignment:
+    align = fields.Selection([
+        ('left', 'Left'), 
+        ('center', 'center'), 
+        ('right', 'right'), 
+        ('fill', 'fill'), 
+        ('justify', 'justify'), 
+        ('center_across', 'center_across'), 
+        ('distributed', 'distributed'), 
+        ], 'Horizontal alignment', default='left'),
+        
+    valign = fields.Selection([
+        ('top', 'Left'), 
+        ('vcenter', 'center'), 
+        ('bottom', 'right'), 
+        ('vjustify', 'fill'), 
+        ('vdistributed', 'justify'), 
+        ], 'Vertical alignment', default='vcenter'),
     # TODO: 
-    # align
-    # valign
     # wrap
     # format
 

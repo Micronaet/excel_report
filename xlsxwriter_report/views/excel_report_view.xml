@@ -16,6 +16,9 @@
                     <field name="height" />
                     <field name="bold" />
                     <field name="italic" />
+
+                    <field name="align" />
+                    <field name="valign" />
                     
                     <field name="foreground_id" />
                     <field name="background_id" />
@@ -47,6 +50,11 @@
                                         <field name="height" />
                                         <field name="bold" />
                                         <field name="italic" />
+
+                                        <separator string="Alignment:" colspan="4"/>
+                                        <field name="align" />
+                                        <field name="valign" />
+                                        
                                     </group>    
                                 </page>
                                 <page string="Border:">
