@@ -472,20 +472,6 @@ class ExcelReport(models.TransientModel):
                 self._WS[ws_name].write_rich_string(row, col, *record)
             col += 1
         return True
-
-    # TODO USED?
-    """
-    @api.model
-    def write_xls_data(self, ws_name, row, col, data, style=False):
-        ''' Write data in row col position with style (used?)
-            
-            @return: nothing
-        '''
-        if style:
-            self._WS[ws_name].write(row, col, data, style)
-        else:    
-            self._WS[ws_name].write(row, col, data, style)
-        return True"""
         
     # -------------------------------------------------------------------------
     # Return operation:
