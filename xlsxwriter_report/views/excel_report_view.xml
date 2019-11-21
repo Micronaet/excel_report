@@ -251,6 +251,44 @@
             <field name="domain">[]</field>
         </record>
 
+        <!--excel.report.format.border-->
+        <record model="ir.ui.view" id="view_excel_report_format_border_tree">
+            <field name="name">excel.report.format.border.tree</field>
+            <field name="model">excel.report.format.border</field>
+            <field name="arch" type="xml">
+                <tree string="Excel report border" editable="bottom">
+                    <field name="index" />
+                    <field name="name" />                    
+                    <field name="weight" />
+                    <field name="style" />
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_excel_report_format_border_form">
+            <field name="name">excel.report.format.border.form</field>
+            <field name="model">excel.report.format.border</field>
+            <field name="arch" type="xml">
+                <form string="Excel report border">
+                    <sheet>
+                        <group colspan="4" col="4">
+                            <field name="index" />                    
+                            <field name="name" />                    
+                            <field name="weight" />
+                            <field name="style" />
+                        </group>    
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_excel_report_format_border">
+            <field name="name">Excel border</field>
+            <field name="res_model">excel.report.format.border</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_excel_report_format_border_tree"/>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+        </record>
         <menuitem 
             parent="base.reporting_menuitem"
             name="Excel report"             
@@ -280,6 +318,12 @@
                 id="menu_reporting_excel_color" 
                 action="action_excel_report_format_color"
                 sequence="40"
+                />
+            <menuitem 
+                parent="reporting_excel_root" 
+                id="menu_reporting_excel_border" 
+                action="action_excel_report_format_border"
+                sequence="50"
                 />
             <menuitem 
                 parent="reporting_excel_root" 

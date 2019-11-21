@@ -97,6 +97,20 @@ class ExcelReportFormatFont(models.Model):
     # -------------------------------------------------------------------------
     name = fields.Char('Font name', size=64, required=True)
 
+class ExcelReportFormatBorder(models.Model):
+    """ Model name: ExcelReportFormatColor
+    """    
+    _name = 'excel.report.format.border'
+    _description = 'Excel format border'
+        
+    # -------------------------------------------------------------------------
+    #                                   COLUMNS:
+    # -------------------------------------------------------------------------
+    name = fields.Char('Color name', size=64, required=True)
+    index = fields.Integer('Index', required=True)
+    weight = fields.Integer('Weight')
+    style = fields.Char('Style', size=20)
+
 class ExcelReportFormatColor(models.Model):
     """ Model name: ExcelReportFormatColor
     """    

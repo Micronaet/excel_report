@@ -4,5 +4,6 @@ access_excel_report_format_user,excel.report.format,model_excel_report_format,ba
 access_excel_report_format_page_user,excel.report.format.page,model_excel_report_format_page,base.group_user,1,1,1,1
 access_excel_report_format_font_user,excel.report.format.font,model_excel_report_format_font,base.group_user,1,1,1,1
 access_excel_report_format_color_user,excel.report.format.color,model_excel_report_format_color,base.group_user,1,1,1,1
+access_excel_report_format_border_user,excel.report.format.border,model_excel_report_format_border,base.group_user,1,1,1,1
 access_excel_report_format_style_user,excel.report.format.style,model_excel_report_format_style,base.group_user,1,1,1,1
 

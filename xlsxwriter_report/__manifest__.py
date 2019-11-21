@@ -41,6 +41,7 @@
 
         # Data: 
         'data/color_data.xml',
+        'data/border_data.xml',
         'data/font_data.xml',
         'data/page_data.xml',
 

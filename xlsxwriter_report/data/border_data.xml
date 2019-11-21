@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<openerp>
+    <data> 
+        <record model="excel.report.format.border" id="data_border_0">
+            <field name="name">None</field>
+            <field name="index" eval="0"/>
+            <field name="style"></field>
+            <field name="weight" eval="0" />
+        </record>
+        <record model="excel.report.format.border" id="data_border_1">
+            <field name="name">Continuous (1)</field>
+            <field name="index" eval="1"/>
+            <field name="style">-----------</field>
+            <field name="weight" eval="1" />
+        </record>
+        <record model="excel.report.format.border" id="data_border_2">
+            <field name="name">Continuous (2)</field>
+            <field name="index" eval="2"/>
+            <field name="style">-----------</field>
+            <field name="weight" eval="2" />
+        </record>
+        <record model="excel.report.format.border" id="data_border_3">
+            <field name="name">Dash (1)</field>
+            <field name="index" eval="3"/>
+            <field name="style">- - - - - -</field>
+            <field name="weight" eval="1" />
+        </record>
+        <record model="excel.report.format.border" id="data_border_4">
+            <field name="name">Dot</field>
+            <field name="index" eval="4"/>
+            <field name="style">. . . . . .</field>
+            <field name="weight" eval="1" />
+        </record>
+        <record model="excel.report.format.border" id="data_border_5">
+            <field name="name">Continuous (3)</field>
+            <field name="index" eval="5"/>
+            <field name="style">-----------</field>
+            <field name="weight" eval="3" />
+        </record>
+        <record model="excel.report.format.border" id="data_border_6">
+            <field name="name">Double</field>
+            <field name="index" eval="6"/>
+            <field name="style">===========</field>
+            <field name="weight" eval="3" />
+        </record>
+        <record model="excel.report.format.border" id="data_border_7">
+            <field name="name">Continuous (7)</field>
+            <field name="index" eval="0"/>
+            <field name="style">-----------</field>
+            <field name="weight" eval="0" />
+        </record>
+        <record model="excel.report.format.border" id="data_border_8">
+            <field name="name">Dash (2)</field>
+            <field name="index" eval="8"/>
+            <field name="style">- - - - - -</field>
+            <field name="weight" eval="2" />
+        </record>
+        <record model="excel.report.format.border" id="data_border_9">
+            <field name="name">Dash Dot (1)</field>
+            <field name="index" eval="9"/>
+            <field name="style">- . - . - .</field>
+            <field name="weight" eval="1" />
+        </record>
+        <record model="excel.report.format.border" id="data_border_10">
+            <field name="name">Dash Dot (2)</field>
+            <field name="index" eval="10"/>
+            <field name="style">- . - . - .</field>
+            <field name="weight" eval="2" />
+        </record>
+        <record model="excel.report.format.border" id="data_border_11">
+            <field name="name">Dash Dot Dot (1)</field>
+            <field name="index" eval="11"/>
+            <field name="style">- . . - . .</field>
+            <field name="weight" eval="1" />
+        </record>
+        <record model="excel.report.format.border" id="data_border_12">
+            <field name="name">Dash Dot Dot (2)</field>
+            <field name="index" eval="12"/>
+            <field name="style">- . . - . .</field>
+            <field name="weight" eval="2" />
+        </record>
+        <record model="excel.report.format.border" id="data_border_13">
+            <field name="name">SlantDash Dot (2)</field>
+            <field name="index" eval="13"/>
+            <field name="style">/ - . / - .</field>
+            <field name="weight" eval="2" />
+        </record>
+    </data>
+</openerp>
+
