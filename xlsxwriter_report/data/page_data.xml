@@ -92,15 +92,51 @@
             <field name="paper_size">8 1/2 x 13 in</field>
             <field name="sequence" eval="14"/>
         </record>
+        
+        <record model="excel.report.format.page" id="data_page_15">
+            <field name="index" eval="15" />
+            <field name="name">Quarto</field>
+            <field name="paper_size">215 x 275 mm</field>
+            <field name="sequence" eval="15"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_16">
+            <field name="index" eval="16" />
+            <field name="name">—</field>
+            <field name="paper_size">10x14 in</field>
+            <field name="sequence" eval="16"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_17">
+            <field name="index" eval="17" />
+            <field name="name">—</field>
+            <field name="paper_size">11x17 in</field>
+            <field name="sequence" eval="17"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_18">
+            <field name="index" eval="18" />
+            <field name="name">Note</field>
+            <field name="paper_size">8 1/2 x 11 in</field>
+            <field name="sequence" eval="18"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_19">
+            <field name="index" eval="19" />
+            <field name="name">Envelope 9</field>
+            <field name="paper_size">3 7/8 x 8 7/8</field>
+            <field name="sequence" eval="19"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_20">
+            <field name="index" eval="20" />
+            <field name="name">Envelope 10</field>
+            <field name="paper_size">4 1/8 x 9 1/2</field>
+            <field name="sequence" eval="20"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_21">
+            <field name="index" eval="21" />
+            <field name="name">Envelope 11</field>
+            <field name="paper_size">4 1/2 x 10 3/8</field>
+            <field name="sequence" eval="21"/>
+        </record>
 
 <!--
-15 	Quarto 	215 x 275 mm
-16 	— 	10x14 in
-17 	— 	11x17 in
-18 	Note 	8 1/2 x 11 in
-19 	Envelope 9 	3 7/8 x 8 7/8
-20 	Envelope 10 	4 1/8 x 9 1/2
-21 	Envelope 11 	4 1/2 x 10 3/8
 22 	Envelope 12 	4 3/4 x 11
 23 	Envelope 14 	5 x 11 1/2
 24 	C size sheet 	—
