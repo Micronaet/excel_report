@@ -5,146 +5,156 @@
             <field name="index" eval="0" />
             <field name="name">Printer default</field>
             <field name="paper_size">Printer default</field>
-            <field name="sequence" eval="0"/>
         </record>
         <record model="excel.report.format.page" id="data_page_1">
             <field name="index" eval="1" />
             <field name="name">Letter</field>
             <field name="paper_size">8 1/2 x 11 in</field>
-            <field name="sequence" eval="1"/>
         </record>
         <record model="excel.report.format.page" id="data_page_2">
             <field name="index" eval="2" />
             <field name="name">Letter Small</field>
             <field name="paper_size">8 1/2 x 11 in</field>
-            <field name="sequence" eval="2"/>
         </record>
         <record model="excel.report.format.page" id="data_page_3">
             <field name="index" eval="3" />
             <field name="name">Tabloid</field>
             <field name="paper_size">11 x 17 in</field>
-            <field name="sequence" eval="3"/>
         </record>
         <record model="excel.report.format.page" id="data_page_4">
             <field name="index" eval="4" />
             <field name="name">Ledger</field>
             <field name="paper_size">17 x 11 in</field>
-            <field name="sequence" eval="4"/>
         </record>
         <record model="excel.report.format.page" id="data_page_5">
             <field name="index" eval="5" />
             <field name="name">Legal</field>
             <field name="paper_size">8 1/2 x 14 in</field>
-            <field name="sequence" eval="5"/>
         </record>
         <record model="excel.report.format.page" id="data_page_6">
             <field name="index" eval="6" />
             <field name="name">Statement</field>
             <field name="paper_size">5 1/2 x 8 1/2 in</field>
-            <field name="sequence" eval="6"/>
         </record>
         <record model="excel.report.format.page" id="data_page_7">
             <field name="index" eval="7" />
             <field name="name">Executive</field>
             <field name="paper_size">7 1/4 x 10 1/2 in</field>
-            <field name="sequence" eval="7"/>
         </record>
         <record model="excel.report.format.page" id="data_page_8">
             <field name="index" eval="8" />
             <field name="name">A3</field>
             <field name="paper_size">297 x 420 mm</field>
-            <field name="sequence" eval="8"/>
         </record>
         <record model="excel.report.format.page" id="data_page_9">
             <field name="index" eval="9" />
             <field name="name">A4</field>
             <field name="paper_size">210 x 297 mm</field>
-            <field name="sequence" eval="9"/>
         </record>
         
         <record model="excel.report.format.page" id="data_page_10">
             <field name="index" eval="10" />
             <field name="name">A4 Small</field>
             <field name="paper_size">210 x 297 mm</field>
-            <field name="sequence" eval="10"/>
         </record>
         <record model="excel.report.format.page" id="data_page_11">
             <field name="index" eval="11" />
             <field name="name">A5</field>
             <field name="paper_size">148 x 210 mm</field>
-            <field name="sequence" eval="11"/>
         </record>
         <record model="excel.report.format.page" id="data_page_12">
             <field name="index" eval="12" />
             <field name="name">B4</field>
             <field name="paper_size">250 x 354 mm</field>
-            <field name="sequence" eval="12"/>
         </record>
         <record model="excel.report.format.page" id="data_page_13">
             <field name="index" eval="13" />
             <field name="name">B5</field>
             <field name="paper_size">182 x 257 mm</field>
-            <field name="sequence" eval="13"/>
         </record>
         <record model="excel.report.format.page" id="data_page_14">
             <field name="index" eval="14" />
             <field name="name">Folio</field>
             <field name="paper_size">8 1/2 x 13 in</field>
-            <field name="sequence" eval="14"/>
         </record>
         
         <record model="excel.report.format.page" id="data_page_15">
             <field name="index" eval="15" />
             <field name="name">Quarto</field>
             <field name="paper_size">215 x 275 mm</field>
-            <field name="sequence" eval="15"/>
         </record>
         <record model="excel.report.format.page" id="data_page_16">
             <field name="index" eval="16" />
             <field name="name">—</field>
             <field name="paper_size">10x14 in</field>
-            <field name="sequence" eval="16"/>
         </record>
         <record model="excel.report.format.page" id="data_page_17">
             <field name="index" eval="17" />
             <field name="name">—</field>
             <field name="paper_size">11x17 in</field>
-            <field name="sequence" eval="17"/>
         </record>
         <record model="excel.report.format.page" id="data_page_18">
             <field name="index" eval="18" />
             <field name="name">Note</field>
             <field name="paper_size">8 1/2 x 11 in</field>
-            <field name="sequence" eval="18"/>
         </record>
         <record model="excel.report.format.page" id="data_page_19">
             <field name="index" eval="19" />
             <field name="name">Envelope 9</field>
             <field name="paper_size">3 7/8 x 8 7/8</field>
-            <field name="sequence" eval="19"/>
         </record>
         <record model="excel.report.format.page" id="data_page_20">
             <field name="index" eval="20" />
             <field name="name">Envelope 10</field>
             <field name="paper_size">4 1/8 x 9 1/2</field>
-            <field name="sequence" eval="20"/>
         </record>
         <record model="excel.report.format.page" id="data_page_21">
             <field name="index" eval="21" />
             <field name="name">Envelope 11</field>
             <field name="paper_size">4 1/2 x 10 3/8</field>
-            <field name="sequence" eval="21"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_22">
+            <field name="index" eval="22" />
+            <field name="name">Envelope 12</field>
+            <field name="paper_size">4 3/4 x 11</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_23">
+            <field name="index" eval="23" />
+            <field name="name">Envelope 14</field>
+            <field name="paper_size">5 x 11 1/2</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_24">
+            <field name="index" eval="24" />
+            <field name="name">C size sheet</field>
+            <field name="paper_size">—</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_25">
+            <field name="index" eval="25" />
+            <field name="name">D size sheet</field>
+            <field name="paper_size">—</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_26">
+            <field name="index" eval="26" />
+            <field name="name">E size sheet</field>
+            <field name="paper_size">—</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_27">
+            <field name="index" eval="27" />
+            <field name="name">Envelope DL</field>
+            <field name="paper_size">110 x 220 mm</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_28">
+            <field name="index" eval="28" />
+            <field name="name">Envelope C3</field>
+            <field name="paper_size">324 x 458 mm</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_29">
+            <field name="index" eval="29" />
+            <field name="name">Envelope C4</field>
+            <field name="paper_size">229 x 324 mm</field>
         </record>
 
 <!--
-22 	Envelope 12 	4 3/4 x 11
-23 	Envelope 14 	5 x 11 1/2
-24 	C size sheet 	—
-25 	D size sheet 	—
-26 	E size sheet 	—
-27 	Envelope DL 	110 x 220 mm
-28 	Envelope C3 	324 x 458 mm
-29 	Envelope C4 	229 x 324 mm
 30 	Envelope C5 	162 x 229 mm
 31 	Envelope C6 	114 x 162 mm
 32 	Envelope C65 	114 x 229 mm

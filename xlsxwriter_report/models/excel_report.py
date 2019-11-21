@@ -45,7 +45,7 @@ class ExcelReportFormatPage(models.Model):
     """    
     _name = 'excel.report.format.page'
     _description = 'Excel report'
-    _order = 'sequence,name'
+    _order = 'index'
 
     # -------------------------------------------------------------------------
     #                                   COLUMNS:
@@ -53,7 +53,6 @@ class ExcelReportFormatPage(models.Model):
     #default = fields.Char('Default')
     index = fields.Integer('Index', required=True)
     name = fields.Char('Name', size=64, required=True)
-    sequence = fields.Integer('Sequence')
     paper_size = fields.Char('Paper size', size=40)
     # dimension
     # note

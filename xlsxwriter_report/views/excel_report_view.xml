@@ -160,9 +160,8 @@
             <field name="model">excel.report.format.page</field>
             <field name="arch" type="xml">
                 <tree string="Excel report page" editable="bottom">
-                    <field name="sequence" />
-                    <field name="name" />  
                     <field name="index" />          
+                    <field name="name" />  
                     <field name="paper_size" />        
                 </tree>
             </field>
@@ -174,9 +173,8 @@
                 <form string="Excel report page">
                     <sheet>
                         <group colspan="4" col="4">
-                            <field name="sequence" />
-                            <field name="name" />                    
                             <field name="index" />          
+                            <field name="name" />                    
                             <field name="paper_size" />        
                         </group>    
                     </sheet>
