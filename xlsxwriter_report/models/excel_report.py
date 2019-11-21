@@ -189,7 +189,7 @@ class ExcelReportFormatStyle(models.Model):
         ('justify', 'justify'), 
         ('center_across', 'center_across'), 
         ('distributed', 'distributed'), 
-        ], 'Horizontal alignment', default='left'),
+        ], 'Horizontal alignment', default='left')
         
     valign = fields.Selection([
         ('top', 'Left'), 
@@ -197,7 +197,7 @@ class ExcelReportFormatStyle(models.Model):
         ('bottom', 'right'), 
         ('vjustify', 'fill'), 
         ('vdistributed', 'justify'), 
-        ], 'Vertical alignment', default='vcenter'),
+        ], 'Vertical alignment', default='vcenter')
     # TODO: 
     # wrap
     # format
