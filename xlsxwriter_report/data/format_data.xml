@@ -10,6 +10,7 @@
             <field name="margin_left" eval="0.25"/>
             <field name="margin_right" eval="0.25"/>
             <field name="orientation">portrait</field>
+            <field name="row_height" eval="15" />
         </record>       
     </data>
 </openerp>

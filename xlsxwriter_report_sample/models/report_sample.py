@@ -90,11 +90,18 @@ class ResPartnerExcelReportWizard(models.TransientModel):
         for partner in sorted(partners, key=lambda x: x.name):
             # Data line:
             row += 1
+            
+            # Setup color line:
+            if partner.country_id.name:
+               style_code = 'text'
+            else:
+               style_code = 'text_error'
+               
             report_pool.write_xls_line(ws_name, row, (
                 partner.name,
                 partner.city or '',
                 partner.country_id.name or '',
-                ), style_code='text')
+                ), style_code=style_code)
                 
         # ---------------------------------------------------------------------
         # Save file:

@@ -445,7 +445,7 @@ class ExcelReport(models.TransientModel):
         return True
 
     @api.model
-    def row_height(self, ws_name, row_list, height=10):
+    def row_height(self, ws_name, row_list, height=15):
         ''' WS: Worksheet passed
             columns_w: list of dimension for the columns
         '''
@@ -482,6 +482,9 @@ class ExcelReport(models.TransientModel):
             
             @return: nothing
         '''
+        # ---------------------------------------------------------------------
+        # Write line:
+        # ---------------------------------------------------------------------
         style = self._style[ws_name].get(style_code)
         for record in line:
             if type(record) == bool:
@@ -496,6 +499,14 @@ class ExcelReport(models.TransientModel):
             else: # Rich format TODO                
                 self._WS[ws_name].write_rich_string(row, col, *record)
             col += 1
+         
+        # ---------------------------------------------------------------------
+        # Setup row height: 
+        # ---------------------------------------------------------------------
+        # XXX if more than one style?
+        row_height = self._row_height.get(style, False)
+        if row_height:
+            self._WS[ws_name].set_row(row, row_height)
         return True
         
     # -------------------------------------------------------------------------
