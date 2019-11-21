@@ -155,10 +155,14 @@ class ExcelReportFormatStyle(models.Model):
     
     # -------------------------------------------------------------------------
     # Border:
-    border_top = fields.Integer('Border top')
-    border_bottom = fields.Integer('Border bottom')
-    border_left = fields.Integer('Border left')
-    border_right = fields.Integer('Border right')
+    border_top_id = fields.Many2one(
+        'excel.report.format.border', 'Border top')
+    border_bottom_id = fields.Many2one(
+        'excel.report.format.border', 'Border bottom')
+    border_left_id = fields.Many2one(
+        'excel.report.format.border', 'Border left')
+    border_right_id = fields.Many2one(
+        'excel.report.format.border', 'Border right')
 
     # -------------------------------------------------------------------------
     # Border color

@@ -26,10 +26,10 @@
             <field name="bold" eval="True" />
             <field name="italic" eval="False" />
             
-            <field name="border_top" eval="1" />
-            <field name="border_bottom" eval="1" />
-            <field name="border_left" eval="1" />
-            <field name="border_right" eval="1" />
+            <field name="border_top_id" ref="xlsxwriter_report.data_border_1" />
+            <field name="border_bottom_id" ref="xlsxwriter_report.data_border_1" />
+            <field name="border_left_id" ref="xlsxwriter_report.data_border_1" />
+            <field name="border_right_id" ref="xlsxwriter_report.data_border_1" />
 
             <field name="border_color_top_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_bottom_id" ref="xlsxwriter_report.data_color_black" />
@@ -50,10 +50,10 @@
             <field name="bold" eval="False" />
             <field name="italic" eval="False" />
             
-            <field name="border_top" eval="1" />
-            <field name="border_bottom" eval="1" />
-            <field name="border_left" eval="1" />
-            <field name="border_right" eval="1" />
+            <field name="border_top_id" ref="xlsxwriter_report.data_border_1" />
+            <field name="border_bottom_id" ref="xlsxwriter_report.data_border_1" />
+            <field name="border_left_id" ref="xlsxwriter_report.data_border_1" />
+            <field name="border_right_id" ref="xlsxwriter_report.data_border_1" />
 
             <field name="border_color_top_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_bottom_id" ref="xlsxwriter_report.data_color_black" />
