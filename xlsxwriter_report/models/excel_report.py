@@ -285,6 +285,7 @@ class ExcelReport(models.TransientModel):
         self._WB = xlsxwriter.Workbook(filename)
         self._WS = {}
         self._style = {} # Style for every WS
+        self._row_height = {}
 
         self._filename = filename
         _logger.warning('Created WB on file: %s' % filename)
@@ -293,10 +294,13 @@ class ExcelReport(models.TransientModel):
     def _close_workbook(self, ):
         ''' Close workbook
         '''
+        # Reset persistent data:
         self._WS = {}
         self._style = {}
+        self._row_height = {}
         self._wb_format = False
         
+        # Try to remove document:
         try:
             self._WB.close()            
         except:            
@@ -347,6 +351,7 @@ class ExcelReport(models.TransientModel):
             _logger.info('Format selected: %s' % format_code)
             
             # Setup page:
+            row_height = current_format.row_height or False # default overr.
             page_id = current_format.page_id
             if page_id:
                 # -------------------------------------------------------------
@@ -415,8 +420,12 @@ class ExcelReport(models.TransientModel):
                         
                         # locked
                         # hidden
-                        
                         })
+
+                    # Save row height for this style:
+                    self._row_height[self._style[name][style.code]] = \
+                        style.row_height or row_height
+    
             
         else:    
             _logger.info('Format not found: %s, use nothing: %s' % format_code)
