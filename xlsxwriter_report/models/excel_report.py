@@ -382,12 +382,24 @@ class ExcelReport(models.TransientModel):
                         'font_name': style.font_id.name,
                         'font_size': style.height,
                         'font_color': style.foreground_id.rgb,
-                        
 
                         'bold': style.bold, 
                         'italic': style.italic,
-                        # bottom top left right
-                        # bottom_color top_color left_color right_color
+
+                        # -----------------------------------------------------
+                        # Border:                        
+                        # -----------------------------------------------------
+                        # Mode:
+                        'bottom': style.border_bottom_id.index or 0,
+                        'top': style.border_top_id.index or 0, 
+                        'left': style.border_left_id.index or 0,
+                        'right': style.border_right_id.index or 0,
+                        
+                        # Color:
+                        'bottom_color': border_color_bottom_id.rgb or '',
+                        'top_color': border_color_top_id.rgb or '',
+                        'left_color': border_color_left_id.rgb or '',
+                        'right_color': border_color_right_id.rgb or '',
                         
                         'bg_color': style.background_id.rgb,
 
