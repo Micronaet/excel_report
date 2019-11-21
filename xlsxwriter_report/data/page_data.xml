@@ -153,20 +153,66 @@
             <field name="name">Envelope C4</field>
             <field name="paper_size">229 x 324 mm</field>
         </record>
-
-<!--
-30 	Envelope C5 	162 x 229 mm
-31 	Envelope C6 	114 x 162 mm
-32 	Envelope C65 	114 x 229 mm
-33 	Envelope B4 	250 x 353 mm
-34 	Envelope B5 	176 x 250 mm
-35 	Envelope B6 	176 x 125 mm
-36 	Envelope 	110 x 230 mm
-37 	Monarch 	3.875 x 7.5 in
-38 	Envelope 	3 5/8 x 6 1/2 in
-39 	Fanfold 	14 7/8 x 11 in
-40 	German Std Fanfold 	8 1/2 x 12 in
-41 	German Legal Fanfold 	8 1/2 x 13 in-->
+        <record model="excel.report.format.page" id="data_page_30">
+            <field name="index" eval="30" />
+            <field name="name">Envelope C5</field>
+            <field name="paper_size">162 x 229 mm</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_31">
+            <field name="index" eval="31" />
+            <field name="name">Envelope C6</field>
+            <field name="paper_size">114 x 162 mm</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_32">
+            <field name="index" eval="32" />
+            <field name="name">Envelope C65</field>
+            <field name="paper_size">114 x 229 mm</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_33">
+            <field name="index" eval="33" />
+            <field name="name">Envelope B4</field>
+            <field name="paper_size">250 x 353 mm</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_34">
+            <field name="index" eval="34" />
+            <field name="name">Envelope B5</field>
+            <field name="paper_size">176 x 250 mm</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_35">
+            <field name="index" eval="35" />
+            <field name="name">Envelope B6</field>
+            <field name="paper_size">176 x 125 mm</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_36">
+            <field name="index" eval="36" />
+            <field name="name">Envelope</field>
+            <field name="paper_size">110 x 230 mm</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_37">
+            <field name="index" eval="37" />
+            <field name="name">Monarch</field>
+            <field name="paper_size">3.875 x 7.5 in</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_38">
+            <field name="index" eval="38" />
+            <field name="name">Envelope</field>
+            <field name="paper_size">3 5/8 x 6 1/2 in</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_39">
+            <field name="index" eval="39" />
+            <field name="name">Fanfold</field>
+            <field name="paper_size">14 7/8 x 11 in</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_40">
+            <field name="index" eval="40" />
+            <field name="name">German Std Fanfold</field>
+            <field name="paper_size">8 1/2 x 12 in</field>
+        </record>
+        <record model="excel.report.format.page" id="data_page_41">
+            <field name="index" eval="41" />
+            <field name="name">German Legal Fanfold</field>
+            <field name="paper_size">8 1/2 x 13 in</field>
+        </record>
     </data>
 </openerp>
 
