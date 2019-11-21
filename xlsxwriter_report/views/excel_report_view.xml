@@ -53,8 +53,7 @@
 
                                         <separator string="Alignment:" colspan="4"/>
                                         <field name="align" />
-                                        <field name="valign" />
-                                        
+                                        <field name="valign" />                                        
                                     </group>    
                                 </page>
                                 <page string="Border:">

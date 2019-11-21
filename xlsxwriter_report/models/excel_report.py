@@ -183,20 +183,20 @@ class ExcelReportFormatStyle(models.Model):
     # Alignment:
     align = fields.Selection([
         ('left', 'Left'), 
-        ('center', 'center'), 
-        ('right', 'right'), 
-        ('fill', 'fill'), 
-        ('justify', 'justify'), 
-        ('center_across', 'center_across'), 
-        ('distributed', 'distributed'), 
+        ('center', 'Center'), 
+        ('right', 'Right'), 
+        ('fill', 'Fill'), 
+        ('justify', 'Justify'), 
+        ('center_across', 'Center across'), 
+        ('distributed', 'Distributed'), 
         ], 'Horizontal alignment', default='left')
         
     valign = fields.Selection([
-        ('top', 'Left'), 
-        ('vcenter', 'center'), 
-        ('bottom', 'right'), 
-        ('vjustify', 'fill'), 
-        ('vdistributed', 'justify'), 
+        ('top', 'Top'), 
+        ('vcenter', 'Middle'), 
+        ('bottom', 'Bottom'), 
+        ('vjustify', 'Justify'), 
+        ('vdistributed', 'Distribuited'), 
         ], 'Vertical alignment', default='vcenter')
     # TODO: 
     # wrap
@@ -429,9 +429,8 @@ class ExcelReport(models.TransientModel):
                         
                         'bg_color': style.background_id.rgb,
 
-                        #'align': 'center',
-                        #'valign': 'vcenter',
-                        # italic
+                        'align': style.align,
+                        'valign': style.valign,
                         #'text_wrap': True,
                         #'num_format': F['number'],
                         
