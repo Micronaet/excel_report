@@ -61,13 +61,39 @@
             <field name="paper_size">210 x 297 mm</field>
             <field name="sequence" eval="9"/>
         </record>
+        
+        <record model="excel.report.format.page" id="data_page_10">
+            <field name="index" eval="10" />
+            <field name="name">A4 Small</field>
+            <field name="paper_size">210 x 297 mm</field>
+            <field name="sequence" eval="10"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_11">
+            <field name="index" eval="11" />
+            <field name="name">A5</field>
+            <field name="paper_size">148 x 210 mm</field>
+            <field name="sequence" eval="11"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_12">
+            <field name="index" eval="12" />
+            <field name="name">B4</field>
+            <field name="paper_size">250 x 354 mm</field>
+            <field name="sequence" eval="12"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_13">
+            <field name="index" eval="13" />
+            <field name="name">B5</field>
+            <field name="paper_size">182 x 257 mm</field>
+            <field name="sequence" eval="13"/>
+        </record>
+        <record model="excel.report.format.page" id="data_page_14">
+            <field name="index" eval="14" />
+            <field name="name">Folio</field>
+            <field name="paper_size">8 1/2 x 13 in</field>
+            <field name="sequence" eval="14"/>
+        </record>
 
 <!--
-10 	A4 Small 	210 x 297 mm
-11 	A5 	148 x 210 mm
-12 	B4 	250 x 354 mm
-13 	B5 	182 x 257 mm
-14 	Folio 	8 1/2 x 13 in
 15 	Quarto 	215 x 275 mm
 16 	— 	10x14 in
 17 	— 	11x17 in
