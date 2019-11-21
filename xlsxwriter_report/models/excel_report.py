@@ -73,6 +73,8 @@ class ExcelReportFormat(models.Model):
     page_id = fields.Many2one(
         'excel.report.format.page', 'Page', required=True)
     
+    row_height = fields.Integer('Row height', 
+        help='Usually setup in style, if not take this default value!')
     
     margin_top = fields.Float('Margin Top', digits=(16, 3), default=0.25)
     margin_bottom = fields.Float('Margin Bottom', digits=(16, 3), default=0.25)
@@ -137,6 +139,8 @@ class ExcelReportFormatStyle(models.Model):
     name = fields.Char('Name', size=64, required=True)
     code = fields.Char('Code', size=15, required=True)
     format_id = fields.Many2one('excel.report.format', 'Format')
+    row_height = fields.Integer('Row height', 
+        help='If present use this, instead format value!')
 
     # -------------------------------------------------------------------------
     # Font:
@@ -396,10 +400,10 @@ class ExcelReport(models.TransientModel):
                         'right': style.border_right_id.index or 0,
                         
                         # Color:
-                        'bottom_color': border_color_bottom_id.rgb or '',
-                        'top_color': border_color_top_id.rgb or '',
-                        'left_color': border_color_left_id.rgb or '',
-                        'right_color': border_color_right_id.rgb or '',
+                        'bottom_color': style.border_color_bottom_id.rgb or '',
+                        'top_color': style.border_color_top_id.rgb or '',
+                        'left_color': style.border_color_left_id.rgb or '',
+                        'right_color': style.border_color_right_id.rgb or '',
                         
                         'bg_color': style.background_id.rgb,
 
