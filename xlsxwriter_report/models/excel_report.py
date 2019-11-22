@@ -26,11 +26,11 @@ import shutil
 import openerp
 import logging
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
-from openerp.tools.translate import _
-from openerp.tools import (
+from odoo.tools.translate import _
+from odoo.tools import (
     DEFAULT_SERVER_DATE_FORMAT, 
     DEFAULT_SERVER_DATETIME_FORMAT, 
     DATETIME_FORMATS_MAP, 
