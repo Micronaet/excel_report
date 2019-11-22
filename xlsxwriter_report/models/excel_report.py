@@ -155,7 +155,8 @@ class ExcelReportFormatStyle(models.Model):
     # Type:
     bold = fields.Boolean('Bold')
     italic = fields.Boolean('Italic')
-    
+    num_format = fields.Char('Number format', size=20)#, default='#,##0.00')
+
     # -------------------------------------------------------------------------
     # Border:
     border_top_id = fields.Many2one(
@@ -430,8 +431,8 @@ class ExcelReport(models.TransientModel):
 
                         'align': style.align,
                         'valign': style.valign,
+                        'num_format': style.num_format or '',
                         #'text_wrap': True,
-                        #'num_format': F['number'],
                         
                         # locked
                         # hidden
@@ -469,7 +470,6 @@ class ExcelReport(models.TransientModel):
                 self._WS[ws_name].set_row(row, height)
         else:        
             self._WS[ws_name].set_row(row_list, height)                
-        return True
 
     @api.model
     def merge_cell(self, ws_name, rectangle, style=False, data=''):
@@ -482,21 +482,43 @@ class ExcelReport(models.TransientModel):
         if style:
             rectangle.append(style)            
         self._WS[ws_name].merge_range(*rectangle)
-        return 
 
+    @api.model
+    def autofilter(self, ws_name, rectangle):
+        ''' Auto filter management
+        '''
+        self._WS[ws_name].autofilter(*rectangle)
+        
     # -------------------------------------------------------------------------
     # Miscellaneous operations (called directly):
     # -------------------------------------------------------------------------
     @api.model
-    def write_xls_line(self, ws_name, row, line, style_code=False, col=0):
+    def write_xls_line(self, ws_name, row, line, style_code=False, col=0, 
+            #total_columns=False
+            ):
         ''' Write line in excel file:
-            WS: Worksheet where find
-            row: position where write
+            ws_name: Worksheet name where write line
+            row: position where write (in ws)
             line: Row passed is a list of element or tuple (element, format)
-            style: if present replace when format is not present
+            style_code: Code for style (see setup format)
+            col: add more column data
+            total_columns: Tuple with columns need total
             
             @return: nothing
         '''
+        def reach_style(ws_name, record):
+            ''' Convert style code into style of WB (created when inst.)
+            '''
+            res = []            
+            i = 0
+            for item in record:
+                i += 1
+                if i % 2 == 0:
+                    res.append(self._style[ws_name].get(item))
+                else:
+                    res.append(item)
+            return res        
+                
         # ---------------------------------------------------------------------
         # Write line:
         # ---------------------------------------------------------------------
@@ -510,10 +532,17 @@ class ExcelReport(models.TransientModel):
                 else:    
                     self._WS[ws_name].write(row, col, record)                
             elif len(record) == 2: # Normal text, format
-                self._WS[ws_name].write(row, col, *record)
+                self._WS[ws_name].write(
+                    row, col, *reach_style(ws_name, record))
             else: # Rich format TODO                
-                self._WS[ws_name].write_rich_string(row, col, *record)
+                self._WS[ws_name].write_rich_string(
+                    row, col, *reach_style(ws_name, record))
             col += 1
+            
+        # ---------------------------------------------------------------------
+        # Update total columns if necessary
+        # ---------------------------------------------------------------------
+        #self._WS[ws_name].
          
         # ---------------------------------------------------------------------
         # Setup row height: 
@@ -622,20 +651,4 @@ class ExcelReport(models.TransientModel):
                 ),
             }
 
-        
-    '''@api.model
-    def set_format(    
-            self, 
-            # Title:
-            title_font='Courier 10 pitch', title_size=11, title_fg='black', 
-            # Header:
-            header_font='Courier 10 pitch', header_size=9, header_fg='black',
-            # Text:
-            text_font='Courier 10 pitch', text_size=9, text_fg='black',
-            # Number:
-            number_format='#,##0.#0',
-            # Layout:
-            border=1,
-            ):
-        '''
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

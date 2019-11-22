@@ -32,16 +32,16 @@ from odoo.tools.translate import _
 
 _logger = logging.getLogger(__name__)
 
-class ResPartnerExcelReportWizard(models.TransientModel):
+class ProductProductExcelReportWizard(models.TransientModel):
     """ Model name: StockPicking
     """
-    _name = 'res.partner.excel.report.wizard'
-    _description = 'Extract partner report'
+    _name = 'product.product.excel.report.wizard'
+    _description = 'Extract product report'
     
     # -------------------------------------------------------------------------
     #                            COLUMNS:
     # -------------------------------------------------------------------------    
-    country_id = fields.Many2one('res.country', 'Country')
+    category_id = fields.Many2one('product.category', 'Category')
     # -------------------------------------------------------------------------    
 
     @api.multi
@@ -49,63 +49,83 @@ class ResPartnerExcelReportWizard(models.TransientModel):
         ''' Extract Excel PFU report
         '''
         report_pool = self.env['excel.report']
-        partner_pool = self.env['res.partner']
+        product_pool = self.env['product.product']
         
         # ---------------------------------------------------------------------
         # Wizard parameters:
         # ---------------------------------------------------------------------
-        country = self.country_id
+        category = self.category_id
                 
         # ---------------------------------------------------------------------
         # Collect data:
         # ---------------------------------------------------------------------
         domain = []
-        if country:
-            domain.append(('country_id', '=', country.id))
-        partners = partner_pool.search(domain)
+        if category:
+            domain.append(('categ_id', '=', category.id))
+        products = product_pool.search(domain)
 
         # ---------------------------------------------------------------------
         #                          EXTRACT EXCEL:
         # ---------------------------------------------------------------------
         # Excel file configuration:
-        title = ('Partner list', )
-        header = ('Name', 'City', 'Country')            
-        column_width = (40, 30, 20)    
+        title = ('Product list (red line = product no price)', )
+        header = ('Name', 'Code', 'Category', 'Tax', 'Weight', 'List price', )            
+        column_width = (40, 30, 20, 15, 10, 10)    
 
         # ---------------------------------------------------------------------
-        # Write detail:
+        # WRITE DATA:
         # ---------------------------------------------------------------------        
-        ws_name = 'Partner' # Worksheet name:
+        ws_name = _('Product') # Worksheet name
         report_pool.create_worksheet(ws_name, format_code='DEFAULT')
         report_pool.column_width(ws_name, column_width)
 
+        # ---------------------------------------------------------------------        
         # Title:
         row = 0
         report_pool.write_xls_line(ws_name, row, title, style_code='title')
         
+        # Merge title cell (first row, N cols):
+        report_pool.merge_cell(ws_name, [row, 0, row, len(header) -1])
+        
+        # ---------------------------------------------------------------------        
         # Header:
         row += 1
         report_pool.write_xls_line(ws_name, row, header, style_code='header')
         
-        for partner in sorted(partners, key=lambda x: x.name):
-            # Data line:
+        # Set autofilter (where needed: category, tax)
+        report_pool.autofilter(ws_name, [row, 2, row, 3])
+
+        # ---------------------------------------------------------------------        
+        # Data lines:
+        #total_columns = (3, 4)
+        for product in sorted(products, key=lambda x: x.name):
             row += 1
-            
-            # Setup color line:
-            if partner.country_id.name:
-               style_code = 'text'
+             
+            # -----------------------------------------------------------------
+            # Setup color line (red = product empty price):
+            # -----------------------------------------------------------------
+            if product.list_price:
+               color_style_text = 'text'
+               color_style_number = 'number'
             else:
-               style_code = 'text_error'
+               color_style_text = 'text_error'
+               color_style_number = 'number_error'
                
+            # -----------------------------------------------------------------
+            # Write data:
+            # -----------------------------------------------------------------
             report_pool.write_xls_line(ws_name, row, (
-                partner.name,
-                partner.city or '',
-                partner.country_id.name or '',
-                ), style_code=style_code)
+                product.name,
+                product.default_code or '',
+                product.categ_id.name or '',
+                product.taxes_id.name or '',
+                (product.weight, color_style_number),
+                (product.list_price, color_style_number),
+                ), style_code=color_style_text) #total_columns=total_columns
                 
         # ---------------------------------------------------------------------
         # Save file:
         # ---------------------------------------------------------------------
-        return report_pool.return_attachment('Report_Partner')
+        return report_pool.return_attachment('Report_Product')
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

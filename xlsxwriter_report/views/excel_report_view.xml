@@ -19,6 +19,7 @@
 
                     <field name="align" />
                     <field name="valign" />
+                    <field name="num_format" />                                      
                     
                     <field name="foreground_id" />
                     <field name="background_id" />
@@ -40,7 +41,7 @@
                             
                             <separator string="Colors:" colspan="4"/>
                             <field name="foreground_id" />
-                            <field name="background_id" />                            
+                            <field name="background_id" />                                                        
 
                             <notebook colspan="4">
                                 <page string="Font:">
@@ -53,7 +54,10 @@
 
                                         <separator string="Alignment:" colspan="4"/>
                                         <field name="align" />
-                                        <field name="valign" />                                        
+                                        <field name="valign" />  
+                                        
+                                        <separator string="Number:" colspan="4"/>
+                                        <field name="num_format" />                                      
                                     </group>    
                                 </page>
                                 <page string="Border:">

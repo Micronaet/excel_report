@@ -27,7 +27,7 @@
         </record>
         <record model="excel.report.format.color" id="data_color_grey">
             <field name="name">Grey</field>
-            <field name="rgb">#EEEEEE</field>
+            <field name="rgb">#A1A1A1</field>
         </record>
         <record model="excel.report.format.color" id="data_color_black">
             <field name="name">Black</field>

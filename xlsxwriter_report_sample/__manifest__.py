@@ -30,6 +30,7 @@
     'website': 'https://micronaet.com',
     'depends': [
         'base',
+        'product',
         'xlsxwriter_report',
         ],
     'data': [        
