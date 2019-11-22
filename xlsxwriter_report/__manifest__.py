@@ -50,7 +50,7 @@
         ],
     'external_dependencies': {
         'python': ['xlsxwriter'],
-        }
+        },
     'active': False,
     'installable': True,
     'auto_install': False,
