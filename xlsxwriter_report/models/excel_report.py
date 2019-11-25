@@ -538,7 +538,7 @@ class ExcelReport(models.TransientModel):
             )]
 
         group = group_name.split('.')
-        # TODO change, old mode:
+        # TODO change
         group_id = model_pool.get_object_reference(
             cr, uid, group[0], group[1])[1]    
         partner_ids = []
