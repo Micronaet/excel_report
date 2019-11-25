@@ -533,11 +533,12 @@ class ExcelReport(models.TransientModel):
         self._close_workbook()
         attachments = [(
             filename, 
-            open(self._filename, 'rb').read(), # Raw data
+            # Raw data:
+            open(self._filename, 'rb').read(),
             )]
 
         group = group_name.split('.')
-        groups_id = model_pool.get_object_reference(
+        group_id = model_pool.get_object_reference(
             cr, uid, group[0], group[1])[1]    
         partner_ids = []
         for user in group_pool.browse(group_id).users:
