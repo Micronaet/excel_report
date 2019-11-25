@@ -1,41 +1,11 @@
-# -*- coding: utf-8 -*-
-###############################################################################
-#
-#    Copyright (C) 2001-2014 Micronaet SRL (<http://www.micronaet.it>).
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published
-#    by the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-###############################################################################
-import os
-import sys
-import logging
-import base64
-import xlsxwriter
-import shutil
-import openerp
-import logging
+# Copyright 2019  Micronaet SRL (<http://www.micronaet.it>).
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import models, fields, api
-from datetime import datetime, timedelta
-from dateutil.relativedelta import relativedelta
-from odoo.tools.translate import _
-from odoo.tools import (
-    DEFAULT_SERVER_DATE_FORMAT, 
-    DEFAULT_SERVER_DATETIME_FORMAT, 
-    DATETIME_FORMATS_MAP, 
-    float_compare,
-    )
+import xlsxwriter
+import logging
+import base64
+import shutil
 
 
 _logger = logging.getLogger(__name__)
@@ -69,8 +39,7 @@ class ExcelReportFormat(models.Model):
     #default = fields.Boolean('Default')
     name = fields.Char('Name', size=64, required=True)
     code = fields.Char('Code', size=15, required=True)
-    page_id = fields.Many2one(
-        'excel.report.format.page', 'Page', required=True)
+    page_id = fields.Many2one('excel.report.format.page', 'Page', required=True)
     
     row_height = fields.Integer('Row height', 
         help='Usually setup in style, if not take this default value!')
@@ -124,7 +93,7 @@ class ExcelReportFormatColor(models.Model):
     name = fields.Char('Color name', size=64, required=True)
     rgb = fields.Char('RGB syntax', size=10, required=True)
 
-# TODO class With numer format
+# TODO class With number format
 
 class ExcelReportFormatStyle(models.Model):
     """ Model name: ExcelReportFormat
@@ -132,17 +101,11 @@ class ExcelReportFormatStyle(models.Model):
     _name = 'excel.report.format.style'
     _description = 'Excel format style'
     
-    # -------------------------------------------------------------------------
-    #                                   COLUMNS:
-    # -------------------------------------------------------------------------
     name = fields.Char('Name', size=64, required=True)
     code = fields.Char('Code', size=15, required=True)
     format_id = fields.Many2one('excel.report.format', 'Format')
     row_height = fields.Integer('Row height', 
         help='If present use this, instead format value!')
-
-    # -------------------------------------------------------------------------
-    # Font:
     font_id = fields.Many2one(
         'excel.report.format.font', 'Font', required=True, 
         help='Remember to use standard fonts, need to be installed on PC!')
@@ -150,8 +113,7 @@ class ExcelReportFormatStyle(models.Model):
     background_id = fields.Many2one('excel.report.format.color', 'Backgroung')
 
     height = fields.Integer('Font height', required=True, default=10)
-    
-    # -------------------------------------------------------------------------
+
     # Type:
     bold = fields.Boolean('Bold')
     italic = fields.Boolean('Italic')
@@ -214,41 +176,25 @@ class ExcelReportFormat(models.Model):
         'excel.report.format.style', 'format_id', 'Style')
     
 class ExcelReport(models.TransientModel):
-    """ Model name: Excel Report
-    """    
     _name = 'excel.report'
     _description = 'Excel report'
     _order = 'name'
 
-    # -------------------------------------------------------------------------
-    # Computed fields:
-    # -------------------------------------------------------------------------
     @api.one
     def _get_template(self):
-        ''' Computed fields: B64 file from file content
-        '''
         try:
             origin = self.fullname
             self.b64_file = base64.b64encode(open(origin, 'rb').read())
         except:
             self.b64_file = False    
 
-    # -------------------------------------------------------------------------
-    #                                   COLUMNS:
-    # -------------------------------------------------------------------------
     #name = fields.Char('Name', size=64, required=True)
     #code = fields.Char('Code', size=15, required=True)
-    
     b64_file = fields.Binary('B64 file', compute='_get_template')
     fullname = fields.Text('Fullname of file')
     
-    # -------------------------------------------------------------------------
-    #                                   UTILITY:
-    # -------------------------------------------------------------------------
     @api.model
     def clean_filename(self, destination):
-        ''' Clean char that generate error
-        '''
         destination = destination.replace('/', '_').replace(':', '_')
         if not(destination.endswith('xlsx') or destination.endswith('xls')):
             destination = '%s.xlsx' % destination
@@ -257,8 +203,7 @@ class ExcelReport(models.TransientModel):
     # Format utility:
     @api.model
     def format_date(self, value):
-        ''' Format hour DD:MM:YYYY
-        '''
+        # Format hour DD:MM:YYYY
         if not value:
             return ''
         return '%s/%s/%s' % (
@@ -270,8 +215,7 @@ class ExcelReport(models.TransientModel):
     @api.model
     def format_hour(self, value, hhmm_format=True, approx=0.001, 
             zero_value='0:00'):
-        ''' Format hour HH:MM
-        '''
+        # Format hour HH:MM
         if not hhmm_format:
             return value
             
@@ -650,5 +594,3 @@ class ExcelReport(models.TransientModel):
                 name_of_file,
                 ),
             }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

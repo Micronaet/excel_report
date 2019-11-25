@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<openerp>
+<odoo>
     <data> 
         <record model="excel.report.format.border" id="data_border_0">
             <field name="name">None</field>
@@ -86,5 +86,5 @@
             <field name="weight" eval="2" />
         </record>
     </data>
-</openerp>
+</odoo>
 

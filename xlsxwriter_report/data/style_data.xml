@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
-<openerp>
+<odoo>
     <data> 
         <record model="excel.report.format.style" id="data_format_style_title">
             <field name="name">Title</field>
             <field name="code">title</field>
-            
             <field name="format_id" ref="xlsxwriter_report.data_format_default"/>
             <field name="font_id" ref="xlsxwriter_report.data_font_calibri"/>
             <field name="foreground_id" ref="xlsxwriter_report.data_color_black"/>
@@ -13,13 +12,11 @@
             <field name="bold" eval="True" />
             <field name="italic" eval="False" />
             <field name="row_height" eval="25" />
-            
         </record>       
 
         <record model="excel.report.format.style" id="data_format_style_header">
             <field name="name">Header</field>
             <field name="code">header</field>
-            
             <field name="format_id" ref="xlsxwriter_report.data_format_default"/>
             <field name="font_id" ref="xlsxwriter_report.data_font_calibri"/>
             <field name="foreground_id" ref="xlsxwriter_report.data_color_black"/>
@@ -27,23 +24,19 @@
             <field name="height" eval="10" />
             <field name="bold" eval="True" />
             <field name="italic" eval="False" />
-            
             <field name="border_top_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_bottom_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_left_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_right_id" ref="xlsxwriter_report.data_border_1" />
-
             <field name="border_color_top_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_bottom_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_left_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_right_id" ref="xlsxwriter_report.data_color_black" />
-
         </record>       
 
         <record model="excel.report.format.style" id="data_format_style_text">
             <field name="name">Text cell</field>
             <field name="code">text</field>
-            
             <field name="format_id" ref="xlsxwriter_report.data_format_default"/>
             <field name="font_id" ref="xlsxwriter_report.data_font_calibri"/>
             <field name="foreground_id" ref="xlsxwriter_report.data_color_black"/>
@@ -51,21 +44,19 @@
             <field name="height" eval="10" />
             <field name="bold" eval="False" />
             <field name="italic" eval="False" />
-            
             <field name="border_top_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_bottom_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_left_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_right_id" ref="xlsxwriter_report.data_border_1" />
-
             <field name="border_color_top_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_bottom_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_left_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_right_id" ref="xlsxwriter_report.data_color_black" />
-        </record>       
+        </record>
+
         <record model="excel.report.format.style" id="data_format_style_text_error">
             <field name="name">Text error</field>
             <field name="code">text_error</field>
-            
             <field name="format_id" ref="xlsxwriter_report.data_format_default"/>
             <field name="font_id" ref="xlsxwriter_report.data_font_calibri"/>
             <field name="foreground_id" ref="xlsxwriter_report.data_color_black"/>
@@ -73,23 +64,19 @@
             <field name="height" eval="10" />
             <field name="bold" eval="False" />
             <field name="italic" eval="False" />
-            
             <field name="border_top_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_bottom_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_left_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_right_id" ref="xlsxwriter_report.data_border_1" />
-
             <field name="border_color_top_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_bottom_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_left_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_right_id" ref="xlsxwriter_report.data_color_black" />
         </record>       
 
-        <!-- NUMBERS -->
         <record model="excel.report.format.style" id="data_format_style_number">
             <field name="name">Number cell</field>
             <field name="code">number</field>
-            
             <field name="format_id" ref="xlsxwriter_report.data_format_default"/>
             <field name="font_id" ref="xlsxwriter_report.data_font_calibri"/>
             <field name="foreground_id" ref="xlsxwriter_report.data_color_black"/>
@@ -98,22 +85,20 @@
             <field name="bold" eval="False" />
             <field name="italic" eval="False" />
             <field name="align">right</field>
-            
             <field name="border_top_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_bottom_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_left_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_right_id" ref="xlsxwriter_report.data_border_1" />
-
             <field name="border_color_top_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_bottom_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_left_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_right_id" ref="xlsxwriter_report.data_color_black" />
             <field name="num_format">#,##0.00</field>
-        </record>       
+        </record>
+
         <record model="excel.report.format.style" id="data_format_style_number_error">
             <field name="name">Number error</field>
             <field name="code">number_error</field>
-            
             <field name="format_id" ref="xlsxwriter_report.data_format_default"/>
             <field name="font_id" ref="xlsxwriter_report.data_font_calibri"/>
             <field name="foreground_id" ref="xlsxwriter_report.data_color_black"/>
@@ -122,18 +107,16 @@
             <field name="bold" eval="False" />
             <field name="italic" eval="False" />
             <field name="align">right</field>
-            
             <field name="border_top_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_bottom_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_left_id" ref="xlsxwriter_report.data_border_1" />
             <field name="border_right_id" ref="xlsxwriter_report.data_border_1" />
-
             <field name="border_color_top_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_bottom_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_left_id" ref="xlsxwriter_report.data_color_black" />
             <field name="border_color_right_id" ref="xlsxwriter_report.data_color_black" />
             <field name="num_format">#,##0.00</field>
-        </record>       
-    </data>
-</openerp>
+        </record>
 
+    </data>
+</odoo>
