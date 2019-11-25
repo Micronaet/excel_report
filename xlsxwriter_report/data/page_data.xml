@@ -31,7 +31,6 @@
             <field name="name">B5</field>
             <field name="paper_size">182 x 257 mm</field>
         </record>
-        </record>
     </data>
 </odoo>
 
