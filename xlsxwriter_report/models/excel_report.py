@@ -7,8 +7,8 @@ import logging
 import base64
 import shutil
 
-
 _logger = logging.getLogger(__name__)
+
 
 class ExcelReportFormatPage(models.Model):
     """ Model name: ExcelReportFormatPage
@@ -20,12 +20,13 @@ class ExcelReportFormatPage(models.Model):
     # -------------------------------------------------------------------------
     #                                   COLUMNS:
     # -------------------------------------------------------------------------
-    #default = fields.Char('Default')
+    # default = fields.Char('Default')
     index = fields.Integer('Index', required=True)
     name = fields.Char('Name', size=64, required=True)
     paper_size = fields.Char('Paper size', size=40)
     # dimension
     # note
+
 
 class ExcelReportFormat(models.Model):
     """ Model name: ExcelReportFormat
@@ -36,12 +37,12 @@ class ExcelReportFormat(models.Model):
     # -------------------------------------------------------------------------
     #                                   COLUMNS:
     # -------------------------------------------------------------------------
-    #default = fields.Boolean('Default')
+    # default = fields.Boolean('Default')
     name = fields.Char('Name', size=64, required=True)
     code = fields.Char('Code', size=15, required=True)
     page_id = fields.Many2one('excel.report.format.page', 'Page', required=True)
-    
-    row_height = fields.Integer('Row height', 
+    row_height = fields.Integer(
+        'Row height',
         help='Usually setup in style, if not take this default value!')
     
     margin_top = fields.Float('Margin Top', digits=(16, 3), default=0.25)
@@ -56,6 +57,7 @@ class ExcelReportFormat(models.Model):
 
     # TODO header, footer
 
+
 class ExcelReportFormatFont(models.Model):
     """ Model name: ExcelReportFormatFont
     """    
@@ -66,6 +68,7 @@ class ExcelReportFormatFont(models.Model):
     #                                   COLUMNS:
     # -------------------------------------------------------------------------
     name = fields.Char('Font name', size=64, required=True)
+
 
 class ExcelReportFormatBorder(models.Model):
     """ Model name: ExcelReportFormatColor
@@ -81,6 +84,7 @@ class ExcelReportFormatBorder(models.Model):
     weight = fields.Integer('Weight')
     style = fields.Char('Style', size=20)
 
+
 class ExcelReportFormatColor(models.Model):
     """ Model name: ExcelReportFormatColor
     """    
@@ -95,6 +99,7 @@ class ExcelReportFormatColor(models.Model):
 
 # TODO class With number format
 
+
 class ExcelReportFormatStyle(models.Model):
     """ Model name: ExcelReportFormat
     """    
@@ -104,7 +109,8 @@ class ExcelReportFormatStyle(models.Model):
     name = fields.Char('Name', size=64, required=True)
     code = fields.Char('Code', size=15, required=True)
     format_id = fields.Many2one('excel.report.format', 'Format')
-    row_height = fields.Integer('Row height', 
+    row_height = fields.Integer(
+        'Row height',
         help='If present use this, instead format value!')
     font_id = fields.Many2one(
         'excel.report.format.font', 'Font', required=True, 
@@ -117,7 +123,8 @@ class ExcelReportFormatStyle(models.Model):
     # Type:
     bold = fields.Boolean('Bold')
     italic = fields.Boolean('Italic')
-    num_format = fields.Char('Number format', size=20)#, default='#,##0.00')
+    num_format = fields.Char('Number format', size=20)
+    # , default='#,##0.00')
 
     # -------------------------------------------------------------------------
     # Border:
@@ -164,6 +171,7 @@ class ExcelReportFormatStyle(models.Model):
     # wrap
     # format
 
+
 class ExcelReportFormat(models.Model):
     """ Model name: Inherit for relation: ExcelReportFormat
     """    
@@ -174,7 +182,8 @@ class ExcelReportFormat(models.Model):
     # -------------------------------------------------------------------------
     style_ids = fields.One2many(
         'excel.report.format.style', 'format_id', 'Style')
-    
+
+
 class ExcelReport(models.TransientModel):
     _name = 'excel.report'
     _description = 'Excel report'
@@ -188,8 +197,8 @@ class ExcelReport(models.TransientModel):
         except:
             self.b64_file = False    
 
-    #name = fields.Char('Name', size=64, required=True)
-    #code = fields.Char('Code', size=15, required=True)
+    # name = fields.Char('Name', size=64, required=True)
+    # code = fields.Char('Code', size=15, required=True)
     b64_file = fields.Binary('B64 file', compute='_get_template')
     fullname = fields.Text('Fullname of file')
     
@@ -213,7 +222,8 @@ class ExcelReport(models.TransientModel):
             )
 
     @api.model
-    def format_hour(self, value, hhmm_format=True, approx=0.001, 
+    def format_hour(
+            self, value, hhmm_format=True, approx=0.001,
             zero_value='0:00'):
         # Format hour HH:MM
         if not hhmm_format:
@@ -236,8 +246,8 @@ class ExcelReport(models.TransientModel):
     # -------------------------------------------------------------------------
     @api.model
     def _create_workbook(self, extension='xlsx'):
-        ''' Create workbook in a temp file
-        '''
+        """ Create workbook in a temp file
+        """
         now = fields.Datetime.now()
         now = now.replace(':', '_').replace('-', '_').replace(' ', '_')
         filename = '/tmp/wb_%s.%s' % (now, extension) # TODO better!
@@ -253,8 +263,8 @@ class ExcelReport(models.TransientModel):
 
     @api.model
     def _close_workbook(self, ):
-        ''' Close workbook
-        '''
+        """ Close workbook
+        """
         # Reset persistent data:
         self._WS = {}
         self._style = {}
@@ -270,8 +280,8 @@ class ExcelReport(models.TransientModel):
 
     @api.model
     def close_workbook(self, ):
-        ''' Close workbook
-        '''
+        """ Close workbook
+        """
         return self._close_workbook()
 
     # -------------------------------------------------------------------------
@@ -279,8 +289,8 @@ class ExcelReport(models.TransientModel):
     # -------------------------------------------------------------------------
     @api.model
     def create_worksheet(self, name=False, format_code='', extension='xlsx'):
-        ''' Create database for WS in this module
-        '''
+        """ Create database for WS in this module
+        """
         try:
             if not self._WB:
                 self._create_workbook(extension=extension)
@@ -302,8 +312,8 @@ class ExcelReport(models.TransientModel):
     # -------------------------------------------------------------------------
     @api.model
     def _load_format_code(self, name, format_code):
-        ''' Setup format parameters and syles
-        '''
+        """ Setup format parameters and syles
+        """
         format_pool = self.env['excel.report.format']
         formats = format_pool.search([('code', '=', format_code)])
         ws = self._WS[name]
@@ -376,7 +386,7 @@ class ExcelReport(models.TransientModel):
                         'align': style.align,
                         'valign': style.valign,
                         'num_format': style.num_format or '',
-                        #'text_wrap': True,
+                        # 'text_wrap': True,
                         
                         # locked
                         # hidden
@@ -385,20 +395,17 @@ class ExcelReport(models.TransientModel):
                     # Save row height for this style:
                     self._row_height[self._style[name][style.code]] = \
                         style.row_height or row_height
-    
-            
-        else:    
+        else:
             _logger.info('Format not found: %s, use nothing: %s' % format_code)
-        
-        
+
     # -------------------------------------------------------------------------
     # Sheet setup:
     # -------------------------------------------------------------------------
     @api.model
     def column_width(self, ws_name, columns_w, col=0):
-        ''' WS: Worksheet passed
+        """ WS: Worksheet passed
             columns_w: list of dimension for the columns
-        '''
+        """
         for w in columns_w:
             self._WS[ws_name].set_column(col, col, w)
             col += 1
@@ -406,9 +413,9 @@ class ExcelReport(models.TransientModel):
 
     @api.model
     def row_height(self, ws_name, row_list, height=15):
-        ''' WS: Worksheet passed
+        """ WS: Worksheet passed
             columns_w: list of dimension for the columns
-        '''
+        """
         if type(row_list) in (list, tuple):            
             for row in row_list:
                 self._WS[ws_name].set_row(row, height)
@@ -417,11 +424,11 @@ class ExcelReport(models.TransientModel):
 
     @api.model
     def merge_cell(self, ws_name, rectangle, style=False, data=''):
-        ''' Merge cell procedure:
+        """ Merge cell procedure:
             WS: Worksheet where work
             rectangle: list for 2 corners xy data: [0, 0, 10, 5]
             style: setup format for cells
-        '''
+        """
         rectangle.append(data)        
         if style:
             rectangle.append(style)            
@@ -429,30 +436,31 @@ class ExcelReport(models.TransientModel):
 
     @api.model
     def autofilter(self, ws_name, rectangle):
-        ''' Auto filter management
-        '''
+        """ Auto filter management
+        """
         self._WS[ws_name].autofilter(*rectangle)
         
     # -------------------------------------------------------------------------
     # Miscellaneous operations (called directly):
     # -------------------------------------------------------------------------
     @api.model
-    def write_xls_line(self, ws_name, row, line, style_code=False, col=0, 
-            #total_columns=False
+    def write_xls_line(
+            self, ws_name, row, line, style_code=False, col=0,
+            # total_columns=False
             ):
-        ''' Write line in excel file:
+        """ Write line in excel file:
             ws_name: Worksheet name where write line
             row: position where write (in ws)
             line: Row passed is a list of element or tuple (element, format)
             style_code: Code for style (see setup format)
             col: add more column data
             total_columns: Tuple with columns need total
-            
+
             @return: nothing
-        '''
+        """
         def reach_style(ws_name, record):
-            ''' Convert style code into style of WB (created when inst.)
-            '''
+            """ Convert style code into style of WB (created when inst.)
+            """
             res = []            
             i = 0
             for item in record:
@@ -486,7 +494,7 @@ class ExcelReport(models.TransientModel):
         # ---------------------------------------------------------------------
         # Update total columns if necessary
         # ---------------------------------------------------------------------
-        #self._WS[ws_name].
+        # self._WS[ws_name].
          
         # ---------------------------------------------------------------------
         # Setup row height: 
@@ -501,17 +509,19 @@ class ExcelReport(models.TransientModel):
     # Return operation:
     # -------------------------------------------------------------------------
     @api.model
-    def send_mail_to_group(self,
+    def send_mail_to_group(
+            self,
             group_name,
-            subject, body, filename, # Mail data
+            subject, body, filename,
+            # Mail data
             ):
-        ''' Send mail of current workbook to all partner present in group 
+        """ Send mail of current workbook to all partner present in group
             passed
             group_name: use format module_name.group_id
             subject: mail subject
             body: mail body
             filename: name of xlsx attached file
-        '''
+        """
         # Send mail with attachment:
         
         # Pool used
@@ -519,7 +529,8 @@ class ExcelReport(models.TransientModel):
         model_pool = self.env['ir.model.data']
         thread_pool = self.env['mail.thread']
 
-        self._close_workbook() # Close before read file
+        # Close before read file:
+        self._close_workbook()
         attachments = [(
             filename, 
             open(self._filename, 'rb').read(), # Raw data
@@ -532,20 +543,22 @@ class ExcelReport(models.TransientModel):
         for user in group_pool.browse(group_id).users:
             partner_ids.append(user.partner_id.id)
             
-        thread_pool = self.env['mail.thread']
-        thread_pool.message_post(False, 
+        thread_pool.message_post(
+            False,
             type='email', 
             body=body, 
             subject=subject,
             partner_ids=[(6, 0, partner_ids)],
             attachments=attachments, 
             )
-        self._close_workbook() # if not closed maually        
+        # if not closed manually
+        self._close_workbook()
+
 
     @api.model
     def save_file_as(self, destination):
-        ''' Close workbook and save in another place (passed)
-        '''
+        """ Close workbook and save in another place (passed)
+        """
         _logger.warning('Save file as: %s' % destination)        
         origin = self._filename
         self._close_workbook() # if not closed maually
@@ -554,8 +567,8 @@ class ExcelReport(models.TransientModel):
 
     @api.model
     def save_binary_xlsx(self, binary):
-        ''' Save binary data passed as file temp (returned)
-        '''
+        """ Save binary data passed as file temp (returned)
+        """
         b64_file = base64.decodestring(binary)
         fields.Datetime.now()
         filename = \
@@ -567,16 +580,16 @@ class ExcelReport(models.TransientModel):
 
     @api.model
     def return_attachment(self, name, name_of_file=False):
-        ''' Return attachment passed
+        """ Return attachment passed
             name: Name for the attachment
             name_of_file: file name downloaded
             php: paremeter if activate save_as module for 7.0 (passed base srv)
             context: context passed
-        '''
+        """
         if not name_of_file:
             now = fields.Datetime.now()
             now = now.replace('-', '_').replace(':', '_') 
-            #name_of_file = '/tmp/report_%s.xlsx' % now
+            # name_of_file = '/tmp/report_%s.xlsx' % now
             name_of_file = 'report_%s.xlsx' % now
         self._close_workbook() # if not closed maually
         _logger.info('Return XLSX file: %s' % self._filename)
@@ -587,7 +600,7 @@ class ExcelReport(models.TransientModel):
             }).id
         
         return {
-            'type' : 'ir.actions.act_url',
+            'type': 'ir.actions.act_url',
             'name': name,
             'url': '/web/content/excel.report/%s/b64_file/%s?download=true' % (
                 temp_id,
