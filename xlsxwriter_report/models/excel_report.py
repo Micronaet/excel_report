@@ -116,15 +116,14 @@ class ExcelReportFormatStyle(models.Model):
         'excel.report.format.font', 'Font', required=True, 
         help='Remember to use standard fonts, need to be installed on PC!')
     foreground_id = fields.Many2one('excel.report.format.color', 'Color')
-    background_id = fields.Many2one('excel.report.format.color', 'Backgroung')
+    background_id = fields.Many2one('excel.report.format.color', 'Background')
 
     height = fields.Integer('Font height', required=True, default=10)
 
     # Type:
     bold = fields.Boolean('Bold')
     italic = fields.Boolean('Italic')
-    num_format = fields.Char('Number format', size=20)
-    # , default='#,##0.00')
+    num_format = fields.Char('Number format', size=20)  # , default='#,##0.00')
 
     # -------------------------------------------------------------------------
     # Border:
@@ -277,7 +276,7 @@ class ExcelReport(models.TransientModel):
             self._WB.close()            
         except:            
             _logger.error('Error closing WB')    
-        self._WB = False # remove object in instance
+        self._WB = False  # remove object in instance
 
     @api.model
     def close_workbook(self, ):
@@ -301,7 +300,7 @@ class ExcelReport(models.TransientModel):
             
         self._WS[name] = self._WB.add_worksheet(name)
         self._style[name] = {}
-        self._total[name] = False # Reset total
+        self._total[name] = False  # Reset total
         # TODO subtotal
         
         # ---------------------------------------------------------------------
@@ -315,7 +314,7 @@ class ExcelReport(models.TransientModel):
     # -------------------------------------------------------------------------
     @api.model
     def _load_format_code(self, name, format_code):
-        """ Setup format parameters and syles
+        """ Setup format parameters and styles
         """
         format_pool = self.env['excel.report.format']
         formats = format_pool.search([('code', '=', format_code)])
@@ -325,7 +324,7 @@ class ExcelReport(models.TransientModel):
             _logger.info('Format selected: %s' % format_code)
             
             # Setup page:
-            row_height = current_format.row_height or False # default overr.
+            row_height = current_format.row_height or False  # default over.
             page_id = current_format.page_id
             if page_id:
                 # -------------------------------------------------------------
@@ -497,6 +496,7 @@ class ExcelReport(models.TransientModel):
         if total_columns and not self._total[ws_name]:
             self._total[ws_name] = [0.0 for item in range(0, len(total_columns))]
 
+        # Write every cell of the list:
         style = self._style[ws_name].get(style_code)
         for record in line:
             if type(record) == bool:
@@ -578,7 +578,7 @@ class ExcelReport(models.TransientModel):
         group = group_name.split('.')
         # TODO change
         group_id = model_pool.get_object_reference(
-            cr, uid, group[0], group[1])[1]    
+            group[0], group[1])[1]
         partner_ids = []
         for user in group_pool.browse(group_id).users:
             partner_ids.append(user.partner_id.id)
@@ -593,7 +593,6 @@ class ExcelReport(models.TransientModel):
             )
         # if not closed manually
         self._close_workbook()
-
 
     @api.model
     def save_file_as(self, destination):
@@ -630,9 +629,9 @@ class ExcelReport(models.TransientModel):
             now = fields.Datetime.now()
             now = now.replace('-', '_').replace(':', '_') 
             # name_of_file = '/tmp/report_%s.xlsx' % now
-            name_of_file = 'report_%s.xlsx' % now
-        self._close_workbook() # if not closed maually
-        _logger.info('Return XLSX file: %s' % self._filename)
+            name_of_file = 'report_%s.xlsx' % fields.Datetime.now()
+        self._close_workbook() # if not closed manually
+        _logger.info('Return Excel file: %s' % self._filename)
         
         # TODO is necessary?
         temp_id = self.create({
