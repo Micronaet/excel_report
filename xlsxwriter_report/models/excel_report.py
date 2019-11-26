@@ -250,12 +250,13 @@ class ExcelReport(models.TransientModel):
         """
         now = fields.Datetime.now()
         now = now.replace(':', '_').replace('-', '_').replace(' ', '_')
-        filename = '/tmp/wb_%s.%s' % (now, extension) # TODO better!
+        filename = '/tmp/wb_%s.%s' % (now, extension)  # TODO better!
 
         _logger.info('Start create file %s' % filename)
         self._WB = xlsxwriter.Workbook(filename)
         self._WS = {}
-        self._style = {} # Style for every WS
+        self._style = {}  # Style for every WS
+        self._total = {}  # Array for total line (one for ws)
         self._row_height = {}
 
         self._filename = filename
@@ -300,6 +301,8 @@ class ExcelReport(models.TransientModel):
             
         self._WS[name] = self._WB.add_worksheet(name)
         self._style[name] = {}
+        self._total[name] = False # Reset total
+        # TODO subtotal
         
         # ---------------------------------------------------------------------
         # Setup Format (every new sheet):
@@ -444,9 +447,25 @@ class ExcelReport(models.TransientModel):
     # Miscellaneous operations (called directly):
     # -------------------------------------------------------------------------
     @api.model
+    def write_total_xls_line(
+            self, ws_name, row, total_columns, style_code=False):
+        """ Write total line under correct column position (use original write function passing
+            every total cell
+        """
+        current_total = self._total[ws_name]
+        if not current_total:
+            _logger.error('No total line needed!')
+            return True
+
+        i = 0
+        for col in total_columns:
+            self.write_xls_line(ws_name, row, [current_total[i]], style_code=style_code, col=col)
+            i += 1
+
+    @api.model
     def write_xls_line(
             self, ws_name, row, line, style_code=False, col=0,
-            # total_columns=False
+            total_columns=False,
             ):
         """ Write line in excel file:
             ws_name: Worksheet name where write line
@@ -474,19 +493,26 @@ class ExcelReport(models.TransientModel):
         # ---------------------------------------------------------------------
         # Write line:
         # ---------------------------------------------------------------------
+        # Setup total list:
+        if total_columns and not self._total[ws_name]:
+            self._total[ws_name] = [0.0 for item in range(0, len(total_columns))]
+
         style = self._style[ws_name].get(style_code)
         for record in line:
             if type(record) == bool:
                 record = ''
             if type(record) not in (list, tuple):
-                if style: # needed?               
+                # Needed?:
+                if style:
                     self._WS[ws_name].write(row, col, record, style)
                 else:    
                     self._WS[ws_name].write(row, col, record)                
-            elif len(record) == 2: # Normal text, format
+            elif len(record) == 2:
+                # Normal text, format:
                 self._WS[ws_name].write(
                     row, col, *reach_style(ws_name, record))
-            else: # Rich format TODO                
+            else:
+                # Rich format TODO
                 self._WS[ws_name].write_rich_string(
                     row, col, *reach_style(ws_name, record))
             col += 1
@@ -494,12 +520,24 @@ class ExcelReport(models.TransientModel):
         # ---------------------------------------------------------------------
         # Update total columns if necessary
         # ---------------------------------------------------------------------
-        # self._WS[ws_name].
-         
+        if total_columns:
+            total_pos = 0
+            for total_col in total_columns:
+                value = line[total_col]
+                # Extract from list/tuple if present:
+                if type(value) in (list, tuple):
+                    value = value[0]
+
+                if type(value) in (int, float):
+                    self._total[ws_name][total_pos] += value
+                    total_pos += 1
+                else:
+                    _logger.error('Float not present in col %s' % total_col)
+
         # ---------------------------------------------------------------------
         # Setup row height: 
         # ---------------------------------------------------------------------
-        # XXX if more than one style?
+        # TODO if more than one style?
         row_height = self._row_height.get(style, False)
         if row_height:
             self._WS[ws_name].set_row(row, row_height)

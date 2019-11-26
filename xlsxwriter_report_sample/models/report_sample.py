@@ -31,9 +31,10 @@ class ProductProductExcelReportWizard(models.TransientModel):
         # Excel file configuration:
         title = ('Product list (red line = product no price)', )
         header = ('Name', 'Code', 'Category', 'Tax', 'Weight', 'List price', )            
-        column_width = (40, 30, 20, 15, 10, 10)    
+        column_width = (40, 30, 20, 15, 10, 10)
+        total_columns = (4, 5)  # Columns used for total
 
-        ws_name = _('Product') # Worksheet name
+        ws_name = _('Product')  # Worksheet name
         report_pool.create_worksheet(ws_name, format_code='DEFAULT')
         report_pool.column_width(ws_name, column_width)
 
@@ -43,11 +44,12 @@ class ProductProductExcelReportWizard(models.TransientModel):
         
         # Merge title cell (first row, N cols):
         report_pool.merge_cell(ws_name, [row, 0, row, len(header) -1])
+
         # Header:
         row += 1
         report_pool.write_xls_line(ws_name, row, header, style_code='header')
         
-        # Set autofilter (where needed: category, tax)
+        # Set auto-filter (where needed: category, tax)
         report_pool.autofilter(ws_name, [row, 2, row, 3])
 
         # Data lines:
@@ -55,11 +57,12 @@ class ProductProductExcelReportWizard(models.TransientModel):
             row += 1
             # Setup color line (red = product empty price):
             if product.list_price:
-               color_style_text = 'text'
-               color_style_number = 'number'
+                color_style_text = 'text'
+                color_style_number = 'number'
             else:
-               color_style_text = 'text_error'
-               color_style_number = 'number_error'
+                color_style_text = 'text_error'
+                color_style_number = 'number_error'
+
             # Write data:
             report_pool.write_xls_line(ws_name, row, (
                 product.name,
@@ -68,7 +71,11 @@ class ProductProductExcelReportWizard(models.TransientModel):
                 product.taxes_id.name or '',
                 (product.weight, color_style_number),
                 (product.list_price, color_style_number),
-                ), style_code=color_style_text) #total_columns=total_columns
+                ), style_code=color_style_text, total_columns=total_columns)
+
+        # Write total line:
+        row += 1
+        report_pool.write_total_xls_line(ws_name, row, total_columns, style_code='number_total')
 
         # Save file:
         return report_pool.return_attachment('Report_Product')
