@@ -1,6 +1,7 @@
 # Copyright 2019  Micronaet SRL (<http://www.micronaet.it>).
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
+import io
 from odoo import models, fields, api
 import xlsxwriter
 import logging
@@ -441,7 +442,61 @@ class ExcelReport(models.TransientModel):
         """ Auto filter management
         """
         self._WS[ws_name].autofilter(*rectangle)
-        
+
+    # -------------------------------------------------------------------------
+    # Image management:
+    # -------------------------------------------------------------------------
+    @api.model
+    def clean_odoo_binary(self, odoo_binary_field):
+        """ Prepare image data from ODOO binary field:
+        """
+        return io.BytesIO(base64.decodestring(odoo_binary_field))
+
+    @api.model
+    def write_image(
+            self, ws_name, row, col,
+            x_offset=0, y_offset=0, x_scale=1, y_scale=1, positioning=2,
+            filename=False, data=False, tip='Product image',  # url=False,
+            ):
+        """ Insert image in cell with extra parameter
+            positioning: 1 move + size, 2 move, 3 nothing
+        """
+        parameters = {
+            'tip': tip,
+            'x_scale': x_scale,
+            'y_scale': y_scale,
+            'x_offset': x_offset,
+            'y_offset': y_offset,
+            'positioning': positioning,
+            # 'url': url,
+            }
+
+        if data:
+            if not filename:
+                filename = 'image1.png'  # neeeded if data present
+            parameters['image_data'] = data
+
+        self._WS[ws_name].insert_image(row, col, filename, parameters)
+        return True
+
+    @api.model
+    def write_image_field_data(
+            self, ws_name, row, col,
+            x_offset=0, y_offset=0, x_scale=1, y_scale=1, positioning=2,
+            filename=False, odoo_image=False, tip='Product image',  # url=False,
+            ):
+        if not odoo_image:
+            return False
+
+        return self.write_image(
+            ws_name=ws_name, row=row, col=col,
+            x_offset=x_offset, y_offset=y_offset,
+            x_scale=x_scale, y_scale=y_scale,
+            positioning=positioning, filename=filename,
+            data=self.clean_odoo_binary(odoo_image),
+            tip=tip,  # url=url,
+        )
+
     # -------------------------------------------------------------------------
     # Miscellaneous operations (called directly):
     # -------------------------------------------------------------------------
@@ -646,3 +701,30 @@ class ExcelReport(models.TransientModel):
                 name_of_file,
                 ),
             }
+
+
+    # -------------------------------------------------------------------------
+    # New Ideas to be implemented:
+    # -------------------------------------------------------------------------
+    """
+    workbook.set_properties({
+        'title':    'This is an example spreadsheet',
+        'subject':  'With document properties',
+        'author':   'John McNamara',
+        'manager':  'Dr. Heinz Doofenshmirtz',
+        'company':  'of Wolves',
+        'category': 'Example spreadsheets',
+        'keywords': 'Sample, Example, Properties',
+        'created':  datetime.date(2018, 1, 1),
+        'comments': 'Created with Python and XlsxWriter'})
+        
+    
+    worksheet.repeat_rows()
+     
+    worksheet.fit_to_pages()
+     
+    set_print_scale()
+    
+    worksheet.set_h_pagebreaks()    
+    worksheet.set_v_pagebreaks()   
+    """
