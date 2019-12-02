@@ -2,11 +2,11 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import io
-from odoo import models, fields, api
 import xlsxwriter
 import logging
 import base64
 import shutil
+from odoo import models, fields, api
 
 _logger = logging.getLogger(__name__)
 
@@ -235,8 +235,8 @@ class ExcelReport(models.TransientModel):
         value += approx    
         hour = int(value)
         minute = int((value - hour) * 60)
-        return '%d:%02d' % (hour, minute) 
-    
+        return '%d:%02d' % (hour, minute)
+
     # -------------------------------------------------------------------------
     #                              Excel utility:
     # -------------------------------------------------------------------------
@@ -655,7 +655,7 @@ class ExcelReport(models.TransientModel):
         """
         _logger.warning('Save file as: %s' % destination)        
         origin = self._filename
-        self._close_workbook() # if not closed maually
+        self._close_workbook()  # if not closed maually
         shutil.copy(origin, destination)
         return True
 
@@ -664,7 +664,7 @@ class ExcelReport(models.TransientModel):
         """ Save binary data passed as file temp (returned)
         """
         b64_file = base64.decodestring(binary)
-        fields.Datetime.now()
+        now = fields.Datetime.now()
         filename = \
             '/tmp/file_%s.xlsx' % now.replace(':', '_').replace('-', '_')
         f = open(filename, 'wb')
@@ -677,7 +677,7 @@ class ExcelReport(models.TransientModel):
         """ Return attachment passed
             name: Name for the attachment
             name_of_file: file name downloaded
-            php: paremeter if activate save_as module for 7.0 (passed base srv)
+            php: parameter if activate save_as module for 7.0 (passed base srv)
             context: context passed
         """
         if not name_of_file:
@@ -701,7 +701,6 @@ class ExcelReport(models.TransientModel):
                 name_of_file,
                 ),
             }
-
 
     # -------------------------------------------------------------------------
     # New Ideas to be implemented:
