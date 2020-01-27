@@ -13,7 +13,7 @@
     'website': 'http://www.micronaet.it',
     'license': 'AGPL-3',
     'depends': [
-        'report_xlsx',
+        # 'report_xlsx',
     ],
     'data': [
         'security/ir.model.access.csv',
