@@ -29,6 +29,10 @@
             <field name="name">Grey</field>
             <field name="rgb">#A1A1A1</field>
         </record>
+        <record model="excel.report.format.color" id="data_color_lightgrey">
+            <field name="name">Light Grey</field>
+            <field name="rgb">#E3E3E3</field>
+        </record>        
         <record model="excel.report.format.color" id="data_color_black">
             <field name="name">Black</field>
             <field name="rgb">#000000</field>
