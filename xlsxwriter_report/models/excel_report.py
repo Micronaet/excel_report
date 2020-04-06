@@ -715,6 +715,7 @@ class ExcelReport(models.TransientModel):
                 temp_id,
                 name_of_file,
                 ),
+            #'target': 'self',  # XXX Lock button!!!
             }
 
     # -------------------------------------------------------------------------
