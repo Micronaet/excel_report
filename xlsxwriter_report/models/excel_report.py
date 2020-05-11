@@ -463,6 +463,20 @@ class ExcelReport(models.TransientModel):
         return io.BytesIO(base64.decodestring(odoo_binary_field))
 
     @api.model
+    def write_formula(
+            self, ws_name, row, col, formula, 
+            #format_code, 
+            value
+            ):
+        """ Write formula in cell passed
+        """
+        return self._WS[ws_name].write_formula(
+            row, col, formula, 
+            #self._style[ws_name][format_code], 
+            #value=value,
+            )
+
+    @api.model
     def write_image(
             self, ws_name, row, col,
             x_offset=0, y_offset=0, x_scale=1, y_scale=1, positioning=2,
