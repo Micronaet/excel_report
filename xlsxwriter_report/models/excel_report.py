@@ -415,14 +415,13 @@ class ExcelReport(models.TransientModel):
         return True
 
     @api.model
-    def column_hidden(self, ws_name, columns_w, col=0):
+    def column_hidden(self, ws_name, columns_w):
         """ WS: Worksheet passed
             columns_w: list of dimension for the columns
         """
-        for w in columns_w:
+        for col in columns_w:
             self._WS[ws_name].set_column(
                 col, col, None, None, {'hidden': True})
-            col += 1
         return True
 
     @api.model
