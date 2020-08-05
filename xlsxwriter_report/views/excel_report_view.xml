@@ -288,7 +288,6 @@
     <record model="ir.actions.act_window" id="action_excel_report_format_border">
         <field name="name">Excel border</field>
         <field name="res_model">excel.report.format.border</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_excel_report_format_border_tree"/>
         <field name="context">{}</field>
