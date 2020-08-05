@@ -82,7 +82,6 @@
     <record model="ir.actions.act_window" id="action_excel_report_format_style">
         <field name="name">Excel Format Style</field>
         <field name="res_model">excel.report.format.style</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_excel_report_format_style_tree"/>
         <field name="context">{}</field>
@@ -149,7 +148,6 @@
     <record model="ir.actions.act_window" id="action_excel_report_format">
         <field name="name">Excel Format</field>
         <field name="res_model">excel.report.format</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_excel_report_format_tree"/>
         <field name="context">{}</field>
@@ -186,7 +184,6 @@
     <record model="ir.actions.act_window" id="action_excel_report_format_page">
         <field name="name">Excel Page</field>
         <field name="res_model">excel.report.format.page</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_excel_report_format_page_tree"/>
         <field name="context">{}</field>
@@ -219,7 +216,6 @@
     <record model="ir.actions.act_window" id="action_excel_report_format_font">
         <field name="name">Excel font</field>
         <field name="res_model">excel.report.format.font</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_excel_report_format_font_tree"/>
         <field name="context">{}</field>
@@ -254,7 +250,6 @@
     <record model="ir.actions.act_window" id="action_excel_report_format_color">
         <field name="name">Excel color</field>
         <field name="res_model">excel.report.format.color</field>
-        <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_excel_report_format_color_tree"/>
         <field name="context">{}</field>
@@ -341,5 +336,4 @@
             name="Sample"
             sequence="99"
     />
-
 </odoo>
