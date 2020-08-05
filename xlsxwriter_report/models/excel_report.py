@@ -192,7 +192,6 @@ class ExcelReport(models.TransientModel):
     _description = 'Excel report'
     _order = 'name'
 
-    @api.multi
     def _get_template(self):
         self.ensure_one()
         try:
