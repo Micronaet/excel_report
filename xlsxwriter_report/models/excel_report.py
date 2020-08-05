@@ -1,4 +1,4 @@
-# Copyright 2019  Micronaet SRL (<http://www.micronaet.it>).
+# Copyright 2020  Micronaet SRL (<http://www.micronaet.it>).
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import io
@@ -186,6 +186,8 @@ class ExcelReportFormatInherit(models.Model):
 
 
 class ExcelReport(models.TransientModel):
+    """ Excel Report Wizard
+    """
     _name = 'excel.report'
     _description = 'Excel report'
     _order = 'name'
@@ -464,16 +466,16 @@ class ExcelReport(models.TransientModel):
 
     @api.model
     def write_formula(
-            self, ws_name, row, col, formula, 
-            #format_code, 
+            self, ws_name, row, col, formula,
+            # format_code,
             value
             ):
         """ Write formula in cell passed
         """
         return self._WS[ws_name].write_formula(
-            row, col, formula, 
-            #self._style[ws_name][format_code], 
-            #value=value,
+            row, col, formula,
+            # self._style[ws_name][format_code],
+            # value=value,
             )
 
     @api.model
@@ -497,7 +499,7 @@ class ExcelReport(models.TransientModel):
 
         if data:
             if not filename:
-                filename = 'image1.png'  # neeeded if data present
+                filename = 'image1.png'  # needed if data present
             parameters['image_data'] = data
 
         self._WS[ws_name].insert_image(row, col, filename, parameters)
@@ -683,7 +685,7 @@ class ExcelReport(models.TransientModel):
         """
         _logger.warning('Save file as: %s' % destination)
         origin = self._filename
-        self._close_workbook()  # if not closed maually
+        self._close_workbook()  # if not closed manually
         shutil.copy(origin, destination)
         return True
 
@@ -691,7 +693,7 @@ class ExcelReport(models.TransientModel):
     def save_binary_xlsx(self, binary):
         """ Save binary data passed as file temp (returned)
         """
-        b64_file = base64.decodestring(binary)
+        b64_file = base64.decodebytes(binary)
         now = fields.Datetime.now()
         filename = \
             '/tmp/file_%s.xlsx' % now.replace(':', '_').replace('-', '_')
@@ -705,8 +707,6 @@ class ExcelReport(models.TransientModel):
         """ Return attachment passed
             name: Name for the attachment
             name_of_file: file name downloaded
-            php: parameter if activate save_as module for 7.0 (passed base srv)
-            context: context passed
         """
         if not name_of_file:
             now = fields.Datetime.now()
@@ -728,7 +728,7 @@ class ExcelReport(models.TransientModel):
                 temp_id,
                 name_of_file,
                 ),
-            #'target': 'self',  # XXX Lock button!!!
+            # 'target': 'self',  # XXX Lock button!!!
             }
 
     # -------------------------------------------------------------------------
@@ -738,9 +738,9 @@ class ExcelReport(models.TransientModel):
     workbook.set_properties({
         'title': 'This is an example spreadsheet',
         'subject': 'With document properties',
-        'author': 'John McNamara',
-        'manager': 'Dr. Heinz Doofenshmirtz',
-        'company': 'of Wolves',
+        'author': 'Nicola Riolini',
+        'manager': 'Nicola Riolini',
+        'company': 'Micronaet S.r.l.',
         'category': 'Example spreadsheets',
         'keywords': 'Sample, Example, Properties',
         'created':  datetime.date(2018, 1, 1),
