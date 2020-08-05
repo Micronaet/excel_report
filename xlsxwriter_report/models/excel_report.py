@@ -192,8 +192,9 @@ class ExcelReport(models.TransientModel):
     _description = 'Excel report'
     _order = 'name'
 
-    @api.one
+    @api.multi
     def _get_template(self):
+        self.ensure_one()
         try:
             origin = self.fullname
             self.b64_file = base64.b64encode(open(origin, 'rb').read())
