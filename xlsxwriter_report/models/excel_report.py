@@ -216,7 +216,7 @@ class ExcelReport(models.TransientModel):
         """ Change row col format into cell format
         """
         return xlsxwriter.utility.xl_rowcol_to_cell(row, col)
-        
+
     @api.model
     def format_date(self, value):
         # Format hour DD:MM:YYYY
@@ -470,16 +470,13 @@ class ExcelReport(models.TransientModel):
 
     @api.model
     def write_formula(
-            self, ws_name, row, col, formula, 
-            #format_code, 
-            value
-            ):
+            self, ws_name, row, col, formula, value):  # format_code
         """ Write formula in cell passed
         """
         return self._WS[ws_name].write_formula(
-            row, col, formula, 
-            #self._style[ws_name][format_code], 
-            #value=value,
+            row, col, formula,
+            value=value,
+            # self._style[ws_name][format_code],
             )
 
     @api.model
@@ -503,7 +500,7 @@ class ExcelReport(models.TransientModel):
 
         if data:
             if not filename:
-                filename = 'image1.png'  # neeeded if data present
+                filename = 'image1.png'  # needed if data present
             parameters['image_data'] = data
 
         self._WS[ws_name].insert_image(row, col, filename, parameters)
@@ -564,6 +561,7 @@ class ExcelReport(models.TransientModel):
 
             @return: nothing
         """
+
         def reach_style(ws_name, record):
             """ Convert style code into style of WB (created when inst.)
             """
@@ -734,7 +732,7 @@ class ExcelReport(models.TransientModel):
                 temp_id,
                 name_of_file,
                 ),
-            #'target': 'self',  # XXX Lock button!!!
+            # 'target': 'self',  # XXX Lock button!!!
             }
 
     # -------------------------------------------------------------------------
