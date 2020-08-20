@@ -470,13 +470,13 @@ class ExcelReport(models.TransientModel):
 
     @api.model
     def write_formula(
-            self, ws_name, row, col, formula, value):  # format_code
+            self, ws_name, row, col, formula, value, format_code):
         """ Write formula in cell passed
         """
         return self._WS[ws_name].write_formula(
             row, col, formula,
+            self._style[ws_name][format_code],
             value=value,
-            # self._style[ws_name][format_code],
             )
 
     @api.model
