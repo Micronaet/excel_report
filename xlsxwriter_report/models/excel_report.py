@@ -212,6 +212,12 @@ class ExcelReport(models.TransientModel):
 
     # Format utility:
     @api.model
+    def row_col_to_cell(self, row, col):
+        """ Change row col format into cell format
+        """
+        return xlsxwriter.utility.xl_rowcol_to_cell(row, col)
+        
+    @api.model
     def format_date(self, value):
         # Format hour DD:MM:YYYY
         if not value:
