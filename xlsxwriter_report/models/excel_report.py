@@ -251,8 +251,7 @@ class ExcelReport(models.TransientModel):
     def _create_workbook(self, extension='xlsx'):
         """ Create workbook in a temp file
         """
-        now = fields.Datetime.now()
-        now = now.strftime('%Y_%m_%d_%H_%M_%S')
+        now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
         filename = '/tmp/wb_%s.%s' % (now, extension)  # TODO better!
 
         _logger.info('Start create file %s' % filename)
@@ -694,9 +693,9 @@ class ExcelReport(models.TransientModel):
         """ Save binary data passed as file temp (returned)
         """
         b64_file = base64.decodebytes(binary)
-        now = fields.Datetime.now()
+        now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
         filename = \
-            '/tmp/file_%s.xlsx' % now.replace(':', '_').replace('-', '_')
+            '/tmp/file_%s.xlsx' % now
         f = open(filename, 'wb')
         f.write(b64_file)
         f.close()
@@ -709,9 +708,7 @@ class ExcelReport(models.TransientModel):
             name_of_file: file name downloaded
         """
         if not name_of_file:
-            now = fields.Datetime.now()
-            now = now.replace('-', '_').replace(':', '_')
-            # name_of_file = '/tmp/report_%s.xlsx' % now
+            now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
             name_of_file = 'report_%s.xlsx' % fields.Datetime.now()
         self._close_workbook()  # if not closed manually
         _logger.info('Return Excel file: %s' % self._filename)
