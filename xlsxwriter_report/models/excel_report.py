@@ -454,6 +454,12 @@ class ExcelReport(models.TransientModel):
         """
         self._WS[ws_name].autofilter(*rectangle)
 
+    @api.model
+    def freeze_panes(self, ws_name, row, col):
+        """ Lock row or column
+        """
+        self._WS[ws_name].freeze_panes(row, col)
+
     # -------------------------------------------------------------------------
     # Image management:
     # -------------------------------------------------------------------------
