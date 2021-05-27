@@ -7,6 +7,8 @@ import logging
 import base64
 import shutil
 from odoo import models, fields, api
+from xlsxwriter.utility import xl_rowcol_to_cell
+
 
 _logger = logging.getLogger(__name__)
 
