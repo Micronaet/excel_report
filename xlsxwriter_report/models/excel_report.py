@@ -633,6 +633,19 @@ class ExcelReport(models.TransientModel):
             self._WS[ws_name].set_row(row, row_height)
         return True
 
+    def write_comment(self, ws_name, row, col, comment, parameters=None):
+        """ Write comment in a cell
+        """
+        cell = self.rowcol_to_cell(row, col)
+        if parameters is None:
+            parameters = {
+                #author, visible, x_scale, width, y_scale, height, color
+                #font_name, font_size, start_cell, start_row, start_col
+                #x_offset, y_offset
+                }
+        if comment:
+            self._WS[ws_name].write_comment(cell, comment, parameters)
+
     # -------------------------------------------------------------------------
     # Return operation:
     # -------------------------------------------------------------------------
