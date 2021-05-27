@@ -635,6 +635,11 @@ class ExcelReport(models.TransientModel):
             self._WS[ws_name].set_row(row, row_height)
         return True
 
+    def rowcol_to_cell(self, row, col, row_abs=False, col_abs=False):
+        """ Return row, col format in "A1" notation
+        """
+        return xl_rowcol_to_cell(row, col, row_abs=row_abs, col_abs=col_abs)
+        
     def write_comment(self, ws_name, row, col, comment, parameters=None):
         """ Write comment in a cell
         """
