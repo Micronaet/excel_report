@@ -416,6 +416,15 @@ class ExcelReport(models.TransientModel):
             self._WS[ws_name].set_column(
                 col, col, None, None, {'hidden': True})
         return True
+        
+    def row_hidden(self, ws_name, rows_w):
+        """ WS: Worksheet passed
+            columns_w: list of dimension for the columns
+        """
+        for row in rows_w:
+            self._WS[ws_name].set_row(
+                row, row, None, None, {'hidden': True})
+        return True
 
     def row_height(self, ws_name, row_list, height=15):
         """ WS: Worksheet passed
