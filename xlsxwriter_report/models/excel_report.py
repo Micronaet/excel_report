@@ -423,7 +423,7 @@ class ExcelReport(models.TransientModel):
         """
         for row in rows_w:
             self._WS[ws_name].set_row(
-                row, row, None, None, {'hidden': True})
+                row, None, None, {'hidden': True})
         return True
 
     def row_height(self, ws_name, row_list, height=15):
