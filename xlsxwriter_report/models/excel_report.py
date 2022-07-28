@@ -2,10 +2,12 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import io
-import xlsxwriter
 import logging
 import base64
 import shutil
+import xlsxwriter
+
+from xlsxwriter.utility import xl_rowcol_to_cell
 from odoo import models, fields, api
 
 _logger = logging.getLogger(__name__)
@@ -407,6 +409,7 @@ class ExcelReport(models.TransientModel):
         else:
             _logger.info('Format not found: %s, use nothing: %s' % format_code)
 
+
     # -------------------------------------------------------------------------
     # Sheet setup:
     # -------------------------------------------------------------------------
@@ -468,6 +471,15 @@ class ExcelReport(models.TransientModel):
     # -------------------------------------------------------------------------
     # Image management:
     # -------------------------------------------------------------------------
+    @api.model
+    def write_url(self, WS_name, row, col, link, string, tip=''):
+        ''' WS: Worksheet passed
+            columns_w: list of dimension for the columns
+        '''
+        cell = xl_rowcol_to_cell(row, col)
+        self._WS[WS_name].write_url(cell, link, string=string, tip=tip)
+        return True
+            
     @api.model
     def clean_odoo_binary(self, odoo_binary_field):
         """ Prepare image data from ODOO binary field:
