@@ -193,6 +193,7 @@ class ExcelReport(models.TransientModel):
     _name = 'excel.report'
     _description = 'Excel report'
     _order = 'name'
+    WB = False
 
     def get_template(self):
         self.ensure_one()
