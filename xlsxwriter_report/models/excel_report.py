@@ -193,6 +193,7 @@ class ExcelReport(models.TransientModel):
     _name = 'excel.report'
     _description = 'Excel report'
     _order = 'name'
+    _WB = False
 
     def _get_template(self):
         self.ensure_one()
@@ -416,7 +417,7 @@ class ExcelReport(models.TransientModel):
             self._WS[ws_name].set_column(
                 col, col, None, None, {'hidden': True})
         return True
-        
+
     def row_hidden(self, ws_name, rows_w):
         """ WS: Worksheet passed
             columns_w: list of dimension for the columns
@@ -628,7 +629,7 @@ class ExcelReport(models.TransientModel):
         """ Return row, col format in "A1" notation
         """
         return xl_rowcol_to_cell(row, col, row_abs=row_abs, col_abs=col_abs)
-        
+
     def write_comment(self, ws_name, row, col, comment, parameters=None):
         """ Write comment in a cell
         """
