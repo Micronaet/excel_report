@@ -193,9 +193,8 @@ class ExcelReport(models.TransientModel):
     _name = 'excel.report'
     _description = 'Excel report'
     _order = 'name'
-    _WB = False
 
-    def _get_template(self):
+    def get_template(self):
         self.ensure_one()
         try:
             origin = self.fullname
@@ -247,42 +246,42 @@ class ExcelReport(models.TransientModel):
     # -------------------------------------------------------------------------
     # Workbook:
     # -------------------------------------------------------------------------
-    def _create_workbook(self, extension='xlsx'):
+    def create_workbook(self, extension='xlsx'):
         """ Create workbook in a temp file
         """
         now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
         filename = '/tmp/wb_%s.%s' % (now, extension)  # TODO better!
 
         _logger.info('Start create file %s' % filename)
-        self._WB = xlsxwriter.Workbook(filename)
-        self._WS = {}
-        self._style = {}  # Style for every WS
-        self._total = {}  # Array for total line (one for ws)
-        self._row_height = {}
+        self.WB = xlsxwriter.Workbook(filename)
+        self.WS = {}
+        self.style = {}  # Style for every WS
+        self.total = {}  # Array for total line (one for ws)
+        self.row_height = {}
 
-        self._filename = filename
+        self.filename = filename
         _logger.warning('Created WB on file: %s' % filename)
-
-    def _close_workbook(self, ):
-        """ Close workbook
-        """
-        # Reset persistent data:
-        self._WS = {}
-        self._style = {}
-        self._row_height = {}
-        self._wb_format = False
-
-        # Try to remove document:
-        try:
-            self._WB.close()
-        except:
-            _logger.error('Error closing WB')
-        self._WB = False  # remove object in instance
 
     def close_workbook(self, ):
         """ Close workbook
         """
-        return self._close_workbook()
+        # Reset persistent data:
+        self.WS = {}
+        self.style = {}
+        self.row_height = {}
+        self.wb_format = False
+
+        # Try to remove document:
+        try:
+            self.WB.close()
+        except:
+            _logger.error('Error closing WB')
+        self.WB = False  # remove object in instance
+
+    def close_workbook(self, ):
+        """ Close workbook
+        """
+        return self.close_workbook()
 
     # -------------------------------------------------------------------------
     # Worksheet:
@@ -291,32 +290,32 @@ class ExcelReport(models.TransientModel):
         """ Create database for WS in this module
         """
         try:
-            if not self._WB:
-                self._create_workbook(extension=extension)
-            _logger.info('Using WB: %s' % self._WB)
+            if not self.WB:
+                self.create_workbook(extension=extension)
+            _logger.info('Using WB: %s' % self.WB)
         except:
-            self._create_workbook(extension=extension)
+            self.create_workbook(extension=extension)
 
-        self._WS[name] = self._WB.add_worksheet(name)
-        self._style[name] = {}
-        self._total[name] = False  # Reset total
+        self.WS[name] = self.WB.add_worksheet(name)
+        self.style[name] = {}
+        self.total[name] = False  # Reset total
         # TODO subtotal
 
         # ---------------------------------------------------------------------
         # Setup Format (every new sheet):
         # ---------------------------------------------------------------------
         if format_code:
-            self._load_format_code(name, format_code)
+            self.load_format_code(name, format_code)
 
     # -------------------------------------------------------------------------
     # Format:
     # -------------------------------------------------------------------------
-    def _load_format_code(self, name, format_code):
+    def load_format_code(self, name, format_code):
         """ Setup format parameters and styles
         """
         format_pool = self.env['excel.report.format']
         formats = format_pool.search([('code', '=', format_code)])
-        ws = self._WS[name]
+        ws = self.WS[name]
         if formats:
             current_format = formats[0]
             _logger.info('Format selected: %s' % format_code)
@@ -352,13 +351,13 @@ class ExcelReport(models.TransientModel):
                 # -------------------------------------------------------------
                 # Load Styles:
                 # -------------------------------------------------------------
-                if name not in self._style:
+                if name not in self.style:
                     # Every page use own style (can use different format)
-                    self._style[name] = {}
+                    self.style[name] = {}
 
                 for style in current_format.style_ids:
                     # Create new style and add
-                    self._style[name][style.code] = self._WB.add_format({
+                    self.style[name][style.code] = self.WB.add_format({
                         'font_name': style.font_id.name,
                         'font_size': style.height,
                         'font_color': style.foreground_id.rgb,
@@ -392,7 +391,7 @@ class ExcelReport(models.TransientModel):
                         })
 
                     # Save row height for this style:
-                    self._row_height[self._style[name][style.code]] = \
+                    self.row_height[self.style[name][style.code]] = \
                         style.row_height or row_height
         else:
             _logger.info('Format not found: %s, use nothing: %s' % format_code)
@@ -405,7 +404,7 @@ class ExcelReport(models.TransientModel):
             columns_w: list of dimension for the columns
         """
         for w in columns_w:
-            self._WS[ws_name].set_column(col, col, w)
+            self.WS[ws_name].set_column(col, col, w)
             col += 1
         return True
 
@@ -414,7 +413,7 @@ class ExcelReport(models.TransientModel):
             columns_w: list of dimension for the columns
         """
         for col in columns_w:
-            self._WS[ws_name].set_column(
+            self.WS[ws_name].set_column(
                 col, col, None, None, {'hidden': True})
         return True
 
@@ -423,7 +422,7 @@ class ExcelReport(models.TransientModel):
             columns_w: list of dimension for the columns
         """
         for row in rows_w:
-            self._WS[ws_name].set_row(
+            self.WS[ws_name].set_row(
                 row, None, None, {'hidden': True})
         return True
 
@@ -433,9 +432,9 @@ class ExcelReport(models.TransientModel):
         """
         if type(row_list) in (list, tuple):
             for row in row_list:
-                self._WS[ws_name].set_row(row, height)
+                self.WS[ws_name].set_row(row, height)
         else:
-            self._WS[ws_name].set_row(row_list, height)
+            self.WS[ws_name].set_row(row_list, height)
 
     def merge_cell(self, ws_name, rectangle, style=False, data=''):
         """ Merge cell procedure:
@@ -446,17 +445,17 @@ class ExcelReport(models.TransientModel):
         rectangle.append(data)
         if style:
             rectangle.append(style)
-        self._WS[ws_name].merge_range(*rectangle)
+        self.WS[ws_name].merge_range(*rectangle)
 
     def autofilter(self, ws_name, rectangle):
         """ Auto filter management
         """
-        self._WS[ws_name].autofilter(*rectangle)
+        self.WS[ws_name].autofilter(*rectangle)
 
     def freeze_panes(self, ws_name, row, col):
         """ Lock row or column
         """
-        self._WS[ws_name].freeze_panes(row, col)
+        self.WS[ws_name].freeze_panes(row, col)
 
     # -------------------------------------------------------------------------
     # Image management:
@@ -473,9 +472,9 @@ class ExcelReport(models.TransientModel):
             ):
         """ Write formula in cell passed
         """
-        return self._WS[ws_name].write_formula(
+        return self.WS[ws_name].write_formula(
             row, col, formula,
-            # self._style[ws_name][format_code],
+            # self.style[ws_name][format_code],
             # value=value,
             )
 
@@ -502,7 +501,7 @@ class ExcelReport(models.TransientModel):
                 filename = 'image1.png'  # needed if data present
             parameters['image_data'] = data
 
-        self._WS[ws_name].insert_image(row, col, filename, parameters)
+        self.WS[ws_name].insert_image(row, col, filename, parameters)
         return True
 
     def write_image_field_data(
@@ -531,7 +530,7 @@ class ExcelReport(models.TransientModel):
         """ Write total line under correct column position
             (use original write function passing every total cell)
         """
-        current_total = self._total[ws_name]
+        current_total = self.total[ws_name]
         if not current_total:
             _logger.error('No total line needed!')
             return True
@@ -565,7 +564,7 @@ class ExcelReport(models.TransientModel):
             for item in record:
                 i += 1
                 if i % 2 == 0:
-                    res.append(self._style[ws_name].get(item))
+                    res.append(self.style[ws_name].get(item))
                 else:
                     res.append(item)
             return res
@@ -574,28 +573,28 @@ class ExcelReport(models.TransientModel):
         # Write line:
         # ---------------------------------------------------------------------
         # Setup total list:
-        if total_columns and not self._total[ws_name]:
-            self._total[ws_name] = [
+        if total_columns and not self.total[ws_name]:
+            self.total[ws_name] = [
                 0.0 for item in range(0, len(total_columns))]
 
         # Write every cell of the list:
-        style = self._style[ws_name].get(style_code)
+        style = self.style[ws_name].get(style_code)
         for record in line:
             if type(record) == bool:
                 record = ''
             if type(record) not in (list, tuple):
                 # Needed?:
                 if style:
-                    self._WS[ws_name].write(row, col, record, style)
+                    self.WS[ws_name].write(row, col, record, style)
                 else:
-                    self._WS[ws_name].write(row, col, record)
+                    self.WS[ws_name].write(row, col, record)
             elif len(record) == 2:
                 # Normal text, format:
-                self._WS[ws_name].write(
+                self.WS[ws_name].write(
                     row, col, *reach_style(ws_name, record))
             else:
                 # Rich format TODO
-                self._WS[ws_name].write_rich_string(
+                self.WS[ws_name].write_rich_string(
                     row, col, *reach_style(ws_name, record))
             col += 1
 
@@ -611,7 +610,7 @@ class ExcelReport(models.TransientModel):
                     value = value[0]
 
                 if type(value) in (int, float):
-                    self._total[ws_name][total_pos] += value
+                    self.total[ws_name][total_pos] += value
                     total_pos += 1
                 else:
                     _logger.error('Float not present in col %s' % total_col)
@@ -620,9 +619,9 @@ class ExcelReport(models.TransientModel):
         # Setup row height:
         # ---------------------------------------------------------------------
         # TODO if more than one style?
-        row_height = self._row_height.get(style, False)
+        row_height = self.row_height.get(style, False)
         if row_height:
-            self._WS[ws_name].set_row(row, row_height)
+            self.WS[ws_name].set_row(row, row_height)
         return True
 
     def rowcol_to_cell(self, row, col, row_abs=False, col_abs=False):
@@ -641,7 +640,7 @@ class ExcelReport(models.TransientModel):
                 #x_offset, y_offset
                 }
         if comment:
-            self._WS[ws_name].write_comment(cell, comment, parameters)
+            self.WS[ws_name].write_comment(cell, comment, parameters)
 
     # -------------------------------------------------------------------------
     # Return operation:
@@ -667,11 +666,11 @@ class ExcelReport(models.TransientModel):
         thread_pool = self.env['mail.thread']
 
         # Close before read file:
-        self._close_workbook()
+        self.close_workbook()
         attachments = [(
             filename,
             # Raw data:
-            open(self._filename, 'rb').read(),
+            open(self.filename, 'rb').read(),
             )]
 
         group = group_name.split('.')
@@ -691,14 +690,14 @@ class ExcelReport(models.TransientModel):
             attachments=attachments,
             )
         # if not closed manually
-        self._close_workbook()
+        self.close_workbook()
 
     def save_file_as(self, destination):
         """ Close workbook and save in another place (passed)
         """
         _logger.warning('Save file as: %s' % destination)
-        origin = self._filename
-        self._close_workbook()  # if not closed manually
+        origin = self.filename
+        self.close_workbook()  # if not closed manually
         shutil.copy(origin, destination)
         return True
 
@@ -722,12 +721,12 @@ class ExcelReport(models.TransientModel):
         if not name_of_file:
             now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
             name_of_file = 'report_%s.xlsx' % fields.Datetime.now()
-        self._close_workbook()  # if not closed manually
-        _logger.info('Return Excel file: %s' % self._filename)
+        self.close_workbook()  # if not closed manually
+        _logger.info('Return Excel file: %s' % self.filename)
 
         # TODO is necessary?
         temp_id = self.create({
-            'fullname': self._filename,
+            'fullname': self.filename,
             }).id
 
         return {
