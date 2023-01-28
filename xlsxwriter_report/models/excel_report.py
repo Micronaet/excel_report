@@ -195,7 +195,7 @@ class ExcelReport(models.TransientModel):
     _order = 'name'
     WB = False
 
-    def __init__():
+    def __init__(self, cr, uid, context=None):
         """ Setup
         """
         self.WB = False
