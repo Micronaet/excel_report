@@ -194,17 +194,6 @@ class ExcelReport(models.TransientModel):
     _description = 'Excel report'
     _order = 'name'
 
-    def __init__(self, cr, uid, context=None):
-        """ Setup
-        """
-        self.WB = False
-        self.WS = {}
-        self.style = {}  # Style for every WS
-        self.total = {}  # Array for total line (one for ws)
-        self.row_height = {}
-
-        self.filename = False
-
     def get_template(self):
         self.ensure_one()
         try:
