@@ -195,6 +195,17 @@ class ExcelReport(models.TransientModel):
     _order = 'name'
     WB = False
 
+    def __init__(self):
+        """ Setup
+        """
+        self.WB = False
+        self.WS = {}
+        self.style = {}  # Style for every WS
+        self.total = {}  # Array for total line (one for ws)
+        self.row_height = {}
+
+        self.filename = False
+
     def get_template(self):
         self.ensure_one()
         try:
@@ -263,7 +274,7 @@ class ExcelReport(models.TransientModel):
         self.filename = filename
         _logger.warning('Created WB on file: %s' % filename)
 
-    def close_workbook(self, ):
+    def _close_workbook(self, ):
         """ Close workbook
         """
         # Reset persistent data:
@@ -282,7 +293,7 @@ class ExcelReport(models.TransientModel):
     def close_workbook(self, ):
         """ Close workbook
         """
-        return self.close_workbook()
+        return self._close_workbook()
 
     # -------------------------------------------------------------------------
     # Worksheet:
