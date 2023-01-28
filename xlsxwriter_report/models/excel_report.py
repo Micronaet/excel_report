@@ -193,7 +193,6 @@ class ExcelReport(models.TransientModel):
     _name = 'excel.report'
     _description = 'Excel report'
     _order = 'name'
-    WB = False
 
     def __init__(self, cr, uid, context=None):
         """ Setup
