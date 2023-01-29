@@ -197,7 +197,7 @@ class ExcelReport(models.TransientModel):
     def create(self, vals):
         """ Generate new WB when create record
         """
-        res = super().with_context(prova='prova').create(vals)
+        res = super().create(vals)
         return res
 
     def get_b64_from_filename(self, workbook):
