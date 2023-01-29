@@ -205,7 +205,9 @@ class ExcelReport(models.TransientModel):
             fullname = '/tmp/wb_%s.xlsx' % now  # todo better!
         record = super().create(vals)
 
-        # Update record context with Excel Workbook parameters:
+        # ---------------------------------------------------------------------
+        # Integrate with Excel Workbook parameters:
+        # ---------------------------------------------------------------------
         workbook = {
             'WB': xlsxwriter.Workbook(fullname),
             'WS': {},
@@ -213,26 +215,30 @@ class ExcelReport(models.TransientModel):
             'total': {},  # Array for total line (one for ws)
             'row_height': {},
         }
+        _logger.info('New WB record created %s' % fullname)
         return record.with_context(workbook=workbook).browse(record.id)
 
-    def get_b64_from_filename(self, workbook):
-        """ Read filename for workbook and return binary
+    def unlink(self):
+        """ Generate new WB when create record
         """
-        self.ensure_one()
+        # Excel WB operation:
         try:
-            origin = workbook['fullname']
-            self.b64_file = base64.b64encode(open(origin, 'rb').read())
+            self.env.context['workbook']['WB'].close()
         except:
-            self.b64_file = False
+            _logger.error('Error closing WB')
 
-    b64_file = fields.Binary('B64 file')
-    fullname = fields.Text('Fullname of file')
+        return super().unlink()
 
+    '''
     def clean_filename(self, destination):
+        """ Remove char not used in file system
+            Not used for now
+        """
         destination = destination.replace('/', '_').replace(':', '_')
         if not(destination.endswith('xlsx') or destination.endswith('xls')):
             destination = '%s.xlsx' % destination
         return destination
+    '''
 
     # Format utility:
     def format_date(self, value):
@@ -260,46 +266,30 @@ class ExcelReport(models.TransientModel):
         minute = int((value - hour) * 60)
         return '%d:%02d' % (hour, minute)
 
-    # -------------------------------------------------------------------------
-    #                              Excel utility:
-    # -------------------------------------------------------------------------
-
-    # -------------------------------------------------------------------------
-    # Workbook:
-    # -------------------------------------------------------------------------
-    def create_workbook(self, extension='xlsx'):
-        """ Create workbook in a temp file
+    # Fields compute:
+    def get_b64_from_fullname(self):
+        """ Read filename for workbook and return binary
         """
-        now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
-        filename = '/tmp/wb_%s.%s' % (now, extension)  # todo better!
-
-        _logger.info('Start create file %s' % filename)
-        workbook = {
-            'WB': xlsxwriter.Workbook(filename),
-            'WS': {},
-            'style': {},  # Style for every WS
-            'total': {},  # Array for total line (one for ws)
-            'row_height': {},
-            'filename': filename,
-        }
-        _logger.warning('Created WB on file: %s' % filename)
-        return workbook
-
-    def close_workbook(self, workbook):
-        """ Close workbook
-        """
+        workbook = self
         try:
-            workbook['WB'].close()
+            fullname = self.fullname
+            workbook.b64_file = base64.b64encode(
+                open(fullname, 'rb').read())
         except:
-            _logger.error('Error closing WB')
-        del workbook
+            workbook.b64_file = False
 
-    # -------------------------------------------------------------------------
+    b64_file = fields.Binary('B64 file', compute='get_b64_from_fullname')
+    fullname = fields.Text('Fullname of file')
+
+    # =========================================================================
+    #                              Excel utility:
+    # =========================================================================
     # Worksheet:
     # -------------------------------------------------------------------------
-    def create_worksheet(self, workbook, name=False, format_code=''):
+    def create_worksheet(self, name, format_code=''):
         """ Create database for WS in this module
         """
+        workbook = self.env.context['workbook']
         workbook['WS'][name] = workbook['WB'].add_worksheet(name)
         workbook['style'][name] = {}
         workbook['total'][name] = False  # Reset total
@@ -309,17 +299,19 @@ class ExcelReport(models.TransientModel):
         # Setup Format (every new sheet):
         # ---------------------------------------------------------------------
         if format_code:
-            self.load_format_code(workbook, name, format_code)
+            self.load_format_code(name, format_code)
 
     # -------------------------------------------------------------------------
     # Format:
     # -------------------------------------------------------------------------
-    def load_format_code(self, workbook, name, format_code):
+    def load_format_code(self, name, format_code):
         """ Setup format parameters and styles
         """
         format_pool = self.env['excel.report.format']
+
+        workbook = self.env.context['workbook']
         formats = format_pool.search([('code', '=', format_code)])
-        ws = workbook['WS'][name]
+        worksheet = workbook['WS'][name]
         if formats:
             current_format = formats[0]
             _logger.info('Format selected: %s' % format_code)
@@ -328,24 +320,19 @@ class ExcelReport(models.TransientModel):
             row_height = current_format.row_height or False  # default over.
             page_id = current_format.page_id
             if page_id:
-                # -------------------------------------------------------------
                 # Set page:
-                # -------------------------------------------------------------
-                ws.set_paper(page_id.index)
+                worksheet.set_paper(page_id.index)
 
-                # -------------------------------------------------------------
                 # Set orientation:
-                # -------------------------------------------------------------
-                # set_landscape set_portrait
                 if current_format.orientation == 'landscape':
-                    ws.set_landscape()
+                    worksheet.set_landscape()
                 else:
-                    ws.set_portrait()
+                    worksheet.set_portrait()
 
                 # -------------------------------------------------------------
                 # Setup Margin
                 # -------------------------------------------------------------
-                ws.set_margins(
+                worksheet.set_margins(
                     left=current_format.margin_left,
                     right=current_format.margin_right,
                     top=current_format.margin_top,
@@ -408,49 +395,58 @@ class ExcelReport(models.TransientModel):
     # -------------------------------------------------------------------------
     # Sheet setup:
     # -------------------------------------------------------------------------
-    def column_width(self, workbook, ws_name, columns_w, col=0):
+    def column_width(self, ws_name, columns_w, col=0):
         """ WS: Worksheet passed
             columns_w: list of dimension for the columns
         """
+        workbook = self.env.context['workbook']
         for w in columns_w:
             workbook['WS'][ws_name].set_column(col, col, w)
             col += 1
         return True
 
-    def column_hidden(self, workbook, ws_name, columns_w):
+    def column_hidden(self, ws_name, columns_w):
         """ WS: Worksheet passed
             columns_w: list of dimension for the columns
         """
+        workbook = self.env.context['workbook']
+
         for col in columns_w:
             workbook['WS'][ws_name].set_column(
                 col, col, None, None, {'hidden': True})
         return True
 
-    def row_hidden(self, workbook, ws_name, rows_w):
+    def row_hidden(self, ws_name, rows_w):
         """ WS: Worksheet passed
             columns_w: list of dimension for the columns
         """
+        workbook = self.env.context['workbook']
+
         for row in rows_w:
             workbook['WS'][ws_name].set_row(
                 row, None, None, {'hidden': True})
         return True
 
-    def row_height(self, workbook, ws_name, row_list, height=15):
+    def row_height(self, ws_name, row_list, height=15):
         """ WS: Worksheet passed
             columns_w: list of dimension for the columns
         """
+        workbook = self.env.context['workbook']
+
         if type(row_list) in (list, tuple):
             for row in row_list:
                 workbook['WS'][ws_name].set_row(row, height)
         else:
             workbook['WS'][ws_name].set_row(row_list, height)
 
-    def merge_cell(self, workbook, ws_name, rectangle, style=False, data=''):
+    def merge_cell(self, ws_name, rectangle, style=False, data=''):
         """ Merge cell procedure:
             WS: Worksheet where work
             rectangle: list for 2 corners xy data: [0, 0, 10, 5]
             style: setup format for cells
         """
+        workbook = self.env.context['workbook']
+
         rectangle.append(data)
         if style:
             rectangle.append(style)
@@ -461,9 +457,10 @@ class ExcelReport(models.TransientModel):
         """
         workbook['WS'][ws_name].autofilter(*rectangle)
 
-    def freeze_panes(self, workbook, ws_name, row, col):
+    def freeze_panes(self, ws_name, row, col):
         """ Lock row or column
         """
+        workbook = self.env.context['workbook']
         workbook['WS'][ws_name].freeze_panes(row, col)
 
     # -------------------------------------------------------------------------
@@ -475,12 +472,14 @@ class ExcelReport(models.TransientModel):
         return io.BytesIO(base64.decodestring(odoo_binary_field))
 
     def write_formula(
-            self, workbook, ws_name, row, col, formula,
+            self, ws_name, row, col, formula,
             # format_code,
             value
             ):
         """ Write formula in cell passed
         """
+        workbook = self.env.context['workbook']
+
         return workbook['WS'][ws_name].write_formula(
             row, col, formula,
             # self.style[ws_name][format_code],
@@ -488,13 +487,15 @@ class ExcelReport(models.TransientModel):
             )
 
     def write_image(
-            self, workbook, ws_name, row, col,
+            self, ws_name, row, col,
             x_offset=0, y_offset=0, x_scale=1, y_scale=1, positioning=2,
-            filename=False, data=False, tip='Product image',  # url=False,
+            filename=False, data=None, tip='Product image',  # url=False,
             ):
         """ Insert image in cell with extra parameter
             positioning: 1 move + size, 2 move, 3 nothing
         """
+        workbook = self.env.context['workbook']
+
         parameters = {
             'tip': tip,
             'x_scale': x_scale,
@@ -514,7 +515,7 @@ class ExcelReport(models.TransientModel):
         return True
 
     def write_image_field_data(
-            self, workbook, ws_name, row, col,
+            self, ws_name, row, col,
             x_offset=0, y_offset=0, x_scale=1, y_scale=1, positioning=2,
             filename=False, odoo_image=False, tip='Product image',
             # url=False,
@@ -523,7 +524,7 @@ class ExcelReport(models.TransientModel):
             return False
 
         return self.write_image(
-            workbook=workbook, ws_name=ws_name, row=row, col=col,
+            ws_name=ws_name, row=row, col=col,
             x_offset=x_offset, y_offset=y_offset,
             x_scale=x_scale, y_scale=y_scale,
             positioning=positioning, filename=filename,
@@ -535,10 +536,12 @@ class ExcelReport(models.TransientModel):
     # Miscellaneous operations (called directly):
     # -------------------------------------------------------------------------
     def write_total_xls_line(
-            self, workbook, ws_name, row, total_columns, style_code=False):
+            self, ws_name, row, total_columns, style_code=False):
         """ Write total line under correct column position
             (use original write function passing every total cell)
         """
+        workbook = self.env.context['workbook']
+
         current_total = self.total[ws_name]
         if not current_total:
             _logger.error('No total line needed!')
@@ -551,8 +554,23 @@ class ExcelReport(models.TransientModel):
                 style_code=style_code, col=col)
             i += 1
 
+    def reach_style(self, ws_name, record):
+        """ Convert style code into style of WB (created when inst.)
+        """
+        workbook = self.env.context['workbook']
+
+        res = []
+        i = 0
+        for item in record:
+            i += 1
+            if i % 2 == 0:
+                res.append(workbook['style'][ws_name].get(item))
+            else:
+                res.append(item)
+        return res
+
     def write_xls_line(
-            self, workbook, ws_name, row, line, style_code=False, col=0,
+            self, ws_name, row, line, style_code=False, col=0,
             total_columns=False,
             ):
         """ Write line in excel file:
@@ -565,22 +583,11 @@ class ExcelReport(models.TransientModel):
 
             @return: nothing
         """
-        def reach_style(ws_name, record):
-            """ Convert style code into style of WB (created when inst.)
-            """
-            res = []
-            i = 0
-            for item in record:
-                i += 1
-                if i % 2 == 0:
-                    res.append(workbook['style'][ws_name].get(item))
-                else:
-                    res.append(item)
-            return res
-
         # ---------------------------------------------------------------------
         # Write line:
         # ---------------------------------------------------------------------
+        workbook = self.env.context['workbook']
+
         # Setup total list:
         if total_columns and not workbook['total'][ws_name]:
             workbook['total'][ws_name] = [
@@ -600,11 +607,11 @@ class ExcelReport(models.TransientModel):
             elif len(record) == 2:
                 # Normal text, format:
                 workbook['WS'][ws_name].write(
-                    row, col, *reach_style(ws_name, record))
+                    row, col, *self.reach_style(ws_name, record))
             else:
-                # Rich format TODO
+                # Rich format todo
                 workbook['WS'][ws_name].write_rich_string(
-                    row, col, *reach_style(ws_name, record))
+                    row, col, *self.reach_style(ws_name, record))
             col += 1
 
         # ---------------------------------------------------------------------
@@ -627,7 +634,7 @@ class ExcelReport(models.TransientModel):
         # ---------------------------------------------------------------------
         # Setup row height:
         # ---------------------------------------------------------------------
-        # TODO if more than one style?
+        # todo if more than one style?
         row_height = workbook['row_height'].get(style, False)
         if row_height:
             workbook['WS'][ws_name].set_row(row, row_height)
@@ -639,9 +646,11 @@ class ExcelReport(models.TransientModel):
         return xl_rowcol_to_cell(row, col, row_abs=row_abs, col_abs=col_abs)
 
     def write_comment(
-            self, workbook, ws_name, row, col, comment, parameters=None):
+            self, ws_name, row, col, comment, parameters=None):
         """ Write comment in a cell
         """
+        workbook = self.env.context['workbook']
+
         cell = self.rowcol_to_cell(row, col)
         if parameters is None:
             parameters = {
@@ -657,7 +666,6 @@ class ExcelReport(models.TransientModel):
     # -------------------------------------------------------------------------
     def send_mail_to_group(
             self,
-            workbook,
             group_name,
             subject, body, filename,
             # Mail data
@@ -670,17 +678,16 @@ class ExcelReport(models.TransientModel):
             filename: name of xlsx attached file
         """
         # Send mail with attachment:
-
         # Pool used
         group_pool = self.env['res.groups']
         model_pool = self.env['ir.model.data']
         thread_pool = self.env['mail.thread']
 
         # Close before read file:
+        fullname = self.fullname
         attachments = [(
-            filename,
-            # Raw data:
-            open(workbook['filename'], 'rb').read(),
+            fullname,
+            open(fullname, 'rb').read(),  # Raw data
             )]
         group = group_name.split('.')
 
@@ -699,20 +706,20 @@ class ExcelReport(models.TransientModel):
             partner_ids=[(6, 0, partner_ids)],
             attachments=attachments,
             )
+        self.unlink()  # Close WB
 
-        # if not closed manually
-        self.close_workbook(workbook)
-
-    def save_file_as(self, workbook, destination):
+    def save_file_as(self, destination):
         """ Close workbook and save in another place (passed)
         """
+        fullname = self.fullname
+
         _logger.warning('Save file as: %s' % destination)
-        origin = workbook['filename']
-        self.close_workbook(workbook)  # if not closed manually
-        shutil.copy(origin, destination)
+        shutil.copy(fullname, destination)
+        self.unlink()  # Close WB
         return True
 
-    def save_binary_xlsx(self, workbook, binary):
+    '''
+    def save_binary_xlsx(self, binary):
         """ Save binary data passed as file temp (returned)
         """
         # todo used?
@@ -723,30 +730,26 @@ class ExcelReport(models.TransientModel):
         f.write(b64_file)
         f.close()
         return filename
+    '''
 
-    def return_attachment(self, workbook, name, name_of_file=False):
+    def return_attachment(self, name, name_of_file=False):
         """ Return attachment passed
             name: Name for the attachment
             name_of_file: file name downloaded
         """
+        fullname = self.fullname
         if not name_of_file:
             now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
             name_of_file = 'report_%s.xlsx' % now
 
-        _logger.info('Return Excel file: %s' % workbook['filename'])
+        _logger.info('Return Excel file: %s' % fullname)
 
-        # todo is necessary?
-        temp_id = self.create({
-            'fullname': workbook['filename'],
-            'b64_file': self.get_b64_from_filename(workbook)
-            }).id
-
-        self.close_workbook(workbook)  # if not closed manually
+        # self.close_workbook(workbook)  # Garbage close file!
         return {
             'type': 'ir.actions.act_url',
             'name': name,
             'url': '/web/content/excel.report/%s/b64_file/%s?download=true' % (
-                temp_id,
+                self.id,
                 name_of_file,
                 ),
             # 'target': 'self',  # XXX Lock button!!!
