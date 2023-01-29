@@ -206,14 +206,14 @@ class ExcelReport(models.TransientModel):
         record = super().create(vals)
 
         # Update record context with Excel Workbook parameters:
-        parameters = {
+        workbook = {
             'WB': xlsxwriter.Workbook(fullname),
             'WS': {},
             'style': {},  # Style for every WS
             'total': {},  # Array for total line (one for ws)
             'row_height': {},
         }
-        return record.with_context(**parameters).browse(record.id)
+        return record.with_context(workbook=workbook).browse(record.id)
 
     def get_b64_from_filename(self, workbook):
         """ Read filename for workbook and return binary
