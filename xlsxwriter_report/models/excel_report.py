@@ -194,6 +194,12 @@ class ExcelReport(models.TransientModel):
     _description = 'Excel report'
     _order = 'name'
 
+    def create(self, vals):
+        """ Generate new WB when create record
+        """
+        res = super(ExcelReport, self).with_context(prova='prova').create(vals)
+        return res
+
     def get_b64_from_filename(self, workbook):
         """ Read filename for workbook and return binary
         """
