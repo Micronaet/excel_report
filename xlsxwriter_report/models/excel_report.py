@@ -197,8 +197,23 @@ class ExcelReport(models.TransientModel):
     def create(self, vals):
         """ Generate new WB when create record
         """
+        if 'fullname' in vals:
+            fullname = vals['fullname']
+            vals['fullname'] = fullname
+        else:
+            now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+            fullname = '/tmp/wb_%s.xlsx' % now  # todo better!
         record = super().create(vals)
-        return record.with_context(prova='prova').browse(record.id)
+
+        # Update record context with Excel Workbook parameters:
+        parameters = {
+            'WB': xlsxwriter.Workbook(fullname),
+            'WS': {},
+            'style': {},  # Style for every WS
+            'total': {},  # Array for total line (one for ws)
+            'row_height': {},
+        }
+        return record.with_context(**parameters).browse(record.id)
 
     def get_b64_from_filename(self, workbook):
         """ Read filename for workbook and return binary
