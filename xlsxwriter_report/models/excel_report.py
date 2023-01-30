@@ -264,8 +264,21 @@ class ExcelReport(models.TransientModel):
         minute = int((value - hour) * 60)
         return '%d:%02d' % (hour, minute)
 
-    # Fields compute:
     def get_b64_from_fullname(self):
+        """ Read filename for workbook and return binary
+        """
+        workbook = self
+        try:
+            fullname = workbook.fullname
+            return = base64.b64encode(
+                open(fullname, 'rb').read())
+        except:
+            _logger.error('Error naming temp files XSLX!')
+            return = False
+
+    # Fields compute:
+    # todo remove, dont' work!
+    def get_b64_file(self):
         """ Read filename for workbook and return binary
         """
         workbook = self
@@ -288,7 +301,7 @@ class ExcelReport(models.TransientModel):
         'Descrizione', help='Nome fittizio per salvare il record', size=80)
     fullname = fields.Text('Fullname of file')
     b64_file = fields.Binary(
-        'B64 file', compute='get_b64_from_fullname')
+        'B64 file', compute='get_b64_file')
 
     # =========================================================================
     #                              Excel utility:
@@ -754,6 +767,11 @@ class ExcelReport(models.TransientModel):
         _logger.info('Return Excel file: %s' % fullname)
 
         # self.close_workbook(workbook)  # Garbage close file!
+        # Update B64 file in record:
+        self.write({
+            'b64_file': self.get_b64_from_fullname(),
+            })
+
         return {
             'type': 'ir.actions.act_url',
             'name': name,
