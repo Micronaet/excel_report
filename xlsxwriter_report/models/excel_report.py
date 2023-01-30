@@ -216,8 +216,8 @@ class ExcelReport(models.TransientModel):
         _logger.info('New WB record created %s' % record.fullname)
         return record.with_context(workbook=workbook).browse(record.id)
 
-    def unlink(self):
-        """ Generate new WB when create record
+    def close_workbook(self):
+        """ Close operation
         """
         # Excel WB operation:
         try:
@@ -225,6 +225,10 @@ class ExcelReport(models.TransientModel):
         except:
             _logger.error('Error closing WB')
 
+    def unlink(self):
+        """ Generate new WB when create record
+        """
+        self.close_workbook()
         return super().unlink()
 
     '''
@@ -767,6 +771,7 @@ class ExcelReport(models.TransientModel):
 
         # self.close_workbook(workbook)  # Garbage close file!
         # Update B64 file in record:
+        self.close_workbook()  # Close WB
         self.write({
             'b64_file': self.get_b64_from_fullname(),
             })
