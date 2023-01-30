@@ -300,8 +300,7 @@ class ExcelReport(models.TransientModel):
     name = fields.Char(
         'Descrizione', help='Nome fittizio per salvare il record', size=80)
     fullname = fields.Text('Fullname of file')
-    b64_file = fields.Binary(
-        'B64 file', compute='get_b64_file')
+    b64_file = fields.Binary('B64 file')  # , compute='get_b64_file'
 
     # =========================================================================
     #                              Excel utility:
