@@ -278,6 +278,7 @@ class ExcelReport(models.TransientModel):
             workbook.b64_file = base64.b64encode(
                 open(fullname, 'rb').read())
         except:
+            _logger.error('Error naming temp files XSLX!')
             workbook.b64_file = False
 
     def get_temp_filename(self):
