@@ -199,25 +199,29 @@ class ExcelReport(models.TransientModel):
     def create(self, vals):
         """ Generate new WB when create record
         """
+        '''
         if 'fullname' in vals:
             fullname = vals['fullname']
             vals['fullname'] = fullname
         else:
-            now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
             fullname = '/tmp/wb_%s.xlsx' % now  # todo better!
+        '''
+        pdb.set_trace()
+        now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+        vals['fullname'] = '/tmp/wb_%s.xlsx' % now  # todo better!
         record = super().create(vals)
 
         # ---------------------------------------------------------------------
         # Integrate with Excel Workbook parameters:
         # ---------------------------------------------------------------------
         workbook = {
-            'WB': xlsxwriter.Workbook(fullname),
+            'WB': xlsxwriter.Workbook(record.fullname),
             'WS': {},
             'style': {},  # Style for every WS
             'total': {},  # Array for total line (one for ws)
             'row_height': {},
         }
-        _logger.info('New WB record created %s' % fullname)
+        _logger.info('New WB record created %s' % record.fullname)
         return record.with_context(workbook=workbook).browse(record.id)
 
     def unlink(self):
@@ -290,8 +294,7 @@ class ExcelReport(models.TransientModel):
 
     name = fields.Char(
         'Descrizione', help='Nome fittizio per salvare il record', size=80)
-    fullname = fields.Text(
-        'Fullname of file', compute='get_temp_filename', store=True)
+    fullname = fields.Text('Fullname of file')
     b64_file = fields.Binary(
         'B64 file', compute='get_b64_from_fullname')
 
