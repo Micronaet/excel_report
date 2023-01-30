@@ -285,13 +285,14 @@ class ExcelReport(models.TransientModel):
         """
         workbook = self
         now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
-        fullname = '/tmp/wb_%s.xlsx' % now  # todo better!
+        workbook.fullname = '/tmp/wb_%s.xlsx' % now  # todo better!
 
     name = fields.Char(
         'Descrizione', help='Nome fittizio per salvare il record', size=80)
     fullname = fields.Text(
         'Fullname of file', compute='get_temp_filename', store=True)
-    b64_file = fields.Binary('B64 file', compute='get_b64_from_fullname')
+    b64_file = fields.Binary(
+        'B64 file', compute='get_b64_from_fullname')
 
     # =========================================================================
     #                              Excel utility:
