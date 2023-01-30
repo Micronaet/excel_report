@@ -2,6 +2,8 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 import io
+import pdb
+
 import xlsxwriter
 import logging
 import base64
@@ -272,7 +274,7 @@ class ExcelReport(models.TransientModel):
         """
         workbook = self
         try:
-            fullname = self.fullname
+            fullname = workbook.fullname
             workbook.b64_file = base64.b64encode(
                 open(fullname, 'rb').read())
         except:
@@ -737,6 +739,7 @@ class ExcelReport(models.TransientModel):
             name: Name for the attachment
             name_of_file: file name downloaded
         """
+        pdb.set_trace()
         fullname = self.fullname
         if not name_of_file:
             now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
