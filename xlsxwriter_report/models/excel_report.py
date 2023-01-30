@@ -283,9 +283,9 @@ class ExcelReport(models.TransientModel):
     def get_temp_filename(self):
         """ Generate temp filename
         """
-        workbook = self
-        now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
-        workbook.fullname = '/tmp/wb_%s.xlsx' % now  # todo better!
+        for workbook in self:
+            now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
+            workbook.fullname = '/tmp/wb_%s.xlsx' % now  # todo better!
 
     name = fields.Char(
         'Descrizione', help='Nome fittizio per salvare il record', size=80)
