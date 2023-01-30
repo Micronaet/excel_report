@@ -199,14 +199,6 @@ class ExcelReport(models.TransientModel):
     def create(self, vals):
         """ Generate new WB when create record
         """
-        '''
-        if 'fullname' in vals:
-            fullname = vals['fullname']
-            vals['fullname'] = fullname
-        else:
-            fullname = '/tmp/wb_%s.xlsx' % now  # todo better!
-        '''
-        pdb.set_trace()
         now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
         vals['fullname'] = '/tmp/wb_%s.xlsx' % now  # todo better!
         record = super().create(vals)
@@ -754,7 +746,6 @@ class ExcelReport(models.TransientModel):
             name: Name for the attachment
             name_of_file: file name downloaded
         """
-        pdb.set_trace()
         fullname = self.fullname
         if not name_of_file:
             now = fields.Datetime.now().strftime('%Y_%m_%d_%H_%M_%S')
