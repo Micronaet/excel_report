@@ -270,11 +270,11 @@ class ExcelReport(models.TransientModel):
         workbook = self
         try:
             fullname = workbook.fullname
-            return = base64.b64encode(
+            return base64.b64encode(
                 open(fullname, 'rb').read())
         except:
             _logger.error('Error naming temp files XSLX!')
-            return = False
+            return False
 
     # Fields compute:
     # todo remove, dont' work!
