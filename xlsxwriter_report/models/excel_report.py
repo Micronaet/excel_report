@@ -285,7 +285,7 @@ class ExcelReport(models.TransientModel):
         try:
             self._WB.close()
         except Exception as ex:
-            _logger.error(f'Error closing WB: {ex}')
+            _logger.error('Error closing WB')
         self._WB = False  # remove object in instance
 
     @api.model
