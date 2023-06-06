@@ -284,8 +284,8 @@ class ExcelReport(models.TransientModel):
         # Try to remove document:
         try:
             self._WB.close()
-        except:
-            _logger.error('Error closing WB')
+        except Exception as ex:
+            _logger.error(f'Error closing WB: {ex}')
         self._WB = False  # remove object in instance
 
     @api.model
