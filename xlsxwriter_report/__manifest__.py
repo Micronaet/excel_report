@@ -23,9 +23,9 @@
         'data/format_data.xml',
         'data/style_data.xml',
     ],
-    'external_dependencies': {
-        'python': ['xlsxwriter'],
-    },
+    #'external_dependencies': {
+    #    'python': ['xlsxwriter'],
+    #},
     'application': False,
     'installable': True,
     'auto_install': False,
