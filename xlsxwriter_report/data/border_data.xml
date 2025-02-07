@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <odoo>
-    <data> 
+    <data>
         <record model="excel.report.format.border" id="data_border_0">
             <field name="name">None</field>
             <field name="index" eval="0"/>
-            <field name="style"></field>
+            <field name="style"/>
             <field name="weight" eval="0" />
         </record>
         <record model="excel.report.format.border" id="data_border_1">
