@@ -467,7 +467,7 @@ class ExcelReport(models.TransientModel):
             rectangle.append(style)
         report_context['WS'][ws_name].merge_range(*rectangle)
 
-    def autofilter(self, ws_name, rectangle):
+    def autofilter(self, ws_name, *rectangle):
         """ Auto filter management
         """
         report_context = self.env.context['report']
