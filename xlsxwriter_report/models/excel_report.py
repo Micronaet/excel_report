@@ -283,18 +283,26 @@ class ExcelReport(models.TransientModel):
         """ Close workbook
         """
         # Reset persistent data:
-        self._WS = {}
-        self._style = {}
-        self._row_height = {}
-        self._wb_format = False
+        report_context = self.env.context['report']
+        report_context.update({
+            'WS': {},
+            'style': {},  # Style for every WS
+            'row_height': {},
+            'format': False,
+        })
+
+        # self._WS = {}
+        # self._style = {}
+        # self._row_height = {}
+        # self._wb_format = False
 
         # Try to remove document:
         try:
-            self._WB.close()
+            report_context['WB'].close()
         except Exception as ex:
             error = sys.exc_info()
             _logger.error(f'Error closing WB {error}')
-        self._WB = False  # remove object in instance
+        report_context['WB'] = False  # remove object in instance
 
     def close_workbook(self, ):
         """ Close workbook
@@ -307,17 +315,19 @@ class ExcelReport(models.TransientModel):
     def create_worksheet(self, name=False, format_code='', extension='xlsx'):
         """ Create database for WS in this module
         """
+        report_context = self.env.context['report']
         try:
-            if not self._WB:
+            if not report_context['WB']:
                 self._create_workbook(extension=extension)
-            _logger.info('Using WB: %s' % self._WB)
+            _logger.info('Using WB: %s' % report_context['WB'])
         except:
             self._create_workbook(extension=extension)
 
-        self._WS[name] = self._WB.add_worksheet(name)
-        self._style[name] = {}
-        self._total[name] = False  # Reset total
-        # TODO subtotal
+
+        report_context['WS'][name] = report_context['WB'].add_worksheet(name)
+        report_context['style'][name] = {}
+        report_context['total'][name] = False  # Reset total
+        # todo subtotal
 
         # ---------------------------------------------------------------------
         # Setup Format (every new sheet):
