@@ -717,7 +717,7 @@ class ExcelReport(models.TransientModel):
         attachments = [(
             filename,
             # Raw data:
-            open(self._filename, 'rb').read(),
+            open(report_context['filename'], 'rb').read(),
             )]
 
         group = group_name.split('.')
@@ -745,7 +745,7 @@ class ExcelReport(models.TransientModel):
         report_context = self.env.context['report']
 
         _logger.warning('Save file as: %s' % destination)
-        origin = self._filename
+        origin = report_context['filename']
         self._close_workbook()  # if not closed maually
         shutil.copy(origin, destination)
         return True
@@ -776,11 +776,11 @@ class ExcelReport(models.TransientModel):
             # name_of_file = '/tmp/report_%s.xlsx' % now
             name_of_file = 'report_%s.xlsx' % fields.Datetime.now()
         self._close_workbook()  # if not closed manually
-        _logger.info('Return Excel file: %s' % self._filename)
+        _logger.info('Return Excel file: %s' % report_context['filename'])
 
         # todo is necessary?
         temp_id = self.create({
-            'fullname': self._filename,
+            'fullname': report_context['filename'],
             }).id
 
         return {
