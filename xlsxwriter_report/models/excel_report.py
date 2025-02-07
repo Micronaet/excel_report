@@ -257,9 +257,12 @@ class ExcelReport(models.TransientModel):
         """
         now = str(fields.Datetime.now())
         now = now.replace(':', '_').replace('-', '_').replace(' ', '_')
-        filename = '/tmp/wb_%s.%s' % (now, extension)  # TODO better!
+        filename = '/tmp/wb_%s.%s' % (now, extension)  # todo better!
 
         _logger.info('Start create file %s' % filename)
+
+        report_context = self.env.context['report']
+        report_context['WB'] = xlsxwriter.Workbook(filename)
 
         self._WB = xlsxwriter.Workbook(filename)
         self._WS = {}
