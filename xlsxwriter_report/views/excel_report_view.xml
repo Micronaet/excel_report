@@ -5,7 +5,7 @@
         <field name="model">excel.report.format.style</field>
         <field name="arch" type="xml">
             <list string="Excel report style">
-                <field name="format_id" invisible="1"/>
+                <field name="format_id" column_invisible="1"/>
                 <field name="name"/>
                 <field name="code"/>
                 <field name="row_height"/>
