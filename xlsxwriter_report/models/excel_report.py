@@ -341,9 +341,11 @@ class ExcelReport(models.TransientModel):
     def _load_format_code(self, name, format_code):
         """ Setup format parameters and styles
         """
+        report_context = self.env.context['report']
         format_pool = self.env['excel.report.format']
+
         formats = format_pool.search([('code', '=', format_code)])
-        ws = self._WS[name]
+        ws = report_context['WS'][name]
         if formats:
             current_format = formats[0]
             _logger.info('Format selected: %s' % format_code)
@@ -379,13 +381,13 @@ class ExcelReport(models.TransientModel):
                 # -------------------------------------------------------------
                 # Load Styles:
                 # -------------------------------------------------------------
-                if name not in self._style:
+                if name not in report_context['style']:
                     # Every page use own style (can use different format)
-                    self._style[name] = {}
+                    report_context['style'][name] = {}
 
                 for style in current_format.style_ids:
                     # Create new style and add
-                    self._style[name][style.code] = self._WB.add_format({
+                    report_context['style'][style.code] = self._WB.add_format({
                         'font_name': style.font_id.name,
                         'font_size': style.height,
                         'font_color': style.foreground_id.rgb,
@@ -419,7 +421,8 @@ class ExcelReport(models.TransientModel):
                         })
 
                     # Save row height for this style:
-                    self._row_height[self._style[name][style.code]] = \
+                    report_context['row_height'][
+                        report_context['style'][style.code]] = \
                         style.row_height or row_height
         else:
             _logger.info('Format not found: %s, use nothing: %s' % format_code)
