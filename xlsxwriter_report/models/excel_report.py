@@ -193,6 +193,12 @@ class ExcelReport(models.TransientModel):
     _description = 'Excel report'
     _order = 'name'
 
+    def __init__(self):
+        """ Setup used variable for this report
+        """
+        # Setup after:
+        self._WB = False
+
     def _get_template(self):
         try:
             origin = self.fullname
@@ -261,7 +267,7 @@ class ExcelReport(models.TransientModel):
 
         _logger.info('Start create file %s' % filename)
 
-        self.WB = xlsxwriter.Workbook(filename)
+        self._WB = xlsxwriter.Workbook(filename)
         self._WS = {}
         self._style = {}  # Style for every WS
         self._total = {}  # Array for total line (one for ws)
