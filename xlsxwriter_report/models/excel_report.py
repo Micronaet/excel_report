@@ -294,7 +294,6 @@ class ExcelReport(models.TransientModel):
     def create_worksheet(self, name=False, format_code='', extension='xlsx'):
         """ Create database for WS in this module
         """
-        breakpoint()
         try:
             if not self._WB:
                 self._create_workbook(extension=extension)
