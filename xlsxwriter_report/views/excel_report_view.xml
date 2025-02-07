@@ -148,7 +148,6 @@
     <record model="ir.actions.act_window" id="action_excel_report_format">
         <field name="name">Excel Format</field>
         <field name="res_model">excel.report.format</field>
-        <field name="view_type">form</field>
         <field name="view_mode">list,form</field>
         <field name="view_id" ref="view_excel_report_format_list"/>
         <field name="context">{}</field>
@@ -185,7 +184,6 @@
     <record model="ir.actions.act_window" id="action_excel_report_format_page">
         <field name="name">Excel Page</field>
         <field name="res_model">excel.report.format.page</field>
-        <field name="view_type">form</field>
         <field name="view_mode">list,form</field>
         <field name="view_id" ref="view_excel_report_format_page_list"/>
         <field name="context">{}</field>
@@ -218,7 +216,6 @@
     <record model="ir.actions.act_window" id="action_excel_report_format_font">
         <field name="name">Excel font</field>
         <field name="res_model">excel.report.format.font</field>
-        <field name="view_type">form</field>
         <field name="view_mode">list,form</field>
         <field name="view_id" ref="view_excel_report_format_font_list"/>
         <field name="context">{}</field>
@@ -253,7 +250,6 @@
     <record model="ir.actions.act_window" id="action_excel_report_format_color">
         <field name="name">Excel color</field>
         <field name="res_model">excel.report.format.color</field>
-        <field name="view_type">form</field>
         <field name="view_mode">list,form</field>
         <field name="view_id" ref="view_excel_report_format_color_list"/>
         <field name="context">{}</field>
@@ -292,7 +288,6 @@
     <record model="ir.actions.act_window" id="action_excel_report_format_border">
         <field name="name">Excel border</field>
         <field name="res_model">excel.report.format.border</field>
-        <field name="view_type">form</field>
         <field name="view_mode">list,form</field>
         <field name="view_id" ref="view_excel_report_format_border_list"/>
         <field name="context">{}</field>
