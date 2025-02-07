@@ -504,7 +504,7 @@ class ExcelReport(models.TransientModel):
         report_context = self.env.context['report']
         return report_context['WS'][ws_name].write_formula(
             row, col, formula,
-            self._style[ws_name][format_code],
+            report_context['style'][ws_name][format_code],
             value=value,
             )
 
@@ -591,7 +591,7 @@ class ExcelReport(models.TransientModel):
             (use original write function passing every total cell)
         """
         report_context = self.env.context['report']
-        current_total = self._total[ws_name]
+        current_total = report_context['total'][ws_name]
         if not current_total:
             _logger.error('No total line needed!')
             return True
@@ -625,7 +625,7 @@ class ExcelReport(models.TransientModel):
             for item in record:
                 i += 1
                 if i % 2 == 0:
-                    res.append(self._style[ws_name].get(item))
+                    res.append(report_context['style'][ws_name].get(item))
                 else:
                     res.append(item)
             return res
@@ -636,12 +636,12 @@ class ExcelReport(models.TransientModel):
         report_context = self.env.context['report']
 
         # Setup total list:
-        if total_columns and not self._total[ws_name]:
-            self._total[ws_name] = [
+        if total_columns and not report_context['total'][ws_name]:
+            report_context['total'][ws_name] = [
                 0.0 for item in range(0, len(total_columns))]
 
         # Write every cell of the list:
-        style = self._style[ws_name].get(style_code)
+        style = report_context['style'][ws_name].get(style_code)
         for record in line:
             if type(record) == bool:
                 record = ''
@@ -674,7 +674,7 @@ class ExcelReport(models.TransientModel):
                     value = value[0]
 
                 if type(value) in (int, float):
-                    self._total[ws_name][total_pos] += value
+                    report_context['total'][ws_name][total_pos] += value
                     total_pos += 1
                 else:
                     _logger.error('Float not present in col %s' % total_col)
@@ -683,7 +683,7 @@ class ExcelReport(models.TransientModel):
         # Setup row height:
         # ---------------------------------------------------------------------
         # TODO if more than one style?
-        row_height = self._row_height.get(style, False)
+        row_height = report_context['row_height'].get(style, False)
         if row_height:
             report_context['WS'][ws_name].set_row(row, row_height)
         return True
