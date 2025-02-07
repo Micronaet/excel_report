@@ -737,7 +737,7 @@ class ExcelReport(models.TransientModel):
         self._close_workbook()  # if not closed manually
         _logger.info('Return Excel file: %s' % self._filename)
 
-        # TODO is necessary?
+        # todo is necessary?
         temp_id = self.create({
             'fullname': self._filename,
             }).id
