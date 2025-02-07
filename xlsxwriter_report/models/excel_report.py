@@ -313,8 +313,8 @@ class ExcelReport(models.TransientModel):
 
 
         report_context['WS'][name] = report_context['WB'].add_worksheet(name)
-        report_context['style'][name] = {}
-        report_context['total'][name] = False  # Reset total
+        report_context['style'] = {}
+        report_context['total'] = False  # Reset total
         # todo subtotal
 
         # ---------------------------------------------------------------------
@@ -371,7 +371,7 @@ class ExcelReport(models.TransientModel):
                 # -------------------------------------------------------------
                 if name not in report_context['style']:
                     # Every page use own style (can use different format)
-                    report_context['style'][name] = {}
+                    report_context['style'] = {}
 
                 for style in current_format.style_ids:
                     # Create new style and add
@@ -504,7 +504,7 @@ class ExcelReport(models.TransientModel):
         report_context = self.env.context['report']
         return report_context['WS'][ws_name].write_formula(
             row, col, formula,
-            report_context['style'][ws_name][format_code],
+            report_context['style'][format_code],
             value=value,
             )
 
@@ -625,7 +625,7 @@ class ExcelReport(models.TransientModel):
             for item in record:
                 i += 1
                 if i % 2 == 0:
-                    res.append(report_context['style'][ws_name].get(item))
+                    res.append(report_context['style'].get(item))
                 else:
                     res.append(item)
             return res
@@ -641,7 +641,7 @@ class ExcelReport(models.TransientModel):
                 0.0 for item in range(0, len(total_columns))]
 
         # Write every cell of the list:
-        style = report_context['style'][ws_name].get(style_code)
+        style = report_context['style'].get(style_code)
         for record in line:
             if type(record) == bool:
                 record = ''
