@@ -270,13 +270,6 @@ class ExcelReport(models.TransientModel):
             'row_height': {},
             'filename': filename,
         })
-
-        # self._WB = xlsxwriter.Workbook(filename)
-        # self._WS = {}
-        # self._style = {}  # Style for every WS
-        # self._total = {}  # Array for total line (one for ws)
-        # self._row_height = {}
-        # self._filename = filename
         _logger.warning('Created WB on file: %s' % filename)
 
     def _close_workbook(self, ):
@@ -290,11 +283,6 @@ class ExcelReport(models.TransientModel):
             'row_height': {},
             'format': False,
         })
-
-        # self._WS = {}
-        # self._style = {}
-        # self._row_height = {}
-        # self._wb_format = False
 
         # Try to remove document:
         try:
@@ -387,38 +375,43 @@ class ExcelReport(models.TransientModel):
 
                 for style in current_format.style_ids:
                     # Create new style and add
-                    report_context['style'][style.code] = self._WB.add_format({
-                        'font_name': style.font_id.name,
-                        'font_size': style.height,
-                        'font_color': style.foreground_id.rgb,
+                    report_context['style'][style.code] = \
+                        report_context['WB'].add_format({
+                            'font_name': style.font_id.name,
+                            'font_size': style.height,
+                            'font_color': style.foreground_id.rgb,
 
-                        'bold': style.bold,
-                        'italic': style.italic,
+                            'bold': style.bold,
+                            'italic': style.italic,
 
-                        # -----------------------------------------------------
-                        # Border:
-                        # -----------------------------------------------------
-                        # Mode:
-                        'bottom': style.border_bottom_id.index or 0,
-                        'top': style.border_top_id.index or 0,
-                        'left': style.border_left_id.index or 0,
-                        'right': style.border_right_id.index or 0,
+                            # -------------------------------------------------
+                            # Border:
+                            # -------------------------------------------------
+                            # Mode:
+                            'bottom': style.border_bottom_id.index or 0,
+                            'top': style.border_top_id.index or 0,
+                            'left': style.border_left_id.index or 0,
+                            'right': style.border_right_id.index or 0,
 
-                        # Color:
-                        'bottom_color': style.border_color_bottom_id.rgb or '',
-                        'top_color': style.border_color_top_id.rgb or '',
-                        'left_color': style.border_color_left_id.rgb or '',
-                        'right_color': style.border_color_right_id.rgb or '',
+                            # Color:
+                            'bottom_color':
+                                style.border_color_bottom_id.rgb or '',
+                            'top_color':
+                                style.border_color_top_id.rgb or '',
+                            'left_color':
+                                style.border_color_left_id.rgb or '',
+                            'right_color':
+                                style.border_color_right_id.rgb or '',
 
-                        'bg_color': style.background_id.rgb,
+                            'bg_color': style.background_id.rgb,
 
-                        'align': style.align,
-                        'valign': style.valign,
-                        'num_format': style.num_format or '',
-                        # 'text_wrap': True,
-                        # locked
-                        # hidden
-                        })
+                            'align': style.align,
+                            'valign': style.valign,
+                            'num_format': style.num_format or '',
+                            # 'text_wrap': True,
+                            # locked
+                            # hidden
+                            })
 
                     # Save row height for this style:
                     report_context['row_height'][
@@ -435,8 +428,9 @@ class ExcelReport(models.TransientModel):
         """ WS: Worksheet passed
             columns_w: list of dimension for the columns
         """
+        report_context = self.env.context['report']
         for w in columns_w:
-            self._WS[ws_name].set_column(col, col, w)
+            report_context['WS'][ws_name].set_column(col, col, w)
             col += 1
         return True
 
@@ -444,8 +438,9 @@ class ExcelReport(models.TransientModel):
         """ WS: Worksheet passed
             columns_w: list of dimension for the columns
         """
+        report_context = self.env.context['report']
         for col in columns_w:
-            self._WS[ws_name].set_column(
+            report_context['WS'][ws_name].set_column(
                 col, col, None, None, {'hidden': True})
         return True
 
@@ -453,11 +448,12 @@ class ExcelReport(models.TransientModel):
         """ WS: Worksheet passed
             columns_w: list of dimension for the columns
         """
+        report_context = self.env.context['report']
         if type(row_list) in (list, tuple):
             for row in row_list:
-                self._WS[ws_name].set_row(row, height)
+                report_context['WS'][ws_name].set_row(row, height)
         else:
-            self._WS[ws_name].set_row(row_list, height)
+            report_context['WS'][ws_name].set_row(row_list, height)
 
     def merge_cell(self, ws_name, rectangle, style=False, data=''):
         """ Merge cell procedure:
@@ -465,20 +461,23 @@ class ExcelReport(models.TransientModel):
             rectangle: list for 2 corners xy data: [0, 0, 10, 5]
             style: setup format for cells
         """
+        report_context = self.env.context['report']
         rectangle.append(data)
         if style:
             rectangle.append(style)
-        self._WS[ws_name].merge_range(*rectangle)
+        report_context['WS'][ws_name].merge_range(*rectangle)
 
     def autofilter(self, ws_name, rectangle):
         """ Auto filter management
         """
-        self._WS[ws_name].autofilter(*rectangle)
+        report_context = self.env.context['report']
+        report_context['WS'][ws_name].autofilter(*rectangle)
 
     def freeze_panes(self, ws_name, row, col):
         """ Lock row or column
         """
-        self._WS[ws_name].freeze_panes(row, col)
+        report_context = self.env.context['report']
+        report_context['WS'][ws_name].freeze_panes(row, col)
 
     # -------------------------------------------------------------------------
     # Image management:
@@ -487,8 +486,10 @@ class ExcelReport(models.TransientModel):
         """ WS: Worksheet passed
             columns_w: list of dimension for the columns
         """
+        report_context = self.env.context['report']
         cell = xl_rowcol_to_cell(row, col)
-        self._WS[WS_name].write_url(cell, link, string=string, tip=tip)
+        report_context['WS'][WS_name].write_url(
+            cell, link, string=string, tip=tip)
         return True
 
     def clean_odoo_binary(self, odoo_binary_field):
@@ -500,7 +501,8 @@ class ExcelReport(models.TransientModel):
             self, ws_name, row, col, formula, value, format_code):
         """ Write formula in cell passed
         """
-        return self._WS[ws_name].write_formula(
+        report_context = self.env.context['report']
+        return report_context['WS'][ws_name].write_formula(
             row, col, formula,
             self._style[ws_name][format_code],
             value=value,
@@ -514,6 +516,7 @@ class ExcelReport(models.TransientModel):
         """ Insert image in cell with extra parameter
             positioning: 1 move + size, 2 move, 3 nothing
         """
+        report_context = self.env.context['report']
         parameters = {
             'tip': tip,
             'x_scale': x_scale,
@@ -529,7 +532,8 @@ class ExcelReport(models.TransientModel):
                 filename = 'image1.png'  # needed if data present
             parameters['image_data'] = data
 
-        self._WS[ws_name].insert_image(row, col, filename, parameters)
+        report_context['WS'][ws_name].insert_image(
+            row, col, filename, parameters)
         return True
 
     def write_image_field_data(
@@ -538,6 +542,7 @@ class ExcelReport(models.TransientModel):
             filename=False, odoo_image=False, tip='Product image',
             # url=False,
             ):
+        report_context = self.env.context['report']
         if not odoo_image:
             return False
 
@@ -557,6 +562,7 @@ class ExcelReport(models.TransientModel):
     def write_comment(self, ws_name, row, col, comment, parameters=None):
         """ Write comment in a cell
         """
+        report_context = self.env.context['report']
         cell = xl_rowcol_to_cell(row, col)
         if parameters is None:
             parameters = {
@@ -566,11 +572,13 @@ class ExcelReport(models.TransientModel):
                 }
         if comment:
             comment = u'{}'.format(comment)
-            self._WS[ws_name].write_comment(cell, comment, parameters)
+            report_context['WS'][ws_name].write_comment(
+                cell, comment, parameters)
 
     def write_comment_line(self, ws_name, row, line, col=0, parameters=None):
         """ Write comment line
         """
+        report_context = self.env.context['report']
         for comment in line:
             if comment:
                 self.write_comment(
@@ -582,6 +590,7 @@ class ExcelReport(models.TransientModel):
         """ Write total line under correct column position
             (use original write function passing every total cell)
         """
+        report_context = self.env.context['report']
         current_total = self._total[ws_name]
         if not current_total:
             _logger.error('No total line needed!')
@@ -608,7 +617,6 @@ class ExcelReport(models.TransientModel):
 
             @return: nothing
         """
-
         def reach_style(ws_name, record):
             """ Convert style code into style of WB (created when inst.)
             """
@@ -625,6 +633,8 @@ class ExcelReport(models.TransientModel):
         # ---------------------------------------------------------------------
         # Write line:
         # ---------------------------------------------------------------------
+        report_context = self.env.context['report']
+
         # Setup total list:
         if total_columns and not self._total[ws_name]:
             self._total[ws_name] = [
@@ -638,16 +648,17 @@ class ExcelReport(models.TransientModel):
             if type(record) not in (list, tuple):
                 # Needed?:
                 if style:
-                    self._WS[ws_name].write(row, col, record, style)
+                    report_context['WS'][ws_name].write(
+                        row, col, record, style)
                 else:
-                    self._WS[ws_name].write(row, col, record)
+                    report_context['WS'][ws_name].write(row, col, record)
             elif len(record) == 2:
                 # Normal text, format:
-                self._WS[ws_name].write(
+                report_context['WS'][ws_name].write(
                     row, col, *reach_style(ws_name, record))
             else:
                 # Rich format TODO
-                self._WS[ws_name].write_rich_string(
+                report_context['WS'][ws_name].write_rich_string(
                     row, col, *reach_style(ws_name, record))
             col += 1
 
@@ -674,7 +685,7 @@ class ExcelReport(models.TransientModel):
         # TODO if more than one style?
         row_height = self._row_height.get(style, False)
         if row_height:
-            self._WS[ws_name].set_row(row, row_height)
+            report_context['WS'][ws_name].set_row(row, row_height)
         return True
 
     # -------------------------------------------------------------------------
@@ -693,8 +704,9 @@ class ExcelReport(models.TransientModel):
             body: mail body
             filename: name of xlsx attached file
         """
-        # Send mail with attachment:
+        report_context = self.env.context['report']
 
+        # Send mail with attachment:
         # Pool used
         group_pool = self.env['res.groups']
         model_pool = self.env['ir.model.data']
@@ -730,6 +742,8 @@ class ExcelReport(models.TransientModel):
     def save_file_as(self, destination):
         """ Close workbook and save in another place (passed)
         """
+        report_context = self.env.context['report']
+
         _logger.warning('Save file as: %s' % destination)
         origin = self._filename
         self._close_workbook()  # if not closed maually
@@ -755,6 +769,7 @@ class ExcelReport(models.TransientModel):
             php: parameter if activate save_as module for 7.0 (passed base srv)
             context: context passed
         """
+        report_context = self.env.context['report']
         if not name_of_file:
             now = fields.Datetime.now()
             now = now.replace('-', '_').replace(':', '_')
