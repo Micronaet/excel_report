@@ -262,15 +262,21 @@ class ExcelReport(models.TransientModel):
         _logger.info('Start create file %s' % filename)
 
         report_context = self.env.context['report']
-        report_context['WB'] = xlsxwriter.Workbook(filename)
+        report_context.update({
+            'WB': xlsxwriter.Workbook(filename),
+            'WS': {},
+            'style': {},  # Style for every WS
+            'total': {},  # Array for total line (one for ws)
+            'row_height': {},
+            'filename': filename,
+        })
 
-        self._WB = xlsxwriter.Workbook(filename)
-        self._WS = {}
-        self._style = {}  # Style for every WS
-        self._total = {}  # Array for total line (one for ws)
-        self._row_height = {}
-
-        self._filename = filename
+        # self._WB = xlsxwriter.Workbook(filename)
+        # self._WS = {}
+        # self._style = {}  # Style for every WS
+        # self._total = {}  # Array for total line (one for ws)
+        # self._row_height = {}
+        # self._filename = filename
         _logger.warning('Created WB on file: %s' % filename)
 
     def _close_workbook(self, ):
