@@ -200,6 +200,9 @@ class ExcelReport(models.TransientModel):
         except:
             self.b64_file = False
 
+    # -------------------------------------------------------------------------
+    # Columns:
+    # -------------------------------------------------------------------------
     # name = fields.Char('Name', size=64, required=True)
     # code = fields.Char('Code', size=15, required=True)
     b64_file = fields.Binary('B64 file', compute='_get_template')
@@ -257,7 +260,8 @@ class ExcelReport(models.TransientModel):
         filename = '/tmp/wb_%s.%s' % (now, extension)  # TODO better!
 
         _logger.info('Start create file %s' % filename)
-        self._WB = xlsxwriter.Workbook(filename)
+
+        self.WB = xlsxwriter.Workbook(filename)
         self._WS = {}
         self._style = {}  # Style for every WS
         self._total = {}  # Array for total line (one for ws)
