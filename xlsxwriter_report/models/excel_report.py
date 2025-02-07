@@ -193,12 +193,6 @@ class ExcelReport(models.TransientModel):
     _description = 'Excel report'
     _order = 'name'
 
-    def __init__(self):
-        """ Setup used variable for this report
-        """
-        # Setup after:
-        self._WB = False
-
     def _get_template(self):
         try:
             origin = self.fullname
