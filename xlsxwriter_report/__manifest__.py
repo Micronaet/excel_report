@@ -8,11 +8,13 @@
     'description': '''
         Template for python xlsxwriter report
         ''',
-    'summary': 'Excel, utility, report',
+    # 'summary': 'Excel, utility, report',
     'author': 'Micronaet S.r.l. - Nicola Riolini',
-    'website': 'http://www.micronaet.it',
+    'website': 'http://micronaet.com',
     'license': 'AGPL-3',
-    'depends': [],
+    'depends': [
+        'base',
+    ],
     'data': [
         'security/ir.model.access.csv',
         'views/excel_report_view.xml',
@@ -23,10 +25,8 @@
         'data/format_data.xml',
         'data/style_data.xml',
     ],
-    #'external_dependencies': {
-    #    'python': ['xlsxwriter'],
-    #},
-    'application': False,
+    'active': True,
     'installable': True,
     'auto_install': False,
+    'application': False,
 }
