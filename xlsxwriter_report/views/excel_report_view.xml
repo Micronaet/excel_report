@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <odoo>
-    <record model="ir.ui.view" id="view_excel_report_format_style_tree">
-        <field name="name">excel.report.format.style.tree</field>
+    <record model="ir.ui.view" id="view_excel_report_format_style_list">
+        <field name="name">excel.report.format.style.list</field>
         <field name="model">excel.report.format.style</field>
         <field name="arch" type="xml">
-            <tree string="Excel report style">
+            <list string="Excel report style">
                 <field name="format_id" invisible="1"/>
                 <field name="name"/>
                 <field name="code"/>
@@ -21,7 +21,7 @@
 
                 <field name="foreground_id"/>
                 <field name="background_id"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="view_excel_report_format_style_form">
@@ -83,18 +83,18 @@
         <field name="name">Excel Format Style</field>
         <field name="res_model">excel.report.format.style</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_excel_report_format_style_tree"/>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_excel_report_format_style_list"/>
         <field name="context">{}</field>
         <field name="domain">[]</field>
     </record>
 
     <!--excel.report.format-->
-    <record model="ir.ui.view" id="view_excel_report_format_tree">
-        <field name="name">excel.report.format.tree</field>
+    <record model="ir.ui.view" id="view_excel_report_format_list">
+        <field name="name">excel.report.format.list</field>
         <field name="model">excel.report.format</field>
         <field name="arch" type="xml">
-            <tree string="Excel report format">
+            <list string="Excel report format">
                 <field name="code"/>
                 <field name="name"/>
                 <field name="page_id"/>
@@ -103,7 +103,7 @@
                 <field name="margin_bottom"/>
                 <field name="margin_left"/>
                 <field name="margin_right"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="view_excel_report_format_form">
@@ -150,22 +150,22 @@
         <field name="name">Excel Format</field>
         <field name="res_model">excel.report.format</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_excel_report_format_tree"/>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_excel_report_format_list"/>
         <field name="context">{}</field>
         <field name="domain">[]</field>
     </record>
 
     <!--excel.report.format.page-->
-    <record model="ir.ui.view" id="view_excel_report_format_page_tree">
-        <field name="name">excel.report.format.page.tree</field>
+    <record model="ir.ui.view" id="view_excel_report_format_page_list">
+        <field name="name">excel.report.format.page.list</field>
         <field name="model">excel.report.format.page</field>
         <field name="arch" type="xml">
-            <tree string="Excel report page" editable="bottom">
+            <list string="Excel report page" editable="bottom">
                 <field name="index"/>
                 <field name="name"/>
                 <field name="paper_size"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="view_excel_report_format_page_form">
@@ -187,20 +187,20 @@
         <field name="name">Excel Page</field>
         <field name="res_model">excel.report.format.page</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_excel_report_format_page_tree"/>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_excel_report_format_page_list"/>
         <field name="context">{}</field>
         <field name="domain">[]</field>
     </record>
 
     <!--excel.report.format.font-->
-    <record model="ir.ui.view" id="view_excel_report_format_font_tree">
-        <field name="name">excel.report.format.font.tree</field>
+    <record model="ir.ui.view" id="view_excel_report_format_font_list">
+        <field name="name">excel.report.format.font.list</field>
         <field name="model">excel.report.format.font</field>
         <field name="arch" type="xml">
-            <tree string="Excel report font" editable="bottom">
+            <list string="Excel report font" editable="bottom">
                 <field name="name"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="view_excel_report_format_font_form">
@@ -220,21 +220,21 @@
         <field name="name">Excel font</field>
         <field name="res_model">excel.report.format.font</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_excel_report_format_font_tree"/>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_excel_report_format_font_list"/>
         <field name="context">{}</field>
         <field name="domain">[]</field>
     </record>
 
     <!--excel.report.format.color-->
-    <record model="ir.ui.view" id="view_excel_report_format_color_tree">
-        <field name="name">excel.report.format.color.tree</field>
+    <record model="ir.ui.view" id="view_excel_report_format_color_list">
+        <field name="name">excel.report.format.color.list</field>
         <field name="model">excel.report.format.color</field>
         <field name="arch" type="xml">
-            <tree string="Excel report color" editable="bottom">
+            <list string="Excel report color" editable="bottom">
                 <field name="name"/>
                 <field name="rgb"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="view_excel_report_format_color_form">
@@ -255,23 +255,23 @@
         <field name="name">Excel color</field>
         <field name="res_model">excel.report.format.color</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_excel_report_format_color_tree"/>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_excel_report_format_color_list"/>
         <field name="context">{}</field>
         <field name="domain">[]</field>
     </record>
 
     <!--excel.report.format.border-->
-    <record model="ir.ui.view" id="view_excel_report_format_border_tree">
-        <field name="name">excel.report.format.border.tree</field>
+    <record model="ir.ui.view" id="view_excel_report_format_border_list">
+        <field name="name">excel.report.format.border.list</field>
         <field name="model">excel.report.format.border</field>
         <field name="arch" type="xml">
-            <tree string="Excel report border" editable="bottom">
+            <list string="Excel report border" editable="bottom">
                 <field name="index"/>
                 <field name="name"/>
                 <field name="weight"/>
                 <field name="style"/>
-            </tree>
+            </list>
         </field>
     </record>
     <record model="ir.ui.view" id="view_excel_report_format_border_form">
@@ -294,8 +294,8 @@
         <field name="name">Excel border</field>
         <field name="res_model">excel.report.format.border</field>
         <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-        <field name="view_id" ref="view_excel_report_format_border_tree"/>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_excel_report_format_border_list"/>
         <field name="context">{}</field>
         <field name="domain">[]</field>
     </record>

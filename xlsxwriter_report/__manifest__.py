@@ -1,4 +1,4 @@
-# Copyright 2019  Micronaet SRL (<http://www.micronaet.it>).
+# Copyright 2025  Micronaet SRL (<http://www.micronaet.it>).
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 {
@@ -12,9 +12,7 @@
     'author': 'Micronaet S.r.l. - Nicola Riolini',
     'website': 'http://www.micronaet.it',
     'license': 'AGPL-3',
-    'depends': [
-        # 'report_xlsx',
-    ],
+    'depends': [],
     'data': [
         'security/ir.model.access.csv',
         'views/excel_report_view.xml',

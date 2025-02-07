@@ -1,6 +1,7 @@
-# Copyright 2019  Micronaet SRL (<http://www.micronaet.it>).
+# Copyright 2025  Micronaet SRL (<http://www.micronaet.it>).
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
+import sys
 import io
 import logging
 import base64
@@ -192,7 +193,6 @@ class ExcelReport(models.TransientModel):
     _description = 'Excel report'
     _order = 'name'
 
-    @api.one
     def _get_template(self):
         try:
             origin = self.fullname
@@ -205,7 +205,6 @@ class ExcelReport(models.TransientModel):
     b64_file = fields.Binary('B64 file', compute='_get_template')
     fullname = fields.Text('Fullname of file')
 
-    @api.model
     def clean_filename(self, destination):
         destination = destination.replace('/', '_').replace(':', '_')
         if not(destination.endswith('xlsx') or destination.endswith('xls')):
@@ -213,13 +212,11 @@ class ExcelReport(models.TransientModel):
         return destination
 
     # Format utility:
-    @api.model
     def row_col_to_cell(self, row, col):
         """ Change row col format into cell format
         """
         return xlsxwriter.utility.xl_rowcol_to_cell(row, col)
 
-    @api.model
     def format_date(self, value):
         # Format hour DD:MM:YYYY
         if not value:
@@ -230,7 +227,6 @@ class ExcelReport(models.TransientModel):
             value[:4],
             )
 
-    @api.model
     def format_hour(
             self, value, hhmm_format=True, approx=0.001,
             zero_value='0:00'):
@@ -253,7 +249,6 @@ class ExcelReport(models.TransientModel):
     # -------------------------------------------------------------------------
     # Workbook:
     # -------------------------------------------------------------------------
-    @api.model
     def _create_workbook(self, extension='xlsx'):
         """ Create workbook in a temp file
         """
@@ -271,7 +266,6 @@ class ExcelReport(models.TransientModel):
         self._filename = filename
         _logger.warning('Created WB on file: %s' % filename)
 
-    @api.model
     def _close_workbook(self, ):
         """ Close workbook
         """
@@ -286,10 +280,9 @@ class ExcelReport(models.TransientModel):
             self._WB.close()
         except Exception as ex:
             error = sys.exc_info()
-            _logger.error('Error closing WB {error}')
+            _logger.error(f'Error closing WB {error}')
         self._WB = False  # remove object in instance
 
-    @api.model
     def close_workbook(self, ):
         """ Close workbook
         """
@@ -298,7 +291,6 @@ class ExcelReport(models.TransientModel):
     # -------------------------------------------------------------------------
     # Worksheet:
     # -------------------------------------------------------------------------
-    @api.model
     def create_worksheet(self, name=False, format_code='', extension='xlsx'):
         """ Create database for WS in this module
         """
@@ -323,7 +315,6 @@ class ExcelReport(models.TransientModel):
     # -------------------------------------------------------------------------
     # Format:
     # -------------------------------------------------------------------------
-    @api.model
     def _load_format_code(self, name, format_code):
         """ Setup format parameters and styles
         """
@@ -414,7 +405,6 @@ class ExcelReport(models.TransientModel):
     # -------------------------------------------------------------------------
     # Sheet setup:
     # -------------------------------------------------------------------------
-    @api.model
     def column_width(self, ws_name, columns_w, col=0):
         """ WS: Worksheet passed
             columns_w: list of dimension for the columns
@@ -424,7 +414,6 @@ class ExcelReport(models.TransientModel):
             col += 1
         return True
 
-    @api.model
     def column_hidden(self, ws_name, columns_w):
         """ WS: Worksheet passed
             columns_w: list of dimension for the columns
@@ -434,7 +423,6 @@ class ExcelReport(models.TransientModel):
                 col, col, None, None, {'hidden': True})
         return True
 
-    @api.model
     def row_height(self, ws_name, row_list, height=15):
         """ WS: Worksheet passed
             columns_w: list of dimension for the columns
@@ -445,7 +433,6 @@ class ExcelReport(models.TransientModel):
         else:
             self._WS[ws_name].set_row(row_list, height)
 
-    @api.model
     def merge_cell(self, ws_name, rectangle, style=False, data=''):
         """ Merge cell procedure:
             WS: Worksheet where work
@@ -457,37 +444,32 @@ class ExcelReport(models.TransientModel):
             rectangle.append(style)
         self._WS[ws_name].merge_range(*rectangle)
 
-    @api.model
     def autofilter(self, ws_name, rectangle):
         """ Auto filter management
         """
         self._WS[ws_name].autofilter(*rectangle)
 
-    @api.model
     def freeze_panes(self, ws_name, row, col):
         """ Lock row or column
-        """        
+        """
         self._WS[ws_name].freeze_panes(row, col)
-        
+
     # -------------------------------------------------------------------------
     # Image management:
     # -------------------------------------------------------------------------
-    @api.model
     def write_url(self, WS_name, row, col, link, string, tip=''):
-        ''' WS: Worksheet passed
+        """ WS: Worksheet passed
             columns_w: list of dimension for the columns
-        '''
+        """
         cell = xl_rowcol_to_cell(row, col)
         self._WS[WS_name].write_url(cell, link, string=string, tip=tip)
         return True
-            
-    @api.model
+
     def clean_odoo_binary(self, odoo_binary_field):
         """ Prepare image data from ODOO binary field:
         """
         return io.BytesIO(base64.decodestring(odoo_binary_field))
 
-    @api.model
     def write_formula(
             self, ws_name, row, col, formula, value, format_code):
         """ Write formula in cell passed
@@ -498,7 +480,6 @@ class ExcelReport(models.TransientModel):
             value=value,
             )
 
-    @api.model
     def write_image(
             self, ws_name, row, col,
             x_offset=0, y_offset=0, x_scale=1, y_scale=1, positioning=2,
@@ -525,7 +506,6 @@ class ExcelReport(models.TransientModel):
         self._WS[ws_name].insert_image(row, col, filename, parameters)
         return True
 
-    @api.model
     def write_image_field_data(
             self, ws_name, row, col,
             x_offset=0, y_offset=0, x_scale=1, y_scale=1, positioning=2,
@@ -548,7 +528,6 @@ class ExcelReport(models.TransientModel):
     # Miscellaneous operations (called directly):
     # -------------------------------------------------------------------------
     # Comment:
-    @api.model
     def write_comment(self, ws_name, row, col, comment, parameters=None):
         """ Write comment in a cell
         """
@@ -563,7 +542,6 @@ class ExcelReport(models.TransientModel):
             comment = u'{}'.format(comment)
             self._WS[ws_name].write_comment(cell, comment, parameters)
 
-    @api.model
     def write_comment_line(self, ws_name, row, line, col=0, parameters=None):
         """ Write comment line
         """
@@ -572,8 +550,7 @@ class ExcelReport(models.TransientModel):
                 self.write_comment(
                     ws_name, row, col, comment, parameters=parameters)
             col += 1
-                
-    @api.model
+
     def write_total_xls_line(
             self, ws_name, row, total_columns, style_code=False):
         """ Write total line under correct column position
@@ -591,7 +568,6 @@ class ExcelReport(models.TransientModel):
                 style_code=style_code, col=col)
             i += 1
 
-    @api.model
     def write_xls_line(
             self, ws_name, row, line, style_code=False, col=0,
             total_columns=False,
@@ -678,7 +654,6 @@ class ExcelReport(models.TransientModel):
     # -------------------------------------------------------------------------
     # Return operation:
     # -------------------------------------------------------------------------
-    @api.model
     def send_mail_to_group(
             self,
             group_name,
@@ -726,7 +701,6 @@ class ExcelReport(models.TransientModel):
         # if not closed manually
         self._close_workbook()
 
-    @api.model
     def save_file_as(self, destination):
         """ Close workbook and save in another place (passed)
         """
@@ -736,7 +710,6 @@ class ExcelReport(models.TransientModel):
         shutil.copy(origin, destination)
         return True
 
-    @api.model
     def save_binary_xlsx(self, binary):
         """ Save binary data passed as file temp (returned)
         """
@@ -749,7 +722,6 @@ class ExcelReport(models.TransientModel):
         f.close()
         return filename
 
-    @api.model
     def return_attachment(self, name, name_of_file=False):
         """ Return attachment passed
             name: Name for the attachment

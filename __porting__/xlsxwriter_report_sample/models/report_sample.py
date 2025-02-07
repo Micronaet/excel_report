@@ -13,7 +13,6 @@ class ProductProductExcelReportWizard(models.TransientModel):
 
     category_id = fields.Many2one('product.category', 'Category')
 
-    @api.multi
     def excel_partner_report(self, ):
         report_pool = self.env['excel.report']
         product_pool = self.env['product.product']
