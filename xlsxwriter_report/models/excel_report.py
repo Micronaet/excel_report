@@ -399,7 +399,7 @@ class ExcelReport(models.TransientModel):
                         'align': style.align,
                         'valign': style.valign,
                         'num_format': style.num_format or '',
-                        # 'text_wrap': True,
+                        'text_wrap': True,
                         # locked
                         # hidden
                         })
