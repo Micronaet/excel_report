@@ -12,8 +12,8 @@
 
                 <field name="font_id"/>
                 <field name="height"/>
-                <field name="bold"/>
-                <field name="italic"/>
+                <field name="bold" widget="boolean_toggle" />
+                <field name="italic" widget="boolean_toggle" />
                 <field name="text_wrap" widget="boolean_toggle" />
 
                 <field name="align" />
@@ -48,8 +48,8 @@
                                     <separator string="Font:" colspan="4"/>
                                     <field name="font_id"/>
                                     <field name="height"/>
-                                    <field name="bold"/>
-                                    <field name="italic"/>
+                                    <field name="bold" widget="boolean_toggle" />
+                                    <field name="italic" widget="boolean_toggle" />
 
                                     <separator string="Alignment:" colspan="4"/>
                                     <field name="align"/>
