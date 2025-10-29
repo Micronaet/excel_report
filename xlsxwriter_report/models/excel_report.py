@@ -170,8 +170,10 @@ class ExcelReportFormatStyle(models.Model):
         ('vjustify', 'Justify'),
         ('vdistributed', 'Distribuited'),
         ], 'Vertical alignment', default='vcenter')
+    text_wrap = fields.Boolean(
+        'Testo su più righe',
+        help='Attiva la funzionalità text wrap per mandare le righe a capo, dove indciato o a fine cella')
     # TODO:
-    # wrap
     # format
 
 
@@ -399,14 +401,13 @@ class ExcelReport(models.TransientModel):
                         'align': style.align,
                         'valign': style.valign,
                         'num_format': style.num_format or '',
-                        'text_wrap': True,
+                        'text_wrap': style.text_wrap,
                         # locked
                         # hidden
                         })
 
                     # Save row height for this style:
-                    self._row_height[self._style[name][style.code]] = \
-                        style.row_height or row_height
+                    self._row_height[self._style[name][style.code]] = style.row_height or row_height
         else:
             _logger.info('Format not found: %s, use nothing: %s' % format_code)
 

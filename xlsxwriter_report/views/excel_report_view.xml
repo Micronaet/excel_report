@@ -14,13 +14,14 @@
                 <field name="height"/>
                 <field name="bold"/>
                 <field name="italic"/>
+                <field name="text_wrap" widget="boolean_toggle" />
 
-                <field name="align"/>
-                <field name="valign"/>
-                <field name="num_format"/>
+                <field name="align" />
+                <field name="valign" />
+                <field name="num_format" />
 
-                <field name="foreground_id"/>
-                <field name="background_id"/>
+                <field name="foreground_id" />
+                <field name="background_id" />
             </tree>
         </field>
     </record>
@@ -56,6 +57,7 @@
 
                                     <separator string="Number:" colspan="4"/>
                                     <field name="num_format"/>
+                                    <field name="text_wrap" widget="boolean_toggle"/>
                                 </group>
                             </page>
                             <page string="Border:">
