@@ -14,6 +14,8 @@
                 <field name="height"/>
                 <field name="bold" widget="boolean_toggle"/>
                 <field name="italic" widget="boolean_toggle"/>
+                <field name="text_wrap" widget="boolean_toggle" />
+
 
                 <field name="align"/>
                 <field name="valign"/>
@@ -56,6 +58,7 @@
 
                                     <separator string="Number:" colspan="4"/>
                                     <field name="num_format"/>
+                                    <field name="text_wrap" widget="boolean_toggle"/>
                                 </group>
                             </page>
                             <page string="Border:">
