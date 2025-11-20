@@ -171,8 +171,10 @@ class ExcelReportFormatStyle(models.Model):
         ('vjustify', 'Justify'),
         ('vdistributed', 'Distribuited'),
         ], 'Vertical alignment', default='vcenter')
+    text_wrap = fields.Boolean(
+        'Testo su più righe',
+        help='Attiva la funzionalità text wrap per mandare le righe a capo, dove indciato o a fine cella')
     # TODO:
-    # wrap
     # format
 
 
@@ -408,7 +410,7 @@ class ExcelReport(models.TransientModel):
                             'align': style.align,
                             'valign': style.valign,
                             'num_format': style.num_format or '',
-                            # 'text_wrap': True,
+                            'text_wrap': style.text_wrap,
                             # locked
                             # hidden
                             })
@@ -682,7 +684,7 @@ class ExcelReport(models.TransientModel):
         # ---------------------------------------------------------------------
         # Setup row height:
         # ---------------------------------------------------------------------
-        # TODO if more than one style?
+        # todo if more than one style?
         row_height = report_context['row_height'].get(style, False)
         if row_height:
             report_context['WS'][ws_name].set_row(row, row_height)
