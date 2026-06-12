@@ -3,7 +3,7 @@
 
 {
     'name': 'XLSX report',
-    'version': '1.0',
+    'version': '18.0.1.0.0',
     'category': 'Report',
     'description': '''
         Template for python xlsxwriter report
